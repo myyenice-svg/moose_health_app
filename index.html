@@ -2,8 +2,16 @@
 <html lang="tr" class="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Moose Fitness</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Moose Fitness">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f172a">
+<meta name="description" content="Yaso'nun kişisel sağlık ve fitness takip uygulaması">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTW9vc2UgRml0bmVzcyIsInNob3J0X25hbWUiOiJNb29zZSIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGYxNzJhIiwidGhlbWVfY29sb3IiOiIjMGYxNzJhIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nODAnPvCfpow8L3RleHQ+PC9zdmc+Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🦌</text></svg>">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,25 +30,46 @@ tailwind.config = {
 }
 </script>
 <style>
-body{font-family:'Inter',sans-serif;background:#0f172a;color:#e2e8f0}
+body{font-family:'Inter',sans-serif;background:#0f172a;color:#e2e8f0;transition:background .3s,color .3s}
+html:not(.dark) body{background:#f1f5f9;color:#1e293b}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#1e293b}::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
-.tab-active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;box-shadow:0 4px 15px rgba(99,102,241,.3)}
-.card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:1.25rem}
-.glass{background:rgba(30,41,59,.7);backdrop-filter:blur(12px);border:1px solid rgba(51,65,85,.5)}
+.tab-active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff!important;box-shadow:0 4px 15px rgba(99,102,241,.3)}
+.card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:1.25rem;transition:background .3s,border-color .3s}
+html:not(.dark) .card{background:#fff;border-color:#e2e8f0}
+.glass{background:rgba(30,41,59,.85);backdrop-filter:blur(12px);border:1px solid rgba(51,65,85,.5);transition:background .3s}
+html:not(.dark) .glass{background:rgba(241,245,249,.9);border-color:rgba(203,213,225,.5)}
 .water-drop{transition:all .2s;cursor:pointer}.water-drop.filled{color:#38bdf8;transform:scale(1.1)}.water-drop:not(.filled){color:#334155}
 .progress-ring{transition:stroke-dashoffset .5s ease}
-input,select,textarea{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:.6rem .8rem;color:#e2e8f0;width:100%;font-size:.9rem}
+input,select,textarea{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:.6rem .8rem;color:#e2e8f0;width:100%;font-size:.9rem;min-height:44px;transition:background .3s,border-color .3s,color .3s}
+html:not(.dark) input,html:not(.dark) select,html:not(.dark) textarea{background:#f8fafc;border-color:#cbd5e1;color:#1e293b}
 input:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 2px rgba(99,102,241,.2)}
 button{cursor:pointer;transition:all .15s}
-.btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-weight:600;border:none}
+.btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-weight:600;border:none;min-height:44px}
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(99,102,241,.4)}
-.btn-sm{padding:.4rem .8rem;font-size:.8rem;border-radius:8px}
+.btn-primary:active{transform:scale(.97)}
+.btn-sm{padding:.4rem .8rem;font-size:.8rem;border-radius:8px;min-height:36px}
 .fade-in{animation:fadeIn .3s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.slide-in{animation:slideIn .3s ease}@keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
 .workout-card{border-left:4px solid #6366f1}
 .meal-card{border-left:4px solid #10b981}
 .rehab-card{border-left:4px solid #f59e0b}
 .macro-bar{height:8px;border-radius:4px;background:#1e293b;overflow:hidden}
+html:not(.dark) .macro-bar{background:#e2e8f0}
 .macro-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.sub-tab{padding:.5rem 1rem;border-radius:10px;font-size:.75rem;font-weight:600;min-height:36px;color:#94a3b8;border:1px solid transparent;transition:all .2s}
+.sub-tab.active{background:rgba(99,102,241,.15);color:#818cf8;border-color:rgba(99,102,241,.3)}
+html:not(.dark) .sub-tab.active{background:rgba(99,102,241,.1)}
+.step-ring-bg{stroke:#334155}
+html:not(.dark) .step-ring-bg{stroke:#e2e8f0}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;font-size:11px;font-weight:500;min-width:56px;min-height:52px;color:#64748b;transition:all .2s;border:none;background:none}
+.nav-btn.tab-active{color:#fff}
+html:not(.dark) .nav-btn{color:#94a3b8}
+html:not(.dark) .text-slate-300{color:#475569}
+html:not(.dark) .text-slate-400{color:#64748b}
+html:not(.dark) .text-slate-500{color:#94a3b8}
+html:not(.dark) .border-slate-700{border-color:#e2e8f0}
+html:not(.dark) .border-slate-700\/50{border-color:rgba(226,232,240,.5)}
+html:not(.dark) .bg-slate-800{background:#f1f5f9}
 </style>
 </head>
 <body class="min-h-screen pb-24">
@@ -52,51 +81,53 @@ button{cursor:pointer;transition:all .15s}
 <span class="text-2xl">🦌</span>
 <h1 class="text-lg font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Moose Fitness</h1>
 </div>
+<div class="flex items-center gap-2">
+<button onclick="toggleTheme()" id="themeBtn" class="text-lg p-1" title="Tema Değiştir">🌙</button>
+<button onclick="showSyncModal()" class="text-lg p-1" title="Veri Yedekle/Geri Yükle">💾</button>
 <div class="text-xs text-slate-400" id="headerDate"></div>
 </div>
+</div>
 </header>
+
+<!-- Sync Modal -->
+<div id="syncModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden">
+<div class="card w-80">
+<h3 class="font-semibold mb-3">💾 Veri Yönetimi</h3>
+<p class="text-xs text-slate-400 mb-3">Tüm verilerini JSON olarak yedekle veya geri yükle.</p>
+<button onclick="exportData()" class="btn-primary w-full text-sm mb-2">📥 Verileri İndir (JSON)</button>
+<label class="btn-primary w-full text-sm mb-3 block text-center cursor-pointer" style="background:linear-gradient(135deg,#10b981,#059669)">
+📤 Verileri Yükle (JSON)
+<input type="file" accept=".json" onchange="importData(event)" class="hidden">
+</label>
+<button onclick="document.getElementById('syncModal').classList.add('hidden')" class="btn-sm w-full border border-slate-600 text-slate-300 rounded-lg">Kapat</button>
+</div>
+</div>
 
 <!-- Main Content -->
 <main class="max-w-lg mx-auto px-4 pt-4" id="mainContent"></main>
 
-<!-- Bottom Navigation -->
-<nav class="fixed bottom-0 left-0 right-0 glass z-50">
-<div class="max-w-lg mx-auto flex justify-around py-2 px-2">
-<button onclick="navigate('dashboard')" data-tab="dashboard" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
+<!-- Bottom Navigation - 5 tabs -->
+<nav class="fixed bottom-0 left-0 right-0 glass z-50" style="padding-bottom:env(safe-area-inset-bottom)">
+<div class="max-w-lg mx-auto flex justify-around py-1 px-1">
+<button onclick="navigate('dashboard')" data-tab="dashboard" class="nav-btn tab-btn">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
 Ana
 </button>
-<button onclick="navigate('food')" data-tab="food" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-Öğün
+<button onclick="navigate('takip')" data-tab="takip" class="nav-btn tab-btn">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+Takip
 </button>
-<button onclick="navigate('water')" data-tab="water" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3c-4 6-7 8-7 12a7 7 0 1014 0c0-4-3-6-7-12z"/></svg>
-Su
-</button>
-<button onclick="navigate('weight')" data-tab="weight" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
-Kilo
-</button>
-<button onclick="navigate('gym')" data-tab="gym" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h2m12 0h2M6 8v8m12-8v8M8 6h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+<button onclick="navigate('gym')" data-tab="gym" class="nav-btn tab-btn">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h2m12 0h2M6 8v8m12-8v8M8 6h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
 Spor
 </button>
-<button onclick="navigate('diet')" data-tab="diet" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-Diyet
+<button onclick="navigate('saglik')" data-tab="saglik" class="nav-btn tab-btn">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+Sağlık
 </button>
-<button onclick="navigate('vitamins')" data-tab="vitamins" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-Vitamin
-</button>
-<button onclick="navigate('bp')" data-tab="bp" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-Tansiyon
-</button>
-<button onclick="navigate('progress')" data-tab="progress" class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl text-xs font-medium tab-btn">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-Grafik
+<button onclick="navigate('rapor')" data-tab="rapor" class="nav-btn tab-btn">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+Rapor
 </button>
 </div>
 </nav>
@@ -109,7 +140,7 @@ const DB = {
   today(){ return new Date().toISOString().slice(0,10) }
 };
 
-const PROFILE = { height:190, startWeight:114, targetWeight:96, dailyCal:2300, protein:[170,180], fat:[70,80], carbs:[200,250], waterTarget:3.5, stepsTarget:10000 };
+const PROFILE = { height:190, startWeight:111, targetWeight:96, dailyCal:2300, protein:[170,180], fat:[70,80], carbs:[200,250], waterTarget:3.5, stepsTarget:10000 };
 
 const QUOTES = [
   "Başarı, her gün tekrarlanan küçük çabaların toplamıdır. 💪",
@@ -130,15 +161,72 @@ function todaySteps(){ return DB.get('steps_'+DB.today(), 0) }
 function weightLog(){ return DB.get('weight_log', []) }
 function latestWeight(){ const l=weightLog(); return l.length? l[l.length-1].kg : PROFILE.startWeight }
 function goals(){ return DB.get('goals', []) }
+function vitaminLog(d){ return DB.get('vitamins_'+(d||DB.today()), {}) }
+function bpLog(){ return DB.get('bp_log', []) }
+function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
+
+// ==================== THEME ====================
+function toggleTheme(){
+  const html = document.documentElement;
+  html.classList.toggle('dark');
+  const isDark = html.classList.contains('dark');
+  localStorage.setItem('moose_theme', isDark?'dark':'light');
+  document.getElementById('themeBtn').textContent = isDark?'🌙':'☀️';
+  document.querySelector('meta[name=theme-color]').content = isDark?'#0f172a':'#f1f5f9';
+}
+(function(){
+  const t = localStorage.getItem('moose_theme');
+  if(t==='light'){ document.documentElement.classList.remove('dark'); document.getElementById('themeBtn').textContent='☀️'; }
+})();
+
+// ==================== SYNC ====================
+function showSyncModal(){ document.getElementById('syncModal').classList.remove('hidden') }
+function exportData(){
+  const data = {};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k.startsWith('moose_')) data[k]=localStorage.getItem(k);
+  }
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`moose-backup-${DB.today()}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const data=JSON.parse(ev.target.result);
+      let count=0;
+      for(const[k,v] of Object.entries(data)){
+        if(k.startsWith('moose_')){ localStorage.setItem(k,v); count++; }
+      }
+      alert(`✅ ${count} veri başarıyla geri yüklendi!`);
+      document.getElementById('syncModal').classList.add('hidden');
+      render();
+    }catch{ alert('❌ Geçersiz dosya formatı!') }
+  };
+  reader.readAsText(file);
+}
 
 // ==================== NAVIGATION ====================
 let currentTab = 'dashboard';
+let currentSubTab = {};
+
 function navigate(tab){
   currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b=>{
     b.classList.toggle('tab-active', b.dataset.tab===tab);
-    if(b.dataset.tab!==tab) b.className=b.className.replace('tab-active','').trim()+' text-slate-400';
   });
+  render();
+}
+
+function setSubTab(parent, sub){
+  currentSubTab[parent] = sub;
   render();
 }
 
@@ -146,7 +234,7 @@ function render(){
   const m = document.getElementById('mainContent');
   m.innerHTML = '';
   m.className = 'max-w-lg mx-auto px-4 pt-4 fade-in';
-  const views = {dashboard:renderDashboard,food:renderFood,water:renderWater,weight:renderWeight,gym:renderGym,diet:renderDiet,vitamins:renderVitamins,bp:renderBP,progress:renderProgress};
+  const views = {dashboard:renderDashboard, takip:renderTakip, gym:renderGym, saglik:renderSaglik, rapor:renderRapor};
   (views[currentTab]||renderDashboard)(m);
 }
 
@@ -165,10 +253,31 @@ function renderDashboard(el){
   const calPct = Math.min(100, Math.round(cal/PROFILE.dailyCal*100));
   const waterPct = Math.min(100, Math.round(water/3.5*100));
   const stepPct = Math.min(100, Math.round(steps/PROFILE.stepsTarget*100));
+  const circumference = 2*Math.PI*54;
+  const stepOffset = circumference - (stepPct/100)*circumference;
 
   el.innerHTML = `
   <div class="card mb-4 text-center bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border-indigo-500/20">
     <p class="text-sm italic text-slate-300">${quote}</p>
+  </div>
+
+  <!-- Step Counter Ring -->
+  <div class="card mb-4 text-center">
+    <h3 class="text-sm font-semibold text-slate-300 mb-3">🚶 Günlük Adım</h3>
+    <div class="relative inline-block mb-3">
+      <svg width="140" height="140" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="54" fill="none" class="step-ring-bg" stroke-width="8"/>
+        <circle cx="60" cy="60" r="54" fill="none" stroke="#8b5cf6" stroke-width="8"
+          stroke-dasharray="${circumference}" stroke-dashoffset="${stepOffset}"
+          stroke-linecap="round" transform="rotate(-90 60 60)" class="progress-ring"/>
+        <text x="60" y="55" text-anchor="middle" fill="currentColor" font-size="22" font-weight="700">${steps.toLocaleString()}</text>
+        <text x="60" y="72" text-anchor="middle" fill="#94a3b8" font-size="10">${PROFILE.stepsTarget.toLocaleString()} hedef</text>
+      </svg>
+    </div>
+    <div class="flex items-center gap-2 max-w-xs mx-auto">
+      <input type="number" id="stepsInput" placeholder="Adım gir..." value="${steps||''}" class="flex-1 text-sm text-center">
+      <button onclick="saveSteps()" class="btn-primary btn-sm">Kaydet</button>
+    </div>
   </div>
 
   <div class="grid grid-cols-2 gap-3 mb-4">
@@ -188,9 +297,9 @@ function renderDashboard(el){
       <div class="macro-bar mt-2"><div class="macro-fill bg-emerald-500" style="width:${Math.min(100,Math.round((PROFILE.startWeight-weight)/(PROFILE.startWeight-PROFILE.targetWeight)*100))}%"></div></div>
     </div>
     <div class="card text-center">
-      <div class="text-3xl font-bold text-amber-400">${steps.toLocaleString()}</div>
-      <div class="text-xs text-slate-400 mt-1">${PROFILE.stepsTarget.toLocaleString()} adım hedef</div>
-      <div class="macro-bar mt-2"><div class="macro-fill bg-amber-500" style="width:${stepPct}%"></div></div>
+      <div class="text-3xl font-bold text-purple-400">${stepPct}%</div>
+      <div class="text-xs text-slate-400 mt-1">adım tamamlama</div>
+      <div class="macro-bar mt-2"><div class="macro-fill bg-purple-500" style="width:${stepPct}%"></div></div>
     </div>
   </div>
 
@@ -216,16 +325,6 @@ function renderDashboard(el){
   </div>
 
   <div class="card mb-4">
-    <div class="flex items-center justify-between mb-2">
-      <h3 class="text-sm font-semibold text-slate-300">Adım Sayısı</h3>
-    </div>
-    <div class="flex items-center gap-2">
-      <input type="number" id="stepsInput" placeholder="Adım gir..." value="${steps||''}" class="flex-1 text-sm">
-      <button onclick="saveSteps()" class="btn-primary btn-sm">Kaydet</button>
-    </div>
-  </div>
-
-  <div class="card mb-4">
     <div class="flex items-center justify-between mb-3">
       <h3 class="text-sm font-semibold text-slate-300">🎯 Hedefler</h3>
       <button onclick="showGoalModal()" class="btn-primary btn-sm text-xs">+ Ekle</button>
@@ -233,7 +332,7 @@ function renderDashboard(el){
     <div id="goalsList">${renderGoals()}</div>
   </div>
 
-  <div id="goalModal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center hidden">
+  <div id="goalModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden">
     <div class="card w-80">
       <h3 class="font-semibold mb-3">Yeni Hedef</h3>
       <input id="goalText" placeholder="Hedef açıklaması" class="mb-2 text-sm">
@@ -257,10 +356,10 @@ function renderGoals(){
   if(!g.length) return '<p class="text-xs text-slate-500">Henüz hedef yok</p>';
   return g.map((goal,i)=>`
     <div class="flex items-center gap-2 py-1.5 ${i?'border-t border-slate-700':''}">
-      <button onclick="toggleGoal(${i})" class="text-lg">${goal.done?'✅':'⬜'}</button>
+      <button onclick="toggleGoal(${i})" class="text-lg min-w-[44px] min-h-[44px] flex items-center justify-center">${goal.done?'✅':'⬜'}</button>
       <span class="flex-1 text-sm ${goal.done?'line-through text-slate-500':''}">${goal.text}</span>
       ${goal.date?`<span class="text-xs text-slate-500">${goal.date}</span>`:''}
-      <button onclick="removeGoal(${i})" class="text-xs text-red-400 hover:text-red-300">✕</button>
+      <button onclick="removeGoal(${i})" class="text-xs text-red-400 hover:text-red-300 min-w-[44px] min-h-[44px] flex items-center justify-center">✕</button>
     </div>`).join('');
 }
 
@@ -277,7 +376,22 @@ function addGoal(){
 function toggleGoal(i){ const g=goals(); g[i].done=!g[i].done; DB.set('goals',g); render() }
 function removeGoal(i){ const g=goals(); g.splice(i,1); DB.set('goals',g); render() }
 
-// ==================== FOOD LOG ====================
+// ==================== TAKIP (Food + Water + Weight + Diet) ====================
+function renderTakip(el){
+  const sub = currentSubTab.takip || 'food';
+  el.innerHTML = `
+  <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
+    <button onclick="setSubTab('takip','food')" class="sub-tab ${sub==='food'?'active':''}">🍽️ Öğün</button>
+    <button onclick="setSubTab('takip','water')" class="sub-tab ${sub==='water'?'active':''}">💧 Su</button>
+    <button onclick="setSubTab('takip','weight')" class="sub-tab ${sub==='weight'?'active':''}">⚖️ Kilo</button>
+    <button onclick="setSubTab('takip','diet')" class="sub-tab ${sub==='diet'?'active':''}">📋 Diyet</button>
+  </div>
+  <div id="takipContent" class="slide-in"></div>`;
+  const container = el.querySelector('#takipContent');
+  const views = {food:renderFood, water:renderWater, weight:renderWeight, diet:renderDiet};
+  (views[sub]||renderFood)(container);
+}
+
 function renderFood(el){
   const foods = todayFoods();
   const cal = foods.reduce((s,f)=>s+f.cal,0);
@@ -323,11 +437,11 @@ function renderFood(el){
   <div class="space-y-2">
     ${foods.length?foods.map((f,i)=>`
       <div class="card flex items-center justify-between py-2 px-3">
-        <div>
+        <div class="flex-1">
           <div class="text-sm font-medium">${f.name}</div>
           <div class="text-xs text-slate-400">${f.meal} · ${f.cal}kcal · P:${f.pro}g Y:${f.fat}g K:${f.carb}g</div>
         </div>
-        <button onclick="removeFood(${i})" class="text-red-400 text-xs hover:text-red-300">✕</button>
+        <button onclick="removeFood(${i})" class="text-red-400 text-xs hover:text-red-300 min-w-[44px] min-h-[44px] flex items-center justify-center">✕</button>
       </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-4">Bugün henüz öğün eklenmedi</p>'}
   </div>`;
 }
@@ -346,16 +460,13 @@ function addFood(){
   DB.set('foods_'+DB.today(), f);
   render();
 }
-
-function removeFood(i){
-  const f=todayFoods(); f.splice(i,1); DB.set('foods_'+DB.today(), f); render();
-}
+function removeFood(i){ const f=todayFoods(); f.splice(i,1); DB.set('foods_'+DB.today(), f); render() }
 
 // ==================== WATER ====================
 function renderWater(el){
   const water = todayWater();
   const glasses = Math.round(water/0.25);
-  const target = 14; // 3.5L / 0.25L
+  const target = 14;
   el.innerHTML = `
   <h2 class="text-lg font-bold mb-3">💧 Su Takibi</h2>
   <div class="card text-center mb-4">
@@ -363,7 +474,7 @@ function renderWater(el){
     <div class="text-sm text-slate-400 mb-4">${PROFILE.waterTarget}L hedef · ${glasses}/${target} bardak</div>
     <div class="macro-bar h-3 mb-4"><div class="macro-fill bg-gradient-to-r from-cyan-500 to-blue-500" style="width:${Math.min(100,Math.round(water/PROFILE.waterTarget*100))}%"></div></div>
     <div class="grid grid-cols-7 gap-2 mb-4">
-      ${Array.from({length:target},(_,i)=>`<button onclick="setWater(${i+1})" class="water-drop text-2xl ${i<glasses?'filled':''}">💧</button>`).join('')}
+      ${Array.from({length:target},(_,i)=>`<button onclick="setWater(${i+1})" class="water-drop text-2xl min-h-[44px]${i<glasses?' filled':''}">💧</button>`).join('')}
     </div>
     <div class="flex gap-2 justify-center">
       <button onclick="addWater(0.25)" class="btn-primary btn-sm">+1 Bardak</button>
@@ -372,16 +483,8 @@ function renderWater(el){
     </div>
   </div>`;
 }
-
-function addWater(amount){
-  const w = Math.max(0, todayWater()+amount);
-  DB.set('water_'+DB.today(), w);
-  render();
-}
-function setWater(glasses){
-  DB.set('water_'+DB.today(), glasses*0.25);
-  render();
-}
+function addWater(amount){ DB.set('water_'+DB.today(), Math.max(0, todayWater()+amount)); render() }
+function setWater(glasses){ DB.set('water_'+DB.today(), glasses*0.25); render() }
 
 // ==================== WEIGHT ====================
 function renderWeight(el){
@@ -412,7 +515,6 @@ function renderWeight(el){
         <span class="font-medium">${e.kg} kg</span>
       </div>`).join('')}
   </div>`;
-
   if(log.length>1) setTimeout(()=>drawWeightChart(log),50);
 }
 
@@ -430,249 +532,12 @@ function drawWeightChart(log){
   if(!ctx)return;
   new Chart(ctx,{
     type:'line',
-    data:{
-      labels:log.map(e=>e.date.slice(5)),
-      datasets:[
-        {label:'Kilo (kg)',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3,pointRadius:4},
-        {label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}
-      ]
-    },
+    data:{labels:log.map(e=>e.date.slice(5)),datasets:[
+      {label:'Kilo (kg)',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3,pointRadius:4},
+      {label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}
+    ]},
     options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
   });
-}
-
-// ==================== VITAMINS ====================
-function vitaminLog(){ return DB.get('vitamins_'+DB.today(), {}) }
-
-const VITAMINS = [
-  {id:'folbiol', name:'Folbiol 5mg (Folik Asit) ⏳3 hafta', emoji:'💗', desc:'Hücre yenilenmesi, DNA sentezi, kan yapımı (reçeteli) — 20 tablet (~8 Mart bitiş)', when:'Sabah aç karnına'},
-  {id:'tiopatib_sabah', name:'Tiopati-B (SABAH)', emoji:'💜', desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)', when:'Sabah aç karnına'},
-  {id:'tiopatib_aksam', name:'Tiopati-B (AKŞAM)', emoji:'💜', desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)', when:'Akşam aç karnına'},
-  {id:'lipanthyl', name:'Lipanthyl 160mg (Fenofibrat) ⏳2 hafta', emoji:'❤️', desc:'Kolesterol/trigliserit ilacı (reçeteli) — sadece 2 hafta (~1 Mart bitiş)', when:'Akşam tok karnına (yemekten sonra)'},
-  {id:'ginseng', name:'Kore Kırmızı Ginsengi (3000mg)', emoji:'🌿', desc:'Enerji, kan dolaşımı, beyin fonksiyonu', when:'Sabah aç karnına'},
-  {id:'probiotics', name:'Probiyotik (Physician\'s Choice 60B)', emoji:'🦠', desc:'Sindirim, bağırsak sağlığı — 10 suş + prebiyotik', when:'Sabah aç karnına (kahvaltıdan 15dk önce)'},
-  {id:'multivitamin', name:'Multivitamin (2 tablet)', emoji:'💊', desc:'A, C, D, E, K, B vitaminleri, Çinko, Selenyum, BCAA, Zerdeçal', when:'Kahvaltıyla birlikte'},
-  {id:'omega3', name:'Omega-3 (Balık Yağı)', emoji:'🐟', desc:'Kalp, beyin, bel ağrısı (anti-inflamatuar)', when:'Öğle veya akşam yemekle', missing:true},
-  {id:'magnesium', name:'Magnezyum (300-400mg)', emoji:'🧲', desc:'Kas gevşetme, uyku, bel ağrısı', when:'Akşam yatmadan', missing:true},
-  {id:'creatine', name:'Kreatin (5g)', emoji:'💪', desc:'Kas gücü, gym performansı', when:'Günün herhangi saati (suyla)', missing:true},
-  {id:'larginine', name:'L-Arginin (3-5g)', emoji:'🔥', desc:'Kan dolaşımı, erektil fonksiyon, ginseng ile sinerji', when:'Sabah veya antrenman öncesi', missing:true},
-];
-
-function renderVitamins(el){
-  const log = vitaminLog();
-  const taken = Object.values(log).filter(v=>v).length;
-  const total = VITAMINS.length;
-  const pct = Math.round(taken/total*100);
-
-  el.innerHTML = `
-  <h2 class="text-lg font-bold mb-3">💊 Vitamin & Takviye</h2>
-  
-  <div class="card mb-4 text-center">
-    <div class="text-3xl font-bold text-purple-400">${taken}/${total}</div>
-    <div class="text-xs text-slate-400 mt-1">Bugün alınan</div>
-    <div class="macro-bar mt-2"><div class="macro-fill bg-purple-500" style="width:${pct}%"></div></div>
-  </div>
-
-  <div class="space-y-2">
-    ${VITAMINS.map(v=>{
-      const done = log[v.id] || false;
-      return `
-      <div class="card flex items-center gap-3 py-2 px-3 ${done?'opacity-60':''}">
-        <button onclick="toggleVitamin('${v.id}')" class="text-2xl">${done?'✅':v.emoji}</button>
-        <div class="flex-1">
-          <div class="text-sm font-medium ${done?'line-through text-slate-500':''}">${v.name} ${v.missing?'<span class="text-xs text-red-400 font-normal">(SATIN AL)</span>':''}</div>
-          <div class="text-xs text-slate-400">${v.desc}</div>
-          <div class="text-xs text-indigo-400 mt-0.5">⏰ ${v.when}</div>
-        </div>
-      </div>`}).join('')}
-  </div>
-
-  <div class="card mt-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Öneriler</h3>
-    <div class="text-xs text-slate-400 space-y-1">
-      <p>• <strong>Kilo verirken</strong> en önemli: Multivitamin, D Vitamini, Omega-3, Magnezyum</p>
-      <p>• <strong>Gym yapanlar</strong> için: Kreatin (5g/gün), Çinko, Magnezyum</p>
-      <p>• <strong>Bel ağrısı</strong> için: Omega-3 (anti-inflamatuar), Magnezyum (kas gevşetme)</p>
-      <p>• Doktoruna danışmadan yüksek doz alma!</p>
-    </div>
-  </div>`;
-}
-
-function toggleVitamin(id){
-  const log = vitaminLog();
-  log[id] = !log[id];
-  DB.set('vitamins_'+DB.today(), log);
-  render();
-}
-
-// ==================== BLOOD PRESSURE ====================
-function bpLog(){ return DB.get('bp_log', []) }
-
-function renderBP(el){
-  const log = bpLog();
-  const latest = log.length ? log[log.length-1] : null;
-  
-  function bpCategory(sys,dia){
-    if(sys<120 && dia<80) return {label:'Normal',color:'text-emerald-400',bg:'bg-emerald-500'};
-    if(sys<130 && dia<80) return {label:'Yükselmiş',color:'text-yellow-400',bg:'bg-yellow-500'};
-    if(sys<140 || dia<90) return {label:'Hipertansiyon 1',color:'text-orange-400',bg:'bg-orange-500'};
-    if(sys>=140 || dia>=90) return {label:'Hipertansiyon 2',color:'text-red-400',bg:'bg-red-500'};
-    return {label:'—',color:'text-slate-400',bg:'bg-slate-500'};
-  }
-
-  const cat = latest ? bpCategory(latest.sys, latest.dia) : null;
-
-  el.innerHTML = `
-  <h2 class="text-lg font-bold mb-3">❤️ Tansiyon Takibi</h2>
-  
-  ${latest ? `
-  <div class="card mb-4 text-center">
-    <div class="text-4xl font-bold"><span class="text-red-400">${latest.sys}</span><span class="text-slate-500">/</span><span class="text-blue-400">${latest.dia}</span></div>
-    <div class="text-sm text-slate-400 mt-1">mmHg</div>
-    <div class="flex items-center justify-center gap-2 mt-2">
-      <span class="text-lg">💓</span>
-      <span class="text-xl font-bold text-pink-400">${latest.pulse || '—'}</span>
-      <span class="text-sm text-slate-400">bpm</span>
-    </div>
-    <div class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-semibold ${cat.color}" style="background:rgba(0,0,0,.3)">${cat.label}</div>
-    <div class="text-xs text-slate-500 mt-1">${latest.date} ${latest.time||''}</div>
-  </div>` : `
-  <div class="card mb-4 text-center">
-    <p class="text-sm text-slate-500 py-4">Henüz tansiyon kaydı yok</p>
-  </div>`}
-
-  <div class="card mb-4">
-    <h3 class="text-sm font-semibold mb-3">Yeni Ölçüm Ekle</h3>
-    <div class="grid grid-cols-3 gap-2 mb-2">
-      <div>
-        <label class="text-xs text-slate-400">Sistolik</label>
-        <input id="bpSys" type="number" placeholder="120" class="text-sm text-center">
-      </div>
-      <div>
-        <label class="text-xs text-slate-400">Diastolik</label>
-        <input id="bpDia" type="number" placeholder="80" class="text-sm text-center">
-      </div>
-      <div>
-        <label class="text-xs text-slate-400">Nabız</label>
-        <input id="bpPulse" type="number" placeholder="72" class="text-sm text-center">
-      </div>
-    </div>
-    <button onclick="addBP()" class="btn-primary w-full text-sm mt-2">+ Kaydet</button>
-  </div>
-
-  <div class="card mb-4"><canvas id="bpChart" height="200"></canvas></div>
-
-  <div class="space-y-1">
-    ${log.slice().reverse().slice(0,15).map(e=>{
-      const c = bpCategory(e.sys,e.dia);
-      return `
-      <div class="flex justify-between items-center text-sm py-1.5 border-b border-slate-700/50">
-        <span class="text-slate-400 text-xs">${e.date} ${e.time||''}</span>
-        <div class="flex items-center gap-2">
-          <span class="font-medium">${e.sys}/${e.dia}</span>
-          <span class="text-pink-400 text-xs">♥${e.pulse||'—'}</span>
-          <span class="text-xs ${c.color}">${c.label}</span>
-        </div>
-      </div>`}).join('')}
-  </div>
-
-  <div class="card mt-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Referans Değerler</h3>
-    <div class="space-y-1 text-xs">
-      <div class="flex justify-between"><span class="text-emerald-400">Normal</span><span class="text-slate-400">&lt;120 / &lt;80</span></div>
-      <div class="flex justify-between"><span class="text-yellow-400">Yükselmiş</span><span class="text-slate-400">120-129 / &lt;80</span></div>
-      <div class="flex justify-between"><span class="text-orange-400">Hipertansiyon 1</span><span class="text-slate-400">130-139 / 80-89</span></div>
-      <div class="flex justify-between"><span class="text-red-400">Hipertansiyon 2</span><span class="text-slate-400">≥140 / ≥90</span></div>
-    </div>
-  </div>`;
-
-  if(log.length>1) setTimeout(()=>{
-    const ctx=document.getElementById('bpChart');
-    if(!ctx)return;
-    new Chart(ctx,{
-      type:'line',
-      data:{
-        labels:log.map(e=>e.date.slice(5)),
-        datasets:[
-          {label:'Sistolik',data:log.map(e=>e.sys),borderColor:'#f87171',backgroundColor:'rgba(248,113,113,.1)',fill:false,tension:.3,pointRadius:4},
-          {label:'Diastolik',data:log.map(e=>e.dia),borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,.1)',fill:false,tension:.3,pointRadius:4},
-          {label:'Nabız',data:log.map(e=>e.pulse),borderColor:'#f472b6',borderDash:[4,4],fill:false,tension:.3,pointRadius:3}
-        ]
-      },
-      options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
-    });
-  },50);
-}
-
-function addBP(){
-  const sys=parseInt(document.getElementById('bpSys').value);
-  const dia=parseInt(document.getElementById('bpDia').value);
-  const pulse=parseInt(document.getElementById('bpPulse').value)||null;
-  if(!sys||!dia)return;
-  const log=bpLog();
-  const now=new Date();
-  log.push({date:DB.today(), time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}), sys, dia, pulse});
-  DB.set('bp_log', log);
-  render();
-}
-
-// ==================== GYM ====================
-function renderGym(el){
-  el.innerHTML = `
-  <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı</h2>
-  <p class="text-xs text-slate-400 mb-4">Haftada 3 gün + her seans sonrası bel rehabilitasyonu</p>
-
-  <div class="card workout-card mb-3">
-    <h3 class="font-semibold text-indigo-400 mb-2">📅 Pazartesi — Üst Vücut</h3>
-    <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>💪 Bench Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/chest/barbell-bench-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>💪 Barbell Row</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>💪 Shoulder Press</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/shoulders/barbell-overhead-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>💪 Bicep Curl</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/biceps/barbell-curl" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>💪 Tricep Dips</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/triceps/tricep-dips" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <div class="text-xs text-cyan-400 mt-2">🫀 20dk Eliptik Bisiklet</div>
-    </div>
-  </div>
-
-  <div class="card workout-card mb-3" style="border-left-color:#10b981">
-    <h3 class="font-semibold text-emerald-400 mb-2">📅 Çarşamba — Alt Vücut</h3>
-    <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🦵 Squat</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-squat" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🦵 Leg Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/quads/leg-press" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🦵 Lunges</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-lunge" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🦵 Calf Raises</span><span class="text-slate-400">3×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/calves/calf-raise" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🦵 Leg Curls</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/hamstrings/leg-curl" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <div class="text-xs text-cyan-400 mt-2">🚴 20dk Bisiklet</div>
-    </div>
-  </div>
-
-  <div class="card workout-card mb-3" style="border-left-color:#f59e0b">
-    <h3 class="font-semibold text-amber-400 mb-2">📅 Cuma — Full Body + Kardiyo</h3>
-    <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🏋️ Deadlift</span><span class="text-slate-400">4×8</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/glutes/barbell-deadlift" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🏋️ Pull-ups</span><span class="text-slate-400">3×max</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lats/pull-up" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🏋️ Chest Fly</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/dumbbells/male/chest/dumbbell-fly" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <div class="text-xs text-cyan-400 mt-2">🫀 30dk Eliptik Bisiklet</div>
-    </div>
-  </div>
-
-  <div class="card rehab-card mb-3">
-    <h3 class="font-semibold text-amber-400 mb-2">🧘 Bel Rehabilitasyonu <span class="text-xs font-normal text-slate-400">(her seans sonrası)</span></h3>
-    <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🧘 Cat-Cow (Kedi-İnek)</span><span class="text-slate-400">2×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/abdominals/cat-cow" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🧘 Bird-Dog</span><span class="text-slate-400">2×10 (her taraf)</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lower-back/bird-dog" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🧘 Dead Hang (Asılma)</span><span class="text-slate-400">3×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/forearms/dead-hang" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer"><span>🧘 Hip Flexor Stretch</span><span class="text-slate-400">2×30sn (her taraf)</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/stretches/male/hip-flexors/kneeling-hip-flexor-stretch" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır? (Video)</a></div></details>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3 class="font-semibold text-slate-300 mb-2">📝 Günlük Hedef</h3>
-    <div class="flex items-center gap-2 text-sm">
-      <span class="text-2xl">🚶</span>
-      <span>Her gün <strong class="text-amber-400">10.000 adım</strong></span>
-    </div>
-  </div>`;
 }
 
 // ==================== DIET ====================
@@ -745,7 +610,7 @@ function renderDiet(el){
       const tp=day.meals.reduce((s,m)=>s+m.p,0);
       return `
       <details class="card meal-card">
-        <summary class="font-semibold text-emerald-400 cursor-pointer flex justify-between items-center">
+        <summary class="font-semibold text-emerald-400 cursor-pointer flex justify-between items-center min-h-[44px]">
           <span>${day.day}</span>
           <span class="text-xs text-slate-400 font-normal">${tc} kcal · P:${tp}g</span>
         </summary>
@@ -760,6 +625,502 @@ function renderDiet(el){
             </div>`).join('')}
         </div>
       </details>`}).join('')}
+  </div>`;
+}
+
+// ==================== SAGLIK (Vitamins + BP) ====================
+function renderSaglik(el){
+  const sub = currentSubTab.saglik || 'vitamins';
+  el.innerHTML = `
+  <div class="flex gap-2 mb-4">
+    <button onclick="setSubTab('saglik','vitamins')" class="sub-tab ${sub==='vitamins'?'active':''}">💊 Vitamin</button>
+    <button onclick="setSubTab('saglik','bp')" class="sub-tab ${sub==='bp'?'active':''}">❤️ Tansiyon</button>
+  </div>
+  <div id="saglikContent" class="slide-in"></div>`;
+  const container = el.querySelector('#saglikContent');
+  if(sub==='bp') renderBP(container); else renderVitamins(container);
+}
+
+// ==================== VITAMINS ====================
+const VITAMINS = [
+  {id:'folbiol', name:'Folbiol 5mg (Folik Asit) ⏳3 hafta', emoji:'💗', desc:'Hücre yenilenmesi, DNA sentezi, kan yapımı (reçeteli) — 20 tablet (~8 Mart bitiş)', when:'Sabah aç karnına'},
+  {id:'tiopatib_sabah', name:'Tiopati-B (SABAH)', emoji:'💜', desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)', when:'Sabah aç karnına'},
+  {id:'tiopatib_aksam', name:'Tiopati-B (AKŞAM)', emoji:'💜', desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)', when:'Akşam aç karnına'},
+  {id:'lipanthyl', name:'Lipanthyl 160mg (Fenofibrat) ⏳2 hafta', emoji:'❤️', desc:'Kolesterol/trigliserit ilacı (reçeteli) — sadece 2 hafta (~1 Mart bitiş)', when:'Akşam tok karnına (yemekten sonra)'},
+  {id:'ginseng', name:'Kore Kırmızı Ginsengi (3000mg)', emoji:'🌿', desc:'Enerji, kan dolaşımı, beyin fonksiyonu', when:'Sabah aç karnına'},
+  {id:'probiotics', name:'Probiyotik (Physician\'s Choice 60B)', emoji:'🦠', desc:'Sindirim, bağırsak sağlığı — 10 suş + prebiyotik', when:'Sabah aç karnına (kahvaltıdan 15dk önce)'},
+  {id:'multivitamin', name:'Multivitamin (2 tablet)', emoji:'💊', desc:'A, C, D, E, K, B vitaminleri, Çinko, Selenyum, BCAA, Zerdeçal', when:'Kahvaltıyla birlikte'},
+  {id:'omega3', name:'Omega-3 (Balık Yağı)', emoji:'🐟', desc:'Kalp, beyin, bel ağrısı (anti-inflamatuar)', when:'Öğle veya akşam yemekle', missing:true},
+  {id:'magnesium', name:'Magnezyum (300-400mg)', emoji:'🧲', desc:'Kas gevşetme, uyku, bel ağrısı', when:'Akşam yatmadan', missing:true},
+  {id:'creatine', name:'Kreatin (5g)', emoji:'💪', desc:'Kas gücü, gym performansı', when:'Günün herhangi saati (suyla)', missing:true},
+  {id:'larginine', name:'L-Arginin (3-5g)', emoji:'🔥', desc:'Kan dolaşımı, erektil fonksiyon, ginseng ile sinerji', when:'Sabah veya antrenman öncesi', missing:true},
+];
+
+function renderVitamins(el){
+  const log = vitaminLog();
+  const taken = Object.values(log).filter(v=>v).length;
+  const total = VITAMINS.length;
+  const pct = Math.round(taken/total*100);
+
+  el.innerHTML = `
+  <h2 class="text-lg font-bold mb-3">💊 Vitamin & Takviye</h2>
+  
+  <div class="card mb-4 text-center">
+    <div class="text-3xl font-bold text-purple-400">${taken}/${total}</div>
+    <div class="text-xs text-slate-400 mt-1">Bugün alınan</div>
+    <div class="macro-bar mt-2"><div class="macro-fill bg-purple-500" style="width:${pct}%"></div></div>
+  </div>
+
+  <div class="space-y-2">
+    ${VITAMINS.map(v=>{
+      const done = log[v.id] || false;
+      return `
+      <div class="card flex items-center gap-3 py-2 px-3 ${done?'opacity-60':''}">
+        <button onclick="toggleVitamin('${v.id}')" class="text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center">${done?'✅':v.emoji}</button>
+        <div class="flex-1">
+          <div class="text-sm font-medium ${done?'line-through text-slate-500':''}">${v.name} ${v.missing?'<span class="text-xs text-red-400 font-normal">(SATIN AL)</span>':''}</div>
+          <div class="text-xs text-slate-400">${v.desc}</div>
+          <div class="text-xs text-indigo-400 mt-0.5">⏰ ${v.when}</div>
+        </div>
+      </div>`}).join('')}
+  </div>
+
+  <div class="card mt-4">
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">🔔 Hatırlatma Programı</h3>
+    <div class="text-xs text-slate-400 space-y-1.5">
+      <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 07:30</span><span>Sabah aç karnına: Folbiol, Tiopati-B, Ginseng, Probiyotik, L-Arginin</span></div>
+      <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 08:00</span><span>Kahvaltıyla: Multivitamin</span></div>
+      <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 13:00</span><span>Öğle yemekle: Omega-3, Kreatin</span></div>
+      <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 19:00</span><span>Akşam: Tiopati-B (2. doz)</span></div>
+      <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 20:00</span><span>Akşam yemekten sonra: Lipanthyl</span></div>
+      <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 23:00</span><span>Yatmadan: Magnezyum</span></div>
+    </div>
+    <p class="text-xs text-slate-500 mt-2 italic">📱 Hatırlatmalar Telegram bot üzerinden gönderilir.</p>
+  </div>
+
+  <div class="card mt-4">
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Öneriler</h3>
+    <div class="text-xs text-slate-400 space-y-1">
+      <p>• <strong>Kilo verirken</strong> en önemli: Multivitamin, D Vitamini, Omega-3, Magnezyum</p>
+      <p>• <strong>Gym yapanlar</strong> için: Kreatin (5g/gün), Çinko, Magnezyum</p>
+      <p>• <strong>Bel ağrısı</strong> için: Omega-3 (anti-inflamatuar), Magnezyum (kas gevşetme)</p>
+      <p>• Doktoruna danışmadan yüksek doz alma!</p>
+    </div>
+  </div>`;
+}
+
+function toggleVitamin(id){
+  const log = vitaminLog();
+  log[id] = !log[id];
+  DB.set('vitamins_'+DB.today(), log);
+  render();
+}
+
+// ==================== BLOOD PRESSURE ====================
+function renderBP(el){
+  const log = bpLog();
+  const latest = log.length ? log[log.length-1] : null;
+  
+  function bpCategory(sys,dia){
+    if(sys<120 && dia<80) return {label:'Normal',color:'text-emerald-400'};
+    if(sys<130 && dia<80) return {label:'Yükselmiş',color:'text-yellow-400'};
+    if(sys<140 || dia<90) return {label:'Hipertansiyon 1',color:'text-orange-400'};
+    if(sys>=140 || dia>=90) return {label:'Hipertansiyon 2',color:'text-red-400'};
+    return {label:'—',color:'text-slate-400'};
+  }
+
+  const cat = latest ? bpCategory(latest.sys, latest.dia) : null;
+
+  el.innerHTML = `
+  <h2 class="text-lg font-bold mb-3">❤️ Tansiyon Takibi</h2>
+  
+  ${latest ? `
+  <div class="card mb-4 text-center">
+    <div class="text-4xl font-bold"><span class="text-red-400">${latest.sys}</span><span class="text-slate-500">/</span><span class="text-blue-400">${latest.dia}</span></div>
+    <div class="text-sm text-slate-400 mt-1">mmHg</div>
+    <div class="flex items-center justify-center gap-2 mt-2">
+      <span class="text-lg">💓</span>
+      <span class="text-xl font-bold text-pink-400">${latest.pulse || '—'}</span>
+      <span class="text-sm text-slate-400">bpm</span>
+    </div>
+    <div class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-semibold ${cat.color}" style="background:rgba(0,0,0,.3)">${cat.label}</div>
+    <div class="text-xs text-slate-500 mt-1">${latest.date} ${latest.time||''}</div>
+  </div>` : `
+  <div class="card mb-4 text-center"><p class="text-sm text-slate-500 py-4">Henüz tansiyon kaydı yok</p></div>`}
+
+  <div class="card mb-4">
+    <h3 class="text-sm font-semibold mb-3">Yeni Ölçüm Ekle</h3>
+    <div class="grid grid-cols-3 gap-2 mb-2">
+      <div><label class="text-xs text-slate-400">Sistolik</label><input id="bpSys" type="number" placeholder="120" class="text-sm text-center"></div>
+      <div><label class="text-xs text-slate-400">Diastolik</label><input id="bpDia" type="number" placeholder="80" class="text-sm text-center"></div>
+      <div><label class="text-xs text-slate-400">Nabız</label><input id="bpPulse" type="number" placeholder="72" class="text-sm text-center"></div>
+    </div>
+    <button onclick="addBP()" class="btn-primary w-full text-sm mt-2">+ Kaydet</button>
+  </div>
+
+  <div class="card mb-4"><canvas id="bpChart" height="200"></canvas></div>
+
+  <div class="space-y-1">
+    ${log.slice().reverse().slice(0,15).map(e=>{
+      const c = bpCategory(e.sys,e.dia);
+      return `
+      <div class="flex justify-between items-center text-sm py-1.5 border-b border-slate-700/50">
+        <span class="text-slate-400 text-xs">${e.date} ${e.time||''}</span>
+        <div class="flex items-center gap-2">
+          <span class="font-medium">${e.sys}/${e.dia}</span>
+          <span class="text-pink-400 text-xs">♥${e.pulse||'—'}</span>
+          <span class="text-xs ${c.color}">${c.label}</span>
+        </div>
+      </div>`}).join('')}
+  </div>
+
+  <div class="card mt-4">
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Referans Değerler</h3>
+    <div class="space-y-1 text-xs">
+      <div class="flex justify-between"><span class="text-emerald-400">Normal</span><span class="text-slate-400">&lt;120 / &lt;80</span></div>
+      <div class="flex justify-between"><span class="text-yellow-400">Yükselmiş</span><span class="text-slate-400">120-129 / &lt;80</span></div>
+      <div class="flex justify-between"><span class="text-orange-400">Hipertansiyon 1</span><span class="text-slate-400">130-139 / 80-89</span></div>
+      <div class="flex justify-between"><span class="text-red-400">Hipertansiyon 2</span><span class="text-slate-400">≥140 / ≥90</span></div>
+    </div>
+  </div>`;
+
+  if(log.length>1) setTimeout(()=>{
+    const ctx=document.getElementById('bpChart');
+    if(!ctx)return;
+    new Chart(ctx,{
+      type:'line',
+      data:{labels:log.map(e=>e.date.slice(5)),datasets:[
+        {label:'Sistolik',data:log.map(e=>e.sys),borderColor:'#f87171',fill:false,tension:.3,pointRadius:4},
+        {label:'Diastolik',data:log.map(e=>e.dia),borderColor:'#60a5fa',fill:false,tension:.3,pointRadius:4},
+        {label:'Nabız',data:log.map(e=>e.pulse),borderColor:'#f472b6',borderDash:[4,4],fill:false,tension:.3,pointRadius:3}
+      ]},
+      options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
+    });
+  },50);
+}
+
+function addBP(){
+  const sys=parseInt(document.getElementById('bpSys').value);
+  const dia=parseInt(document.getElementById('bpDia').value);
+  const pulse=parseInt(document.getElementById('bpPulse').value)||null;
+  if(!sys||!dia)return;
+  const log=bpLog();
+  const now=new Date();
+  log.push({date:DB.today(), time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}), sys, dia, pulse});
+  DB.set('bp_log', log);
+  render();
+}
+
+// ==================== GYM ====================
+const GYM_PROGRAM = {
+  'Pazartesi': {title:'Üst Vücut', color:'#6366f1', exercises:['Bench Press 4×10','Barbell Row 4×10','Shoulder Press 3×12','Bicep Curl 3×12','Tricep Dips 3×12','Eliptik Bisiklet 20dk']},
+  'Çarşamba': {title:'Alt Vücut', color:'#10b981', exercises:['Squat 4×10','Leg Press 4×10','Lunges 3×12','Calf Raises 3×15','Leg Curls 3×12','Bisiklet 20dk']},
+  'Cuma': {title:'Full Body + Kardiyo', color:'#f59e0b', exercises:['Deadlift 4×8','Pull-ups 3×max','Chest Fly 3×12','Eliptik Bisiklet 30dk']},
+  'Rehabilitasyon': {title:'Bel Rehabilitasyonu', color:'#f59e0b', exercises:['Cat-Cow 2×15','Bird-Dog 2×10','Dead Hang 3×30sn','Hip Flexor Stretch 2×30sn']}
+};
+
+function renderGym(el){
+  const sub = currentSubTab.gym || 'program';
+  el.innerHTML = `
+  <div class="flex gap-2 mb-4">
+    <button onclick="setSubTab('gym','program')" class="sub-tab ${sub==='program'?'active':''}">📋 Program</button>
+    <button onclick="setSubTab('gym','log')" class="sub-tab ${sub==='log'?'active':''}">📝 Kayıt</button>
+    <button onclick="setSubTab('gym','history')" class="sub-tab ${sub==='history'?'active':''}">📊 Geçmiş</button>
+  </div>
+  <div id="gymContent" class="slide-in"></div>`;
+  const container = el.querySelector('#gymContent');
+  if(sub==='log') renderGymLog(container);
+  else if(sub==='history') renderGymHistory(container);
+  else renderGymProgram(container);
+}
+
+function renderGymProgram(el){
+  el.innerHTML = `
+  <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı</h2>
+  <p class="text-xs text-slate-400 mb-4">Haftada 3 gün + her seans sonrası bel rehabilitasyonu</p>
+
+  <div class="card workout-card mb-3">
+    <h3 class="font-semibold text-indigo-400 mb-2">📅 Pazartesi — Üst Vücut</h3>
+    <div class="space-y-2 text-sm">
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bench Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/chest/barbell-bench-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Barbell Row</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Shoulder Press</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/shoulders/barbell-overhead-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bicep Curl</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/biceps/barbell-curl" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Tricep Dips</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/triceps/tricep-dips" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <div class="text-xs text-cyan-400 mt-2">🫀 20dk Eliptik Bisiklet</div>
+    </div>
+  </div>
+
+  <div class="card workout-card mb-3" style="border-left-color:#10b981">
+    <h3 class="font-semibold text-emerald-400 mb-2">📅 Çarşamba — Alt Vücut</h3>
+    <div class="space-y-2 text-sm">
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Squat</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-squat" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/quads/leg-press" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Lunges</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-lunge" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Calf Raises</span><span class="text-slate-400">3×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/calves/calf-raise" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Curls</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/hamstrings/leg-curl" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <div class="text-xs text-cyan-400 mt-2">🚴 20dk Bisiklet</div>
+    </div>
+  </div>
+
+  <div class="card workout-card mb-3" style="border-left-color:#f59e0b">
+    <h3 class="font-semibold text-amber-400 mb-2">📅 Cuma — Full Body + Kardiyo</h3>
+    <div class="space-y-2 text-sm">
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Deadlift</span><span class="text-slate-400">4×8</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/glutes/barbell-deadlift" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Pull-ups</span><span class="text-slate-400">3×max</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lats/pull-up" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Chest Fly</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/dumbbells/male/chest/dumbbell-fly" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <div class="text-xs text-cyan-400 mt-2">🫀 30dk Eliptik Bisiklet</div>
+    </div>
+  </div>
+
+  <div class="card rehab-card mb-3">
+    <h3 class="font-semibold text-amber-400 mb-2">🧘 Bel Rehabilitasyonu <span class="text-xs font-normal text-slate-400">(her seans sonrası)</span></h3>
+    <div class="space-y-2 text-sm">
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Cat-Cow (Kedi-İnek)</span><span class="text-slate-400">2×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/abdominals/cat-cow" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Bird-Dog</span><span class="text-slate-400">2×10 (her taraf)</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lower-back/bird-dog" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Dead Hang (Asılma)</span><span class="text-slate-400">3×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/forearms/dead-hang" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Hip Flexor Stretch</span><span class="text-slate-400">2×30sn (her taraf)</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/stretches/male/hip-flexors/kneeling-hip-flexor-stretch" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="font-semibold text-slate-300 mb-2">📝 Günlük Hedef</h3>
+    <div class="flex items-center gap-2 text-sm">
+      <span class="text-2xl">🚶</span>
+      <span>Her gün <strong class="text-amber-400">10.000 adım</strong></span>
+    </div>
+  </div>`;
+}
+
+// ==================== GYM LOG ====================
+function renderGymLog(el){
+  const today = DB.today();
+  const existing = gymLog(today);
+  const allExercises = [
+    'Bench Press','Barbell Row','Shoulder Press','Bicep Curl','Tricep Dips',
+    'Squat','Leg Press','Lunges','Calf Raises','Leg Curls',
+    'Deadlift','Pull-ups','Chest Fly',
+    'Cat-Cow','Bird-Dog','Dead Hang','Hip Flexor Stretch',
+    'Eliptik Bisiklet','Bisiklet'
+  ];
+
+  let exerciseRows = '';
+  if(existing && existing.exercises){
+    existing.exercises.forEach((ex,i)=>{
+      exerciseRows += gymExerciseRow(i, ex.name, ex.weight, ex.sets, ex.reps);
+    });
+  } else {
+    exerciseRows = gymExerciseRow(0,'','','','');
+  }
+
+  el.innerHTML = `
+  <h2 class="text-lg font-bold mb-3">📝 Antrenman Kaydı</h2>
+  <div class="card mb-4">
+    <div class="flex items-center gap-2 mb-3">
+      <label class="text-sm text-slate-400">Tarih:</label>
+      <input type="date" id="gymDate" value="${today}" class="text-sm flex-1">
+    </div>
+    <div class="flex items-center gap-2 mb-3">
+      <label class="text-sm text-slate-400">Notlar:</label>
+      <input type="text" id="gymNotes" placeholder="Opsiyonel notlar..." value="${existing?.notes||''}" class="text-sm flex-1">
+    </div>
+    <div id="gymExercises" class="space-y-2 mb-3">
+      ${exerciseRows}
+    </div>
+    <div class="flex gap-2">
+      <button onclick="addGymExerciseRow()" class="btn-sm border border-slate-600 text-slate-300 rounded-lg flex-1">+ Egzersiz Ekle</button>
+      <button onclick="saveGymLog()" class="btn-primary btn-sm flex-1">💾 Kaydet</button>
+    </div>
+  </div>
+  
+  <datalist id="exerciseList">${allExercises.map(e=>`<option value="${e}">`).join('')}</datalist>`;
+}
+
+function gymExerciseRow(i, name, weight, sets, reps){
+  return `<div class="grid grid-cols-12 gap-1 items-center gym-row">
+    <input list="exerciseList" placeholder="Egzersiz" value="${name}" class="col-span-4 text-xs gym-name">
+    <input type="number" placeholder="kg" value="${weight}" class="col-span-2 text-xs text-center gym-weight">
+    <input type="number" placeholder="set" value="${sets}" class="col-span-2 text-xs text-center gym-sets">
+    <input type="number" placeholder="rep" value="${reps}" class="col-span-2 text-xs text-center gym-reps">
+    <button onclick="this.closest('.gym-row').remove()" class="col-span-2 text-red-400 text-xs min-h-[44px]">✕</button>
+  </div>`;
+}
+
+function addGymExerciseRow(){
+  const container = document.getElementById('gymExercises');
+  const div = document.createElement('div');
+  div.innerHTML = gymExerciseRow(container.children.length,'','','','');
+  container.appendChild(div.firstElementChild);
+}
+
+function saveGymLog(){
+  const date = document.getElementById('gymDate').value;
+  const notes = document.getElementById('gymNotes').value;
+  const rows = document.querySelectorAll('.gym-row');
+  const exercises = [];
+  rows.forEach(row=>{
+    const name = row.querySelector('.gym-name').value.trim();
+    if(!name) return;
+    exercises.push({
+      name,
+      weight: parseFloat(row.querySelector('.gym-weight').value)||0,
+      sets: parseInt(row.querySelector('.gym-sets').value)||0,
+      reps: parseInt(row.querySelector('.gym-reps').value)||0
+    });
+  });
+  if(!exercises.length){ alert('En az bir egzersiz girin!'); return; }
+  DB.set('gym_'+date, {date, notes, exercises, savedAt: new Date().toISOString()});
+  alert('✅ Antrenman kaydedildi!');
+}
+
+// ==================== GYM HISTORY ====================
+function renderGymHistory(el){
+  // Find all gym logs
+  const logs = [];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k.startsWith('moose_gym_') && k.length===21){
+      const date = k.slice(10);
+      const data = DB.get('gym_'+date);
+      if(data) logs.push(data);
+    }
+  }
+  logs.sort((a,b)=>b.date.localeCompare(a.date));
+
+  el.innerHTML = `
+  <h2 class="text-lg font-bold mb-3">📊 Antrenman Geçmişi</h2>
+  ${logs.length ? logs.map(log=>`
+    <div class="card mb-3 workout-card">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="font-semibold text-indigo-400 text-sm">${log.date}</h3>
+        <span class="text-xs text-slate-400">${log.exercises.length} egzersiz</span>
+      </div>
+      ${log.notes?`<p class="text-xs text-slate-400 mb-2 italic">${log.notes}</p>`:''}
+      <div class="space-y-1">
+        ${log.exercises.map(ex=>`
+          <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
+            <span>${ex.name}</span>
+            <span class="text-slate-400">${ex.weight}kg · ${ex.sets}×${ex.reps}</span>
+          </div>`).join('')}
+      </div>
+      <button onclick="if(confirm('Bu kaydı silmek istediğine emin misin?')){localStorage.removeItem('moose_gym_${log.date}');render()}" class="text-xs text-red-400 mt-2 hover:text-red-300">🗑️ Sil</button>
+    </div>`).join('') : '<p class="text-sm text-slate-500 text-center py-8">Henüz antrenman kaydı yok. Kayıt sekmesinden ilk antrenmanını ekle!</p>'}`;
+}
+
+// ==================== RAPOR (Progress + Weekly Report) ====================
+function renderRapor(el){
+  const sub = currentSubTab.rapor || 'weekly';
+  el.innerHTML = `
+  <div class="flex gap-2 mb-4">
+    <button onclick="setSubTab('rapor','weekly')" class="sub-tab ${sub==='weekly'?'active':''}">📅 Haftalık</button>
+    <button onclick="setSubTab('rapor','progress')" class="sub-tab ${sub==='progress'?'active':''}">📊 İlerleme</button>
+  </div>
+  <div id="raporContent" class="slide-in"></div>`;
+  const container = el.querySelector('#raporContent');
+  if(sub==='progress') renderProgress(container); else renderWeeklyReport(container);
+}
+
+// ==================== WEEKLY REPORT ====================
+function renderWeeklyReport(el){
+  const today = new Date();
+  const dayOfWeek = today.getDay(); // 0=Sun
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((dayOfWeek+6)%7));
+  
+  let totalCal=0, totalPro=0, totalWater=0, daysWithFood=0, daysWithWater=0;
+  let workoutCount=0;
+  let vitaminDays=0, vitaminTotal=0;
+  const weekDates=[];
+  
+  for(let i=0;i<7;i++){
+    const d=new Date(monday);
+    d.setDate(monday.getDate()+i);
+    if(d>today) break;
+    const ds=d.toISOString().slice(0,10);
+    weekDates.push(ds);
+    
+    const foods=DB.get('foods_'+ds,[]);
+    const cal=foods.reduce((s,f)=>s+f.cal,0);
+    const pro=foods.reduce((s,f)=>s+f.pro,0);
+    if(cal>0){ totalCal+=cal; totalPro+=pro; daysWithFood++; }
+    
+    const water=DB.get('water_'+ds,0);
+    if(water>0){ totalWater+=water; daysWithWater++; }
+    
+    const gym=DB.get('gym_'+ds,null);
+    if(gym) workoutCount++;
+    
+    const vit=DB.get('vitamins_'+ds,{});
+    const taken=Object.values(vit).filter(v=>v).length;
+    if(Object.keys(vit).length>0){ vitaminDays++; vitaminTotal+=taken; }
+  }
+
+  const avgCal = daysWithFood ? Math.round(totalCal/daysWithFood) : 0;
+  const avgPro = daysWithFood ? Math.round(totalPro/daysWithFood) : 0;
+  const avgWater = daysWithWater ? (totalWater/daysWithWater).toFixed(1) : 0;
+  const vitPct = vitaminDays ? Math.round(vitaminTotal/(vitaminDays*VITAMINS.length)*100) : 0;
+
+  // Weight change this week
+  const wlog = weightLog();
+  const weekWeights = wlog.filter(w=>weekDates.includes(w.date));
+  let weightChange = '—';
+  if(weekWeights.length>=2){
+    weightChange = (weekWeights[weekWeights.length-1].kg - weekWeights[0].kg).toFixed(1);
+    weightChange = (parseFloat(weightChange)>0?'+':'')+weightChange+'kg';
+  }
+
+  // Grade
+  let grade='🟡', gradeText='Devam Et';
+  const score = (avgCal>0&&avgCal<=PROFILE.dailyCal+100?25:0) + (avgPro>=150?25:avgPro>=100?15:0) + (workoutCount>=2?25:workoutCount>=1?15:0) + (vitPct>=70?25:vitPct>=40?15:0);
+  if(score>=80){grade='🟢';gradeText='Harika Gidiyorsun!'} else if(score>=50){grade='🟡';gradeText='İyi Ama Daha İyisi Var'} else{grade='🔴';gradeText='Kendine Çeki Düzen Ver!'}
+
+  el.innerHTML = `
+  <h2 class="text-lg font-bold mb-3">📅 Haftalık Rapor</h2>
+  <p class="text-xs text-slate-400 mb-4">${weekDates[0] || '—'} → ${weekDates[weekDates.length-1] || '—'}</p>
+
+  <div class="card mb-4 text-center bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border-indigo-500/20">
+    <div class="text-4xl mb-1">${grade}</div>
+    <div class="text-lg font-bold">${gradeText}</div>
+    <div class="text-xs text-slate-400 mt-1">Skor: ${score}/100</div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-4">
+    <div class="card text-center">
+      <div class="text-2xl font-bold text-indigo-400">${avgCal}</div>
+      <div class="text-xs text-slate-400">Ort. Kalori</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-2xl font-bold text-red-400">${avgPro}g</div>
+      <div class="text-xs text-slate-400">Ort. Protein</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-2xl font-bold text-cyan-400">${avgWater}L</div>
+      <div class="text-xs text-slate-400">Ort. Su</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-2xl font-bold text-amber-400">${workoutCount}</div>
+      <div class="text-xs text-slate-400">Antrenman</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-2xl font-bold text-purple-400">${vitPct}%</div>
+      <div class="text-xs text-slate-400">Vitamin Uyumu</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-2xl font-bold ${weightChange.includes('-')?'text-emerald-400':'text-red-400'}">${weightChange}</div>
+      <div class="text-xs text-slate-400">Kilo Değişimi</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">💡 Öneriler</h3>
+    <div class="text-xs text-slate-400 space-y-1">
+      ${avgCal===0?'<p>• 📝 Bu hafta öğün kaydı yok. Yediklerini kaydetmeye başla!</p>':''}
+      ${avgPro<150?'<p>• 🥩 Protein alımını artır (hedef: 170-180g/gün)</p>':''}
+      ${parseFloat(avgWater)<3?'<p>• 💧 Su içmeyi unutma! (hedef: 3.5L/gün)</p>':''}
+      ${workoutCount<3?'<p>• 🏋️ Bu hafta daha fazla antrenman yap (hedef: 3/hafta)</p>':''}
+      ${vitPct<70?'<p>• 💊 Vitamin almayı ihmal etme!</p>':''}
+      ${score>=80?'<p>• 🌟 Bu hafta harika gidiyorsun, aynı tempoyu koru!</p>':''}
+    </div>
   </div>`;
 }
 
@@ -825,9 +1186,17 @@ function renderProgress(el){
       data:{labels:last30.map(d=>d.date.slice(8)),datasets:[
         {label:'Kalori',data:last30.map(d=>d.cal),backgroundColor:last30.map(d=>d.cal>PROFILE.dailyCal?'rgba(239,68,68,.6)':d.cal>0?'rgba(99,102,241,.6)':'rgba(51,65,85,.3)'),borderRadius:4},
       ]},
-      options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}},annotation:{}},scales:{x:{ticks:{color:'#64748b',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
+      options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
     });
   },50);
+}
+
+// ==================== SERVICE WORKER ====================
+if('serviceWorker' in navigator){
+  const swCode = `self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).catch(()=>new Response('Offline',{status:503})))});`;
+  const swBlob = new Blob([swCode],{type:'application/javascript'});
+  const swUrl = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
 }
 
 // ==================== INIT ====================
