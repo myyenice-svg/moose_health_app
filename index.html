@@ -445,37 +445,44 @@ window.addEventListener('DOMContentLoaded', function(){
 // ==================== QUICK SYNC (Dashboard button) ====================
 async function quickSync(btn){
   const token=getGHToken();
-  if(!token) return;
-  const origText=btn.innerHTML;
-  btn.innerHTML='⏳ Sync...'; btn.disabled=true;
+  if(!token){btn.innerHTML='❌ Token yok!';setTimeout(()=>{btn.innerHTML='☁️ Sync'},2000);return;}
+  btn.innerHTML='⏳ İndiriliyor...'; btn.disabled=true;
   try{
-    // 1. Download cloud data and merge (cloud fills missing local keys)
-    try{
-      const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});
-      if(res.ok){
-        const j=await res.json();
+    // 1. Download cloud data and merge
+    let sha=null;
+    const dlRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github+json'}});
+    if(dlRes.ok){
+      const j=await dlRes.json();
+      sha=j.sha;
+      try{
         const cloud=JSON.parse(decodeURIComponent(escape(atob(j.content))));
         for(const[k,v] of Object.entries(cloud)){
-          if(k.startsWith('moose_') && !localStorage.getItem(k)) localStorage.setItem(k,v);
+          if(k.startsWith('moose_')) localStorage.setItem(k,v);
         }
-      }
-    }catch{}
+      }catch(pe){console.error('Parse error',pe)}
+    }
 
-    // 2. Upload all local data to cloud
-    let sha=null;
-    try{const r=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r.ok){const j=await r.json();sha=j.sha;}}catch{}
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));
-    const body={message:'Quick sync '+new Date().toISOString(),content};
+    btn.innerHTML='⏳ Yükleniyor...';
+
+    // 2. Upload local data to cloud
+    if(!sha){
+      // Try to get SHA again if download failed
+      try{const r2=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r2.ok){const j2=await r2.json();sha=j2.sha;}}catch{}
+    }
+    const allData=getAllData();
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(allData,null,2))));
+    const body={message:'Sync '+DB.today(),content};
     if(sha) body.sha=sha;
-    const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!res.ok) throw new Error('HTTP '+res.status);
+    const upRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify(body)});
+    if(!upRes.ok){const err=await upRes.text();throw new Error(upRes.status+': '+err.slice(0,100));}
 
     btn.innerHTML='✅ Sync Tamam!';
-    render();
-    setTimeout(()=>{btn.innerHTML=origText;btn.disabled=false},2000);
+    if(typeof render==='function') render();
+    setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},2500);
   }catch(e){
-    btn.innerHTML='❌ Hata';
-    setTimeout(()=>{btn.innerHTML=origText;btn.disabled=false},2000);
+    console.error('Sync error',e);
+    btn.innerHTML='❌ '+e.message.slice(0,30);
+    setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},4000);
   }
 }
 
