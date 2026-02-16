@@ -1,7 +1,7 @@
 {
   "moose_app_version": "6275a4f36c7af5c923fc2ddd67320dc045e87146",
-  "moose_foods_2026-02-16": "[{\"name\": \"Menemen+Zeytin+\\u00c7orba+Tahin\", \"meal\": \"\\u00d6\\u011fle\", \"cal\": 650, \"pro\": 33, \"fat\": 39, \"carb\": 38}]",
-  "moose_water_2026-02-16": "0.5",
+  "moose_foods_2026-02-16": "[{\"name\": \"Menemen+Zeytin+Çorba+Tahin\", \"meal\": \"Öğle\", \"cal\": 650, \"pro\": 33, \"fat\": 39, \"carb\": 38}, {\"name\": \"Portakal + Fıstık (15 adet)\", \"meal\": \"Ara Öğün 1\", \"cal\": 175, \"pro\": 6, \"fat\": 10, \"carb\": 18}]",
+  "moose_water_2026-02-16": "1.5",
   "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true}",
   "moose_weight_log": "[{\"date\": \"2026-02-16\", \"kg\": 111}]"
 }
