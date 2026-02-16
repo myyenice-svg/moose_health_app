@@ -224,6 +224,31 @@ function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
     if(en>=0&&en<10000){ DB.set('energy_'+today, en); synced.push('Aktif Enerji: '+en+' kcal'); }
   }
 
+  // Food entry
+  if(p.has('food')){
+    const foods = DB.get('foods_'+today, []);
+    foods.push({
+      name: decodeURIComponent(p.get('food')),
+      meal: decodeURIComponent(p.get('meal')||'Öğle'),
+      cal: parseInt(p.get('cal'))||0,
+      pro: parseInt(p.get('pro'))||0,
+      fat: parseInt(p.get('fat'))||0,
+      carb: parseInt(p.get('carb'))||0
+    });
+    DB.set('foods_'+today, foods);
+    synced.push(decodeURIComponent(p.get('food'))+': '+p.get('cal')+' kcal');
+  }
+
+  // Water (liters, adds to existing)
+  if(p.has('water')){
+    const w = parseFloat(p.get('water'));
+    if(w>0&&w<20){
+      const current = DB.get('water_'+today, 0);
+      DB.set('water_'+today, current + w);
+      synced.push('Su: +'+w+'L');
+    }
+  }
+
   // Clean URL and show notification
   if(synced.length){
     window.history.replaceState({}, '', window.location.pathname);
