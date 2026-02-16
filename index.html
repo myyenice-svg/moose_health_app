@@ -10,6 +10,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f172a">
 <meta name="description" content="Yaso'nun kişisel sağlık ve fitness takip uygulaması">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTW9vc2UgRml0bmVzcyIsInNob3J0X25hbWUiOiJNb29zZSIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGYxNzJhIiwidGhlbWVfY29sb3IiOiIjMGYxNzJhIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHk9Jy45ZW0nIGZvbnQtc2l6ZT0nODAnPvCfpow8L3RleHQ+PC9zdmc+Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>🦌</text></svg>">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -248,6 +251,15 @@ window.addEventListener('DOMContentLoaded', function(){
       DB.set('water_'+today, current + w);
       synced.push('Su: +'+w+'L');
     }
+  }
+
+  // Vitamin check-off (comma-separated ids)
+  if(p.has('vit')){
+    const vitLog = DB.get('vitamins_'+today, {});
+    const ids = decodeURIComponent(p.get('vit')).split(',');
+    ids.forEach(id=>{ if(id.trim()) vitLog[id.trim()]=true; });
+    DB.set('vitamins_'+today, vitLog);
+    synced.push('Vitamin: '+ids.length+' işaretlendi ✅');
   }
 
   // Clean URL, show notification, re-render
