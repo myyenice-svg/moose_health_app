@@ -1,6 +1,7 @@
 {
+  "moose_app_version": "6275a4f36c7af5c923fc2ddd67320dc045e87146",
   "moose_foods_2026-02-16": "[{\"name\": \"Menemen+Zeytin+\\u00c7orba+Tahin\", \"meal\": \"\\u00d6\\u011fle\", \"cal\": 650, \"pro\": 33, \"fat\": 39, \"carb\": 38}]",
   "moose_weight_log": "[{\"date\": \"2026-02-16\", \"kg\": 111}]",
-  "moose_app_version": "6275a4f36c7af5c923fc2ddd67320dc045e87146",
+  "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true}",
   "moose_water_2026-02-16": "0.5"
 }
