@@ -166,7 +166,8 @@ function bpLog(){ return DB.get('bp_log', []) }
 function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
 
 // ==================== APPLE HEALTH SYNC ====================
-(function syncFromURL(){
+// Runs after DOMContentLoaded to ensure all functions are defined
+window.addEventListener('DOMContentLoaded', function(){
   const p = new URLSearchParams(window.location.search);
   if(!p.has('sync')) return;
   const today = DB.today();
@@ -176,7 +177,7 @@ function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
   if(p.has('weight')){
     const kg = parseFloat(p.get('weight'));
     if(kg>30 && kg<300){
-      const log = weightLog();
+      const log = DB.get('weight_log', []);
       const existing = log.findIndex(e=>e.date===today);
       if(existing>=0) log[existing].kg=kg; else log.push({date:today,kg});
       DB.set('weight_log', log);
@@ -195,7 +196,7 @@ function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
     const sys=parseInt(p.get('bp_sys')), dia=parseInt(p.get('bp_dia'));
     const pulse=p.has('pulse')?parseInt(p.get('pulse')):null;
     if(sys>60&&sys<260&&dia>30&&dia<160){
-      const log = bpLog();
+      const log = DB.get('bp_log', []);
       const now = new Date();
       log.push({date:today, time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}), sys, dia, pulse});
       DB.set('bp_log', log);
@@ -249,19 +250,20 @@ function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
     }
   }
 
-  // Clean URL and show notification
+  // Clean URL, show notification, re-render
   if(synced.length){
     window.history.replaceState({}, '', window.location.pathname);
+    if(typeof render==='function') render();
     setTimeout(()=>{
       const toast = document.createElement('div');
       toast.className = 'fixed top-16 left-1/2 -translate-x-1/2 z-[70] px-4 py-3 rounded-xl text-sm font-medium text-white shadow-lg';
-      toast.style.background = 'linear-gradient(135deg,#10b981,#059669)';
-      toast.innerHTML = '✅ Apple Health Sync<br><span class="text-xs opacity-80">'+synced.join(' · ')+'</span>';
+      toast.style.cssText = 'background:linear-gradient(135deg,#10b981,#059669);max-width:90vw;text-align:center;z-index:70';
+      toast.innerHTML = '✅ Sync Tamamlandı!<br><span style="font-size:12px;opacity:.8">'+synced.join(' · ')+'</span>';
       document.body.appendChild(toast);
       setTimeout(()=>toast.remove(), 4000);
-    }, 500);
+    }, 300);
   }
-})();
+});
 
 // ==================== THEME ====================
 function toggleTheme(){
