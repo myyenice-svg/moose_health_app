@@ -442,6 +442,43 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 });
 
+// ==================== QUICK SYNC (Dashboard button) ====================
+async function quickSync(btn){
+  const token=getGHToken();
+  if(!token) return;
+  const origText=btn.innerHTML;
+  btn.innerHTML='⏳ Sync...'; btn.disabled=true;
+  try{
+    // 1. Download cloud data and merge (cloud fills missing local keys)
+    try{
+      const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});
+      if(res.ok){
+        const j=await res.json();
+        const cloud=JSON.parse(decodeURIComponent(escape(atob(j.content))));
+        for(const[k,v] of Object.entries(cloud)){
+          if(k.startsWith('moose_') && !localStorage.getItem(k)) localStorage.setItem(k,v);
+        }
+      }
+    }catch{}
+
+    // 2. Upload all local data to cloud
+    let sha=null;
+    try{const r=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r.ok){const j=await r.json();sha=j.sha;}}catch{}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));
+    const body={message:'Quick sync '+new Date().toISOString(),content};
+    if(sha) body.sha=sha;
+    const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+
+    btn.innerHTML='✅ Sync Tamam!';
+    render();
+    setTimeout(()=>{btn.innerHTML=origText;btn.disabled=false},2000);
+  }catch(e){
+    btn.innerHTML='❌ Hata';
+    setTimeout(()=>{btn.innerHTML=origText;btn.disabled=false},2000);
+  }
+}
+
 // ==================== SYNC (FILE) ====================
 function showSyncModal(){ document.getElementById('syncModal').classList.remove('hidden'); updateGHUI(); }
 function exportData(){
@@ -523,6 +560,11 @@ function renderDashboard(el){
   <div class="card mb-4 text-center bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border-indigo-500/20">
     <p class="text-sm italic text-slate-300">${quote}</p>
   </div>
+
+  ${getGHToken()?`
+  <button onclick="quickSync(this)" class="w-full mb-4 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;min-height:48px;border:none">
+    ☁️ Sync
+  </button>`:''}
 
   <!-- Step Counter Ring -->
   <div class="card mb-4 text-center">
