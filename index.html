@@ -191,7 +191,11 @@ function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
 // Runs after DOMContentLoaded to ensure all functions are defined
 window.addEventListener('DOMContentLoaded', function(){
   const p = new URLSearchParams(window.location.search);
-  if(!p.has('sync')) return;
+  // Allow setting token via URL param (one-time)
+  if(p.has('token')){
+    localStorage.setItem('moose_gh_token', p.get('token').trim());
+  }
+  if(!p.has('sync') && !p.has('token')) return;
   const today = DB.today();
   let synced = [];
 
@@ -314,7 +318,7 @@ function toggleTheme(){
 const GH_REPO = 'myyenice-svg/moose_health_app';
 const GH_FILE = 'data.json';
 
-function getGHToken(){ return localStorage.getItem('moose_gh_token') }
+function getGHToken(){ const t=localStorage.getItem('moose_gh_token'); return t?t.trim():null }
 function saveGHToken(){
   const t = document.getElementById('ghTokenInput').value.trim();
   if(!t) return;
