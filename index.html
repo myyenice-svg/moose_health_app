@@ -165,6 +165,79 @@ function vitaminLog(d){ return DB.get('vitamins_'+(d||DB.today()), {}) }
 function bpLog(){ return DB.get('bp_log', []) }
 function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
 
+// ==================== APPLE HEALTH SYNC ====================
+(function syncFromURL(){
+  const p = new URLSearchParams(window.location.search);
+  if(!p.has('sync')) return;
+  const today = DB.today();
+  let synced = [];
+
+  // Weight
+  if(p.has('weight')){
+    const kg = parseFloat(p.get('weight'));
+    if(kg>30 && kg<300){
+      const log = weightLog();
+      const existing = log.findIndex(e=>e.date===today);
+      if(existing>=0) log[existing].kg=kg; else log.push({date:today,kg});
+      DB.set('weight_log', log);
+      synced.push('Kilo: '+kg+'kg');
+    }
+  }
+
+  // Steps
+  if(p.has('steps')){
+    const s = parseInt(p.get('steps'));
+    if(s>=0 && s<200000){ DB.set('steps_'+today, s); synced.push('Adım: '+s.toLocaleString()); }
+  }
+
+  // Blood Pressure
+  if(p.has('bp_sys') && p.has('bp_dia')){
+    const sys=parseInt(p.get('bp_sys')), dia=parseInt(p.get('bp_dia'));
+    const pulse=p.has('pulse')?parseInt(p.get('pulse')):null;
+    if(sys>60&&sys<260&&dia>30&&dia<160){
+      const log = bpLog();
+      const now = new Date();
+      log.push({date:today, time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}), sys, dia, pulse});
+      DB.set('bp_log', log);
+      synced.push('Tansiyon: '+sys+'/'+dia+(pulse?' ♥'+pulse:''));
+    }
+  }
+
+  // Heart Rate (resting)
+  if(p.has('hr') && !p.has('bp_sys')){
+    const hr = parseInt(p.get('hr'));
+    if(hr>30&&hr<220){
+      DB.set('hr_'+today, hr);
+      synced.push('Nabız: '+hr+' bpm');
+    }
+  }
+
+  // Sleep (hours)
+  if(p.has('sleep')){
+    const sl = parseFloat(p.get('sleep'));
+    if(sl>0&&sl<24){ DB.set('sleep_'+today, sl); synced.push('Uyku: '+sl.toFixed(1)+' saat'); }
+  }
+
+  // Active Energy (kcal burned)
+  if(p.has('energy')){
+    const en = parseInt(p.get('energy'));
+    if(en>=0&&en<10000){ DB.set('energy_'+today, en); synced.push('Aktif Enerji: '+en+' kcal'); }
+  }
+
+  // Clean URL and show notification
+  if(synced.length){
+    window.history.replaceState({}, '', window.location.pathname);
+    setTimeout(()=>{
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-16 left-1/2 -translate-x-1/2 z-[70] px-4 py-3 rounded-xl text-sm font-medium text-white shadow-lg';
+      toast.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+      toast.innerHTML = '✅ Apple Health Sync<br><span class="text-xs opacity-80">'+synced.join(' · ')+'</span>';
+      document.body.appendChild(toast);
+      setTimeout(()=>toast.remove(), 4000);
+    }, 500);
+  }
+})();
+
 // ==================== THEME ====================
 function toggleTheme(){
   const html = document.documentElement;
