@@ -1,10 +1,10 @@
 {
   "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true}",
   "moose_steps_2026-02-17": "4000",
-  "moose_app_version": "077d3c23f3a2e7daf175335b4c6818be8aff9bf5",
+  "moose_app_version": "05403dc94e223d8e4b5166a7c5170bc0dcc932e6",
   "moose_foods_2026-02-17": "[{\"name\": \"Turkey Florentina Panini\", \"meal\": \"Ogle\", \"cal\": 550, \"pro\": 30, \"fat\": 25, \"carb\": 40}]",
   "moose_water_2026-02-16": "1.5",
-  "moose_water_2026-02-17": "2.5",
+  "moose_water_2026-02-17": "3",
   "moose_foods_2026-02-16": "[{\"name\": \"Menemen+Zeytin+Corba+Tahin\", \"meal\": \"Ogle\", \"cal\": 650, \"pro\": 33, \"fat\": 39, \"carb\": 38}, {\"name\": \"Portakal+Fistik 15 adet\", \"meal\": \"Ara Ogun 1\", \"cal\": 175, \"pro\": 6, \"fat\": 10, \"carb\": 18}, {\"name\": \"Yarim Tavuk+Roka Salatasi+Cacik\", \"meal\": \"Aksam\", \"cal\": 750, \"pro\": 62, \"fat\": 42, \"carb\": 20}, {\"name\": \"Sut+Bal+Muz\", \"meal\": \"Ara Ogun 3\", \"cal\": 290, \"pro\": 9, \"fat\": 5, \"carb\": 46}]",
   "moose_weight_log": "[{\"date\": \"2026-02-16\", \"kg\": 111}, {\"date\": \"2026-02-17\", \"kg\": 111}]",
   "moose_vitamins_2026-02-17": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"tiopatib_aksam\":false,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"lipanthyl\":false}",
