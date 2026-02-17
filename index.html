@@ -489,8 +489,7 @@ async function quickSync(btn){
     if(log) log.innerHTML+='<br>Upload: '+upRes.status;
 
     btn.innerHTML='✅ Sync Tamam!';
-    if(typeof navigate==='function') navigate('dashboard');
-    setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},2500);
+    setTimeout(()=>location.reload(),1000);
   }catch(e){
     if(log) log.innerHTML+='<br>❌ Hata: '+e.message;
     btn.innerHTML='❌ '+e.message.slice(0,30);
