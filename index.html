@@ -497,6 +497,15 @@ async function quickSync(btn){
   }
 }
 
+function clearTodayData(){
+  if(!confirm('Bugünün verilerini silmek istediğinize emin misiniz? (öğün, su, adım sıfırlanacak)')) return;
+  const today = DB.today();
+  ['foods','water','steps','vitamins','gym','hr','sleep','energy'].forEach(key=>{
+    localStorage.removeItem('moose_'+key+'_'+today);
+  });
+  render();
+}
+
 // ==================== SYNC (FILE) ====================
 function showSyncModal(){ document.getElementById('syncModal').classList.remove('hidden'); updateGHUI(); }
 function exportData(){
@@ -581,6 +590,9 @@ function renderDashboard(el){
 
   <button onclick="quickSync(this)" id="syncBtn" class="w-full mb-4 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;min-height:48px;border:none">
     ☁️ Sync
+  </button>
+  <button onclick="clearTodayData()" class="w-full py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white min-height:48px border:none">
+    🗑️ Bugünü Temizle
   </button>
   <div id="syncLog" class="text-xs text-slate-400 mb-4 hidden"></div>
 
