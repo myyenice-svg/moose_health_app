@@ -448,43 +448,51 @@ window.addEventListener('DOMContentLoaded', function(){
 
 // ==================== QUICK SYNC (Dashboard button) ====================
 async function quickSync(btn){
+  const log=document.getElementById('syncLog');
+  if(log){log.classList.remove('hidden');log.innerHTML='Başlatılıyor...';}
   const token=getGHToken();
-  if(!token){btn.innerHTML='❌ Token yok!';setTimeout(()=>{btn.innerHTML='☁️ Sync'},2000);return;}
+  if(!token){
+    if(log) log.innerHTML='❌ Token bulunamadı. 💾 → Token Kaydet yapın.';
+    btn.innerHTML='❌ Token yok!';setTimeout(()=>{btn.innerHTML='☁️ Sync'},2000);return;
+  }
   btn.innerHTML='⏳ İndiriliyor...'; btn.disabled=true;
+  if(log) log.innerHTML='Token: ...'+token.slice(-6)+' ✅<br>GitHub API çağrılıyor...';
   try{
-    // 1. Download cloud data and merge
+    // 1. Download cloud data
     let sha=null;
     const dlRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github+json'}});
+    if(log) log.innerHTML+='<br>API yanıt: '+dlRes.status;
     if(dlRes.ok){
       const j=await dlRes.json();
       sha=j.sha;
-      try{
-        const cloud=JSON.parse(decodeURIComponent(escape(atob(j.content))));
-        for(const[k,v] of Object.entries(cloud)){
-          if(k.startsWith('moose_') && k!=='moose_gh_token' && k!=='moose_theme' && k!=='moose_app_version') localStorage.setItem(k,v);
-        }
-      }catch(pe){console.error('Parse error',pe)}
+      const rawContent=atob(j.content.replace(/\n/g,''));
+      const cloud=JSON.parse(rawContent);
+      const keys=Object.keys(cloud).filter(k=>k.startsWith('moose_')&&k!=='moose_gh_token'&&k!=='moose_theme'&&k!=='moose_app_version');
+      if(log) log.innerHTML+='<br>Cloud veri: '+keys.length+' anahtar';
+      keys.forEach(k=>localStorage.setItem(k,cloud[k]));
+      if(log) log.innerHTML+='<br>localStorage güncellendi ✅';
+    }else{
+      const errText=await dlRes.text();
+      if(log) log.innerHTML+='<br>❌ API hata: '+errText.slice(0,100);
     }
 
     btn.innerHTML='⏳ Yükleniyor...';
 
-    // 2. Upload local data to cloud
-    if(!sha){
-      // Try to get SHA again if download failed
-      try{const r2=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r2.ok){const j2=await r2.json();sha=j2.sha;}}catch{}
-    }
+    // 2. Upload
+    if(!sha){try{const r2=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r2.ok){sha=(await r2.json()).sha;}}catch{}}
     const allData=getAllData();
+    if(log) log.innerHTML+='<br>Yüklenecek: '+Object.keys(allData).length+' anahtar';
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(allData,null,2))));
     const body={message:'Sync '+DB.today(),content};
     if(sha) body.sha=sha;
-    const upRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},body:JSON.stringify(body)});
-    if(!upRes.ok){const err=await upRes.text();throw new Error(upRes.status+': '+err.slice(0,100));}
+    const upRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(log) log.innerHTML+='<br>Upload: '+upRes.status;
 
     btn.innerHTML='✅ Sync Tamam!';
-    if(typeof render==='function') render();
+    if(typeof navigate==='function') navigate('dashboard');
     setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},2500);
   }catch(e){
-    console.error('Sync error',e);
+    if(log) log.innerHTML+='<br>❌ Hata: '+e.message;
     btn.innerHTML='❌ '+e.message.slice(0,30);
     setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},4000);
   }
@@ -572,10 +580,10 @@ function renderDashboard(el){
     <p class="text-sm italic text-slate-300">${quote}</p>
   </div>
 
-  ${getGHToken()?`
-  <button onclick="quickSync(this)" class="w-full mb-4 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;min-height:48px;border:none">
+  <button onclick="quickSync(this)" id="syncBtn" class="w-full mb-4 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;min-height:48px;border:none">
     ☁️ Sync
-  </button>`:''}
+  </button>
+  <div id="syncLog" class="text-xs text-slate-400 mb-4 hidden"></div>
 
   <!-- Step Counter Ring -->
   <div class="card mb-4 text-center">
