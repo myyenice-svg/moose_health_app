@@ -159,7 +159,7 @@ Rapor
 const DB = {
   get(key, def=null){ try{return JSON.parse(localStorage.getItem('moose_'+key))||def}catch{return def} },
   set(key, val){ localStorage.setItem('moose_'+key, JSON.stringify(val)) },
-  today(){ return new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'})).toISOString().slice(0,10) }
+  today(){ const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
 };
 
 const PROFILE = { height:190, startWeight:111, targetWeight:96, dailyCal:2300, protein:[170,180], fat:[70,80], carbs:[200,250], waterTarget:3.5, stepsTarget:10000 };
