@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sync Test</title>
+<style>body{font-family:sans-serif;background:#0f172a;color:#e2e8f0;padding:20px}pre{background:#1e293b;padding:10px;border-radius:8px;font-size:12px;overflow:auto}button{background:#6366f1;color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:16px;margin:8px 0;width:100%}</style>
+</head><body>
+<h2>🧪 Moose Fitness - Sync Test</h2>
+<div id="log"></div>
+<button onclick="testURLSync()">1. Test URL Sync</button>
+<button onclick="testCloudSync()">2. Test Cloud Sync</button>
+<button onclick="showLS()">3. Show LocalStorage</button>
+<pre id="output">Henüz test yapılmadı</pre>
+
+<script>
+const out = document.getElementById('output');
+const log = document.getElementById('log');
+
+function addLog(msg){out.textContent += '\n' + msg;}
+
+function testURLSync(){
+  out.textContent = '--- URL Sync Test ---';
+  try{
+    const DB = {
+      get(k,d){try{return JSON.parse(localStorage.getItem('moose_'+k))||d}catch{return d}},
+      set(k,v){localStorage.setItem('moose_'+k,JSON.stringify(v))},
+      today(){return new Date().toISOString().slice(0,10)}
+    };
+    const today = DB.today();
+    addLog('Today: ' + today);
+    
+    // Simulate adding food
+    const foods = DB.get('foods_'+today, []);
+    addLog('Current foods: ' + foods.length);
+    foods.push({name:'TEST FOOD',meal:'Test',cal:100,pro:10,fat:5,carb:15});
+    DB.set('foods_'+today, foods);
+    addLog('After add: ' + DB.get('foods_'+today,[]).length + ' foods');
+    addLog('Raw localStorage: ' + localStorage.getItem('moose_foods_'+today));
+    addLog('✅ URL Sync works!');
+  }catch(e){
+    addLog('❌ ERROR: ' + e.message);
+  }
+}
+
+async function testCloudSync(){
+  out.textContent = '--- Cloud Sync Test ---';
+  const token = localStorage.getItem('moose_gh_token');
+  addLog('Token: ' + (token ? '...'+token.slice(-6) : 'NOT FOUND'));
+  if(!token){addLog('❌ No token. Set it first.'); return;}
+  
+  try{
+    const res = await fetch('https://api.github.com/repos/myyenice-svg/moose_health_app/contents/data.json',{
+      headers:{'Authorization':'token '+token.trim()}
+    });
+    addLog('API Status: ' + res.status);
+    if(!res.ok){addLog('❌ API Error: ' + await res.text()); return;}
+    
+    const j = await res.json();
+    addLog('SHA: ' + j.sha);
+    const raw = atob(j.content.replace(/\n/g,''));
+    addLog('Raw length: ' + raw.length);
+    const data = JSON.parse(raw);
+    const keys = Object.keys(data);
+    addLog('Keys: ' + keys.length);
+    keys.forEach(k => {
+      addLog('  ' + k + ' = ' + (data[k]||'').slice(0,50) + '...');
+      if(k.startsWith('moose_') && k!=='moose_gh_token' && k!=='moose_theme'){
+        localStorage.setItem(k, data[k]);
+      }
+    });
+    addLog('✅ Cloud sync done! localStorage updated.');
+  }catch(e){
+    addLog('❌ ERROR: ' + e.message + '\n' + e.stack);
+  }
+}
+
+function showLS(){
+  out.textContent = '--- LocalStorage ---';
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k.startsWith('moose_')){
+      addLog(k + ' = ' + (localStorage.getItem(k)||'').slice(0,80));
+    }
+  }
+  if(localStorage.length===0) addLog('(empty)');
+}
+
+// Auto-set token from URL
+const p = new URLSearchParams(location.search);
+if(p.has('token')) localStorage.setItem('moose_gh_token', p.get('token').trim());
+</script>
+</body></html>
