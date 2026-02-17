@@ -439,7 +439,7 @@ window.addEventListener('DOMContentLoaded', function(){
       const data=JSON.parse(decodeURIComponent(escape(atob(j.content))));
       let updated=false;
       for(const[k,v] of Object.entries(data)){
-        if(k.startsWith('moose_') && !localStorage.getItem(k)){ localStorage.setItem(k,v); updated=true; }
+        if(k.startsWith('moose_') && k!=='moose_gh_token' && k!=='moose_theme' && k!=='moose_app_version'){ localStorage.setItem(k,v); updated=true; }
       }
       if(updated) render();
     }).catch(()=>{});
@@ -461,7 +461,7 @@ async function quickSync(btn){
       try{
         const cloud=JSON.parse(decodeURIComponent(escape(atob(j.content))));
         for(const[k,v] of Object.entries(cloud)){
-          if(k.startsWith('moose_')) localStorage.setItem(k,v);
+          if(k.startsWith('moose_') && k!=='moose_gh_token' && k!=='moose_theme' && k!=='moose_app_version') localStorage.setItem(k,v);
         }
       }catch(pe){console.error('Parse error',pe)}
     }
