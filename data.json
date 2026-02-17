@@ -4,7 +4,7 @@
   "moose_app_version": "ee2fd5734b2bb33f01acbf3ff717bafdb5aeaf8e",
   "moose_foods_2026-02-17": "[]",
   "moose_water_2026-02-16": "1.5",
-  "moose_water_2026-02-17": "2",
+  "moose_water_2026-02-17": "2.5",
   "moose_foods_2026-02-16": "[{\"name\": \"Menemen+Zeytin+Corba+Tahin\", \"meal\": \"Ogle\", \"cal\": 650, \"pro\": 33, \"fat\": 39, \"carb\": 38}, {\"name\": \"Portakal+Fistik 15 adet\", \"meal\": \"Ara Ogun 1\", \"cal\": 175, \"pro\": 6, \"fat\": 10, \"carb\": 18}, {\"name\": \"Yarim Tavuk+Roka Salatasi+Cacik\", \"meal\": \"Aksam\", \"cal\": 750, \"pro\": 62, \"fat\": 42, \"carb\": 20}, {\"name\": \"Sut+Bal+Muz\", \"meal\": \"Ara Ogun 3\", \"cal\": 290, \"pro\": 9, \"fat\": 5, \"carb\": 46}]",
   "moose_weight_log": "[{\"date\": \"2026-02-16\", \"kg\": 111}, {\"date\": \"2026-02-17\", \"kg\": 111}]",
   "moose_vitamins_2026-02-17": "{\"folbiol\":false,\"tiopatib_sabah\":false,\"tiopatib_aksam\":false,\"ginseng\":false,\"probiotics\":false,\"multivitamin\":false,\"lipanthyl\":false}",
