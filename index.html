@@ -135,7 +135,6 @@ html:not(.dark) .glass{background:rgba(241,245,249,.85);border-bottom-color:rgba
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes ringFill{from{stroke-dashoffset:339.292}to{stroke-dashoffset:var(--target-offset)}}
 @keyframes breathe{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes chatBubble{from{opacity:0;transform:translateY(8px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
 
 .fade-in{animation:fadeInUp .4s cubic-bezier(.4,0,.2,1)}
 .slide-in{animation:slideInRight .35s cubic-bezier(.4,0,.2,1)}
@@ -199,14 +198,6 @@ html:not(.dark) .step-ring-bg{stroke:#e2e8f0}
 .meal-card{border-left:4px solid #10b981}
 .rehab-card{border-left:4px solid #f59e0b}
 
-/* AI Chat */
-.chat-container{max-height:280px;overflow-y:auto;scroll-behavior:smooth}
-.chat-bubble{animation:chatBubble .3s cubic-bezier(.4,0,.2,1);border-radius:16px;padding:.6rem .9rem;max-width:85%;font-size:.85rem;line-height:1.45}
-.chat-user{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
-.chat-ai{background:var(--bg-card-raised);border:1px solid var(--border-subtle);border-bottom-left-radius:4px}
-.chat-typing .dot{width:6px;height:6px;border-radius:50%;background:#94a3b8;display:inline-block;animation:breathe 1.2s ease infinite}
-.chat-typing .dot:nth-child(2){animation-delay:.2s}
-.chat-typing .dot:nth-child(3){animation-delay:.4s}
 
 /* Accessibility: Focus visible */
 :focus-visible{outline:2px solid #818cf8;outline-offset:2px;border-radius:4px}
@@ -368,73 +359,6 @@ function readinessColor(score){
   if(score >= 60) return { gradient: 'from-indigo-400 to-purple-500', stroke: '#818cf8', label: 'İyi', bg: 'rgba(129,140,248,.1)' };
   if(score >= 40) return { gradient: 'from-amber-400 to-yellow-500', stroke: '#fbbf24', label: 'Orta', bg: 'rgba(251,191,36,.1)' };
   return { gradient: 'from-red-400 to-rose-500', stroke: '#f87171', label: 'Düşük', bg: 'rgba(248,113,113,.1)' };
-}
-
-// ==================== AI WELLNESS CHAT ====================
-const chatHistory = DB.get('chat_history', []);
-
-async function sendChatMessage(){
-  const input = document.getElementById('chatInput');
-  const msg = input.value.trim();
-  if(!msg) return;
-  input.value = '';
-
-  chatHistory.push({ role: 'user', text: msg, ts: Date.now() });
-  renderChatMessages();
-
-  // Show typing indicator
-  const chatBox = document.getElementById('chatMessages');
-  const typingEl = document.createElement('div');
-  typingEl.className = 'chat-typing flex gap-1 items-center p-2';
-  typingEl.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
-  chatBox.appendChild(typingEl);
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  try {
-    const res = await fetch('https://api.openclaw.ai/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: msg,
-        context: {
-          weight: latestWeight(),
-          steps: todaySteps(),
-          water: todayWater(),
-          calories: todayFoods().reduce((s,f)=>s+f.cal,0),
-          readiness: calcReadinessScore().total
-        }
-      })
-    });
-    const data = await res.json();
-    typingEl.remove();
-    chatHistory.push({ role: 'ai', text: data.reply || data.message || 'Yanıt alınamadı.', ts: Date.now() });
-  } catch(e) {
-    typingEl.remove();
-    // Mock response for offline / demo
-    const mockReplies = [
-      `Bugün ${todaySteps().toLocaleString()} adım atmışsın — ${todaySteps()>=8000?'harika tempo!':'biraz daha yürüyüş iyi olur!'} 🚶`,
-      `Su alımın ${todayWater().toFixed(1)}L. ${todayWater()>=3?'Güzel gidiyorsun!':'Biraz daha su iç! 💧'}`,
-      `Readiness skorun ${calcReadinessScore().total}/100. ${calcReadinessScore().total>=60?'İyi durumdasın 💪':'Bugün dinlenmeye odaklan 🧘'}`,
-      'Protein alımına dikkat et — kas kaybını önlemek için günde 170-180g hedefle! 🥩',
-      'Uyku kalitenizi artırmak için yatmadan 1 saat önce ekrandan uzak durun 😴'
-    ];
-    chatHistory.push({ role: 'ai', text: mockReplies[Math.floor(Math.random()*mockReplies.length)], ts: Date.now() });
-  }
-
-  // Keep last 50 messages
-  while(chatHistory.length > 50) chatHistory.shift();
-  DB.set('chat_history', chatHistory);
-  renderChatMessages();
-}
-
-function renderChatMessages(){
-  const chatBox = document.getElementById('chatMessages');
-  if(!chatBox) return;
-  chatBox.innerHTML = chatHistory.slice(-20).map(m => `
-    <div class="flex ${m.role==='user'?'justify-end':'justify-start'} mb-2">
-      <div class="chat-bubble ${m.role==='user'?'chat-user':'chat-ai'}">${m.text}</div>
-    </div>`).join('');
-  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 // ==================== APPLE HEALTH SYNC ====================
@@ -757,26 +681,7 @@ function renderDashboard(el){
       <div class="macro-bar mt-2"><div class="macro-fill bg-emerald-500" style="width:${Math.min(100,Math.round((PROFILE.startWeight-weight)/(PROFILE.startWeight-PROFILE.targetWeight)*100))}%"></div></div>
     </div>
 
-    <!-- 6. AI Wellness Chat (span 2) -->
-    <div class="bento-card span-2" role="region" aria-label="AI Wellness Asistan">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm animate-breathe">🤖</div>
-        <div>
-          <h3 class="text-sm font-bold text-slate-300">AI Wellness Asistan</h3>
-          <div class="text-xs text-slate-500">Sağlığınla ilgili sorular sor</div>
-        </div>
-      </div>
-      <div id="chatMessages" class="chat-container neu-inset p-3 mb-3" style="min-height:80px" role="log" aria-label="Sohbet mesajları">
-        ${chatHistory.length===0?'<div class="text-xs text-slate-500 text-center py-4 animate-breathe">Merhaba! 👋 Sağlığınla ilgili merak ettiklerini sor.</div>':''}
-      </div>
-      <form onsubmit="event.preventDefault();sendChatMessage()" class="flex gap-2">
-        <input type="text" id="chatInput" placeholder="Mesaj yaz..." class="flex-1 text-sm" aria-label="Mesaj gir" autocomplete="off">
-        <button type="submit" class="btn-primary btn-sm flex items-center gap-1" aria-label="Gönder">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-          Gönder
-        </button>
-      </form>
-    </div>
+    <!-- AI Wellness Chat removed -->
   </div>
 
   <!-- Sync & Actions -->
@@ -830,7 +735,7 @@ function renderDashboard(el){
   </div>`;
 
   // Render chat messages if they exist
-  if(chatHistory.length > 0) renderChatMessages();
+
 }
 
 function saveSteps(){
