@@ -33,40 +33,188 @@ tailwind.config = {
 }
 </script>
 <style>
-body{font-family:'Inter',sans-serif;background:#0f172a;color:#e2e8f0;transition:background .3s,color .3s}
-html:not(.dark) body{background:#f1f5f9;color:#1e293b}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#1e293b}::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
+/* ==================== 2026 NEUMORPHISM 2.0 + BENTO ==================== */
+:root {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-raised: #253349;
+  --border-subtle: rgba(51,65,85,.6);
+  --shadow-neu-dark: 6px 6px 16px rgba(2,6,23,.6), -4px -4px 12px rgba(51,65,85,.15);
+  --shadow-neu-inset: inset 3px 3px 8px rgba(2,6,23,.5), inset -2px -2px 6px rgba(51,65,85,.12);
+  --shadow-glow-indigo: 0 0 20px rgba(99,102,241,.15);
+  --shadow-glow-cyan: 0 0 20px rgba(56,189,248,.12);
+  --shadow-glow-emerald: 0 0 20px rgba(52,211,153,.12);
+  --transition-smooth: all .35s cubic-bezier(.4,0,.2,1);
+  --radius-bento: 20px;
+  --radius-inner: 14px;
+  /* Semantic colors */
+  --color-success: #34d399;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #38bdf8;
+  --color-primary: #818cf8;
+  --color-accent: #c084fc;
+}
+html:not(.dark) {
+  --bg-primary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-raised: #f8fafc;
+  --border-subtle: rgba(203,213,225,.6);
+  --shadow-neu-dark: 6px 6px 16px rgba(148,163,184,.2), -4px -4px 12px rgba(255,255,255,.7);
+  --shadow-neu-inset: inset 3px 3px 8px rgba(148,163,184,.15), inset -2px -2px 6px rgba(255,255,255,.5);
+  --shadow-glow-indigo: 0 0 20px rgba(99,102,241,.1);
+}
+
+*{box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:#e2e8f0;transition:background .4s,color .4s;-webkit-font-smoothing:antialiased}
+html:not(.dark) body{color:#1e293b}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}
+
+/* Bento Card System */
+.bento-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-bento);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-neu-dark);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+.bento-card::before {
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);
+}
+html:not(.dark) .bento-card::before {
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+}
+.bento-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-neu-dark), var(--shadow-glow-indigo);
+}
+.bento-card:active { transform: scale(.985); }
+
+/* Legacy .card alias */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-bento);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-neu-dark);
+  transition: var(--transition-smooth);
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.bento-grid .span-2 { grid-column: span 2; }
+
+/* Neumorphic inset elements */
+.neu-inset {
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-neu-inset);
+  border-radius: var(--radius-inner);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Glass header/nav */
+.glass{background:rgba(15,23,42,.82);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(51,65,85,.4);transition:background .4s}
+html:not(.dark) .glass{background:rgba(241,245,249,.85);border-bottom-color:rgba(203,213,225,.4)}
+
+/* Micro Animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,.3)}50%{box-shadow:0 0 16px 4px rgba(99,102,241,.15)}}
+@keyframes countUp{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes ringFill{from{stroke-dashoffset:339.292}to{stroke-dashoffset:var(--target-offset)}}
+@keyframes breathe{0%,100%{opacity:.6}50%{opacity:1}}
+@keyframes chatBubble{from{opacity:0;transform:translateY(8px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.fade-in{animation:fadeInUp .4s cubic-bezier(.4,0,.2,1)}
+.slide-in{animation:slideInRight .35s cubic-bezier(.4,0,.2,1)}
+.animate-pulse-glow{animation:pulseGlow 2.5s ease infinite}
+.animate-count{animation:countUp .5s cubic-bezier(.4,0,.2,1)}
+.animate-shimmer{background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);background-size:200% 100%;animation:shimmer 2s infinite}
+.animate-breathe{animation:breathe 3s ease infinite}
+
+/* Readiness Score Gradient Ring */
+.readiness-ring { filter: drop-shadow(0 0 8px rgba(99,102,241,.3)); }
+.readiness-score-text { font-variant-numeric: tabular-nums; }
+
+/* Tabs */
 .tab-active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff!important;box-shadow:0 4px 15px rgba(99,102,241,.3)}
-.card{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:1.25rem;transition:background .3s,border-color .3s}
-html:not(.dark) .card{background:#fff;border-color:#e2e8f0}
-.glass{background:rgba(30,41,59,.85);backdrop-filter:blur(12px);border:1px solid rgba(51,65,85,.5);transition:background .3s}
-html:not(.dark) .glass{background:rgba(241,245,249,.9);border-color:rgba(203,213,225,.5)}
-.water-drop{transition:all .2s;cursor:pointer}.water-drop.filled{color:#38bdf8;transform:scale(1.1)}.water-drop:not(.filled){color:#334155}
-.progress-ring{transition:stroke-dashoffset .5s ease}
-input,select,textarea{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:.6rem .8rem;color:#e2e8f0;width:100%;font-size:.9rem;min-height:44px;transition:background .3s,border-color .3s,color .3s}
-html:not(.dark) input,html:not(.dark) select,html:not(.dark) textarea{background:#f8fafc;border-color:#cbd5e1;color:#1e293b}
-input:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 2px rgba(99,102,241,.2)}
-button{cursor:pointer;transition:all .15s}
-.btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-weight:600;border:none;min-height:44px}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(99,102,241,.4)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;font-size:11px;font-weight:500;min-width:56px;min-height:52px;color:#64748b;transition:var(--transition-smooth);border:none;background:none}
+.nav-btn.tab-active{color:#fff}
+html:not(.dark) .nav-btn{color:#94a3b8}
+
+/* Sub-tabs */
+.sub-tab{padding:.5rem 1rem;border-radius:12px;font-size:.75rem;font-weight:600;min-height:36px;color:#94a3b8;border:1px solid transparent;transition:var(--transition-smooth);background:transparent}
+.sub-tab.active{background:rgba(99,102,241,.12);color:#818cf8;border-color:rgba(99,102,241,.25);box-shadow:var(--shadow-glow-indigo)}
+html:not(.dark) .sub-tab.active{background:rgba(99,102,241,.08)}
+
+/* Form inputs - neumorphic */
+input,select,textarea{
+  background:var(--bg-primary);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--radius-inner);
+  padding:.65rem .85rem;
+  color:#e2e8f0;
+  width:100%;font-size:.9rem;min-height:44px;
+  box-shadow:var(--shadow-neu-inset);
+  transition:var(--transition-smooth);
+}
+html:not(.dark) input,html:not(.dark) select,html:not(.dark) textarea{color:#1e293b}
+input:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:var(--shadow-neu-inset),0 0 0 3px rgba(99,102,241,.15)}
+
+/* Buttons */
+button{cursor:pointer;transition:var(--transition-smooth)}
+.btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:.65rem 1.3rem;border-radius:var(--radius-inner);font-weight:600;border:none;min-height:44px;box-shadow:0 4px 12px rgba(99,102,241,.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,102,241,.35)}
 .btn-primary:active{transform:scale(.97)}
-.btn-sm{padding:.4rem .8rem;font-size:.8rem;border-radius:8px;min-height:36px}
-.fade-in{animation:fadeIn .3s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.slide-in{animation:slideIn .3s ease}@keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.btn-sm{padding:.4rem .8rem;font-size:.8rem;border-radius:10px;min-height:36px}
+
+/* Bars */
+.macro-bar{height:8px;border-radius:6px;overflow:hidden;box-shadow:var(--shadow-neu-inset)}
+.macro-fill{height:100%;border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* Water drops */
+.water-drop{transition:var(--transition-smooth);cursor:pointer}
+.water-drop.filled{color:#38bdf8;transform:scale(1.1);filter:drop-shadow(0 0 4px rgba(56,189,248,.4))}
+.water-drop:not(.filled){color:#334155}
+
+/* Progress ring */
+.progress-ring{transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1)}
+.step-ring-bg{stroke:#334155}
+html:not(.dark) .step-ring-bg{stroke:#e2e8f0}
+
+/* Workout cards */
 .workout-card{border-left:4px solid #6366f1}
 .meal-card{border-left:4px solid #10b981}
 .rehab-card{border-left:4px solid #f59e0b}
-.macro-bar{height:8px;border-radius:4px;background:#1e293b;overflow:hidden}
-html:not(.dark) .macro-bar{background:#e2e8f0}
-.macro-fill{height:100%;border-radius:4px;transition:width .5s ease}
-.sub-tab{padding:.5rem 1rem;border-radius:10px;font-size:.75rem;font-weight:600;min-height:36px;color:#94a3b8;border:1px solid transparent;transition:all .2s}
-.sub-tab.active{background:rgba(99,102,241,.15);color:#818cf8;border-color:rgba(99,102,241,.3)}
-html:not(.dark) .sub-tab.active{background:rgba(99,102,241,.1)}
-.step-ring-bg{stroke:#334155}
-html:not(.dark) .step-ring-bg{stroke:#e2e8f0}
-.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:12px;font-size:11px;font-weight:500;min-width:56px;min-height:52px;color:#64748b;transition:all .2s;border:none;background:none}
-.nav-btn.tab-active{color:#fff}
-html:not(.dark) .nav-btn{color:#94a3b8}
+
+/* AI Chat */
+.chat-container{max-height:280px;overflow-y:auto;scroll-behavior:smooth}
+.chat-bubble{animation:chatBubble .3s cubic-bezier(.4,0,.2,1);border-radius:16px;padding:.6rem .9rem;max-width:85%;font-size:.85rem;line-height:1.45}
+.chat-user{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.chat-ai{background:var(--bg-card-raised);border:1px solid var(--border-subtle);border-bottom-left-radius:4px}
+.chat-typing .dot{width:6px;height:6px;border-radius:50%;background:#94a3b8;display:inline-block;animation:breathe 1.2s ease infinite}
+.chat-typing .dot:nth-child(2){animation-delay:.2s}
+.chat-typing .dot:nth-child(3){animation-delay:.4s}
+
+/* Accessibility: Focus visible */
+:focus-visible{outline:2px solid #818cf8;outline-offset:2px;border-radius:4px}
+/* Skip to content */
+.skip-link{position:absolute;top:-100%;left:50%;transform:translateX(-50%);background:#6366f1;color:#fff;padding:.5rem 1rem;border-radius:0 0 8px 8px;z-index:100;font-size:.85rem}
+.skip-link:focus{top:0}
+
+/* Light mode overrides */
 html:not(.dark) .text-slate-300{color:#475569}
 html:not(.dark) .text-slate-400{color:#64748b}
 html:not(.dark) .text-slate-500{color:#94a3b8}
@@ -76,34 +224,34 @@ html:not(.dark) .bg-slate-800{background:#f1f5f9}
 </style>
 </head>
 <body class="min-h-screen pb-24">
+<a href="#mainContent" class="skip-link">İçeriğe Geç</a>
 
 <!-- Header -->
-<header class="sticky top-0 z-50 glass px-4 py-3">
+<header class="sticky top-0 z-50 glass px-4 py-3" role="banner">
 <div class="max-w-lg mx-auto flex items-center justify-between">
 <div class="flex items-center gap-2">
-<span class="text-2xl">🦌</span>
+<span class="text-2xl" aria-hidden="true">🦌</span>
 <h1 class="text-lg font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Moose Fitness</h1>
 </div>
 <div class="flex items-center gap-2">
-<button onclick="toggleTheme()" id="themeBtn" class="text-lg p-1" title="Tema Değiştir">🌙</button>
-<button onclick="showSyncModal()" class="text-lg p-1" title="Veri Yedekle/Geri Yükle">💾</button>
+<button onclick="toggleTheme()" id="themeBtn" class="text-lg p-1" title="Tema Değiştir" aria-label="Tema Değiştir">🌙</button>
+<button onclick="showSyncModal()" class="text-lg p-1" title="Veri Yedekle/Geri Yükle" aria-label="Veri Yönetimi">💾</button>
 <div class="text-xs text-slate-400" id="headerDate"></div>
 </div>
 </div>
 </header>
 
 <!-- Sync Modal -->
-<div id="syncModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden">
+<div id="syncModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden" role="dialog" aria-modal="true" aria-label="Veri Yönetimi">
 <div class="card w-80">
 <h3 class="font-semibold mb-3">💾 Veri Yönetimi</h3>
-
 <div class="mb-3 p-2 rounded-lg" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2)">
 <div class="flex items-center justify-between mb-1">
 <span class="text-xs font-semibold text-indigo-400">☁️ GitHub Cloud Sync</span>
 <span id="syncStatus" class="text-xs">—</span>
 </div>
 <div id="ghSetup">
-<input id="ghTokenInput" type="password" placeholder="GitHub Token gir..." class="text-xs mb-1" style="min-height:36px">
+<input id="ghTokenInput" type="password" placeholder="GitHub Token gir..." class="text-xs mb-1" style="min-height:36px" aria-label="GitHub Token">
 <button onclick="saveGHToken()" class="btn-primary btn-sm w-full text-xs">Token Kaydet</button>
 </div>
 <div id="ghConnected" class="hidden">
@@ -114,7 +262,6 @@ html:not(.dark) .bg-slate-800{background:#f1f5f9}
 <button onclick="clearGHToken()" class="text-xs text-red-400 mt-1 w-full text-center">Token Sil</button>
 </div>
 </div>
-
 <p class="text-xs text-slate-400 mb-2">Veya dosya olarak:</p>
 <button onclick="exportData()" class="btn-primary w-full text-sm mb-2">📥 Verileri İndir (JSON)</button>
 <label class="btn-primary w-full text-sm mb-3 block text-center cursor-pointer" style="background:linear-gradient(135deg,#10b981,#059669)">
@@ -126,29 +273,29 @@ html:not(.dark) .bg-slate-800{background:#f1f5f9}
 </div>
 
 <!-- Main Content -->
-<main class="max-w-lg mx-auto px-4 pt-4" id="mainContent"></main>
+<main class="max-w-lg mx-auto px-4 pt-4" id="mainContent" role="main"></main>
 
-<!-- Bottom Navigation - 5 tabs -->
-<nav class="fixed bottom-0 left-0 right-0 glass z-50" style="padding-bottom:env(safe-area-inset-bottom)">
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 glass z-50" style="padding-bottom:env(safe-area-inset-bottom)" role="navigation" aria-label="Ana Navigasyon">
 <div class="max-w-lg mx-auto flex justify-around py-1 px-1">
-<button onclick="navigate('dashboard')" data-tab="dashboard" class="nav-btn tab-btn">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
+<button onclick="navigate('dashboard')" data-tab="dashboard" class="nav-btn tab-btn" aria-label="Ana Sayfa">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
 Ana
 </button>
-<button onclick="navigate('takip')" data-tab="takip" class="nav-btn tab-btn">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+<button onclick="navigate('takip')" data-tab="takip" class="nav-btn tab-btn" aria-label="Takip">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
 Takip
 </button>
-<button onclick="navigate('gym')" data-tab="gym" class="nav-btn tab-btn">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h2m12 0h2M6 8v8m12-8v8M8 6h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+<button onclick="navigate('gym')" data-tab="gym" class="nav-btn tab-btn" aria-label="Spor">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h2m12 0h2M6 8v8m12-8v8M8 6h8a2 2 0 012 2v8a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
 Spor
 </button>
-<button onclick="navigate('saglik')" data-tab="saglik" class="nav-btn tab-btn">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+<button onclick="navigate('saglik')" data-tab="saglik" class="nav-btn tab-btn" aria-label="Sağlık">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
 Sağlık
 </button>
-<button onclick="navigate('rapor')" data-tab="rapor" class="nav-btn tab-btn">
-<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+<button onclick="navigate('rapor')" data-tab="rapor" class="nav-btn tab-btn" aria-label="Rapor">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
 Rapor
 </button>
 </div>
@@ -159,7 +306,7 @@ Rapor
 const DB = {
   get(key, def=null){ try{return JSON.parse(localStorage.getItem('moose_'+key))||def}catch{return def} },
   set(key, val){ localStorage.setItem('moose_'+key, JSON.stringify(val)) },
-  today(){ const d=new Date(); const y=d.getFullYear(); const m=String(d.getMonth()+1).padStart(2,'0'); const day=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+day; }
+  today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 };
 
 const PROFILE = { height:190, startWeight:111, targetWeight:96, dailyCal:2300, protein:[170,180], fat:[70,80], carbs:[200,250], waterTarget:3.5, stepsTarget:10000 };
@@ -187,459 +334,461 @@ function vitaminLog(d){ return DB.get('vitamins_'+(d||DB.today()), {}) }
 function bpLog(){ return DB.get('bp_log', []) }
 function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
 
+// ==================== DAILY READINESS SCORE ====================
+function calcReadinessScore(){
+  const today = DB.today();
+  // Weight change factor (closer to target = better)
+  const weight = latestWeight();
+  const totalToLose = PROFILE.startWeight - PROFILE.targetWeight; // 15
+  const lost = PROFILE.startWeight - weight;
+  const weightScore = Math.min(20, Math.max(0, Math.round((lost / totalToLose) * 20)));
+
+  // Steps factor
+  const steps = todaySteps();
+  const stepsScore = Math.min(20, Math.round((steps / PROFILE.stepsTarget) * 20));
+
+  // Water factor
+  const water = todayWater();
+  const waterScore = Math.min(20, Math.round((water / PROFILE.waterTarget) * 20));
+
+  // Sleep factor
+  const sleep = DB.get('sleep_'+today, 0);
+  const sleepScore = sleep >= 7 ? 20 : sleep >= 5 ? Math.round((sleep/7)*20) : Math.round((sleep/7)*15);
+
+  // Energy / active calories factor
+  const energy = DB.get('energy_'+today, 0);
+  const energyScore = Math.min(20, energy >= 500 ? 20 : energy >= 200 ? Math.round((energy/500)*20) : Math.round((energy/500)*15));
+
+  const total = weightScore + stepsScore + waterScore + sleepScore + energyScore;
+  return { total: Math.min(100, total), weightScore, stepsScore, waterScore, sleepScore, energyScore };
+}
+
+function readinessColor(score){
+  if(score >= 80) return { gradient: 'from-emerald-400 to-green-500', stroke: '#34d399', label: 'Harika', bg: 'rgba(52,211,153,.1)' };
+  if(score >= 60) return { gradient: 'from-indigo-400 to-purple-500', stroke: '#818cf8', label: 'İyi', bg: 'rgba(129,140,248,.1)' };
+  if(score >= 40) return { gradient: 'from-amber-400 to-yellow-500', stroke: '#fbbf24', label: 'Orta', bg: 'rgba(251,191,36,.1)' };
+  return { gradient: 'from-red-400 to-rose-500', stroke: '#f87171', label: 'Düşük', bg: 'rgba(248,113,113,.1)' };
+}
+
+// ==================== AI WELLNESS CHAT ====================
+const chatHistory = DB.get('chat_history', []);
+
+async function sendChatMessage(){
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+
+  chatHistory.push({ role: 'user', text: msg, ts: Date.now() });
+  renderChatMessages();
+
+  // Show typing indicator
+  const chatBox = document.getElementById('chatMessages');
+  const typingEl = document.createElement('div');
+  typingEl.className = 'chat-typing flex gap-1 items-center p-2';
+  typingEl.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  chatBox.appendChild(typingEl);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.openclaw.ai/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: msg,
+        context: {
+          weight: latestWeight(),
+          steps: todaySteps(),
+          water: todayWater(),
+          calories: todayFoods().reduce((s,f)=>s+f.cal,0),
+          readiness: calcReadinessScore().total
+        }
+      })
+    });
+    const data = await res.json();
+    typingEl.remove();
+    chatHistory.push({ role: 'ai', text: data.reply || data.message || 'Yanıt alınamadı.', ts: Date.now() });
+  } catch(e) {
+    typingEl.remove();
+    // Mock response for offline / demo
+    const mockReplies = [
+      `Bugün ${todaySteps().toLocaleString()} adım atmışsın — ${todaySteps()>=8000?'harika tempo!':'biraz daha yürüyüş iyi olur!'} 🚶`,
+      `Su alımın ${todayWater().toFixed(1)}L. ${todayWater()>=3?'Güzel gidiyorsun!':'Biraz daha su iç! 💧'}`,
+      `Readiness skorun ${calcReadinessScore().total}/100. ${calcReadinessScore().total>=60?'İyi durumdasın 💪':'Bugün dinlenmeye odaklan 🧘'}`,
+      'Protein alımına dikkat et — kas kaybını önlemek için günde 170-180g hedefle! 🥩',
+      'Uyku kalitenizi artırmak için yatmadan 1 saat önce ekrandan uzak durun 😴'
+    ];
+    chatHistory.push({ role: 'ai', text: mockReplies[Math.floor(Math.random()*mockReplies.length)], ts: Date.now() });
+  }
+
+  // Keep last 50 messages
+  while(chatHistory.length > 50) chatHistory.shift();
+  DB.set('chat_history', chatHistory);
+  renderChatMessages();
+}
+
+function renderChatMessages(){
+  const chatBox = document.getElementById('chatMessages');
+  if(!chatBox) return;
+  chatBox.innerHTML = chatHistory.slice(-20).map(m => `
+    <div class="flex ${m.role==='user'?'justify-end':'justify-start'} mb-2">
+      <div class="chat-bubble ${m.role==='user'?'chat-user':'chat-ai'}">${m.text}</div>
+    </div>`).join('');
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
 // ==================== APPLE HEALTH SYNC ====================
-// Runs after DOMContentLoaded to ensure all functions are defined
 window.addEventListener('DOMContentLoaded', function(){
   const p = new URLSearchParams(window.location.search);
-  // Allow setting token via URL param (one-time)
-  if(p.has('token')){
-    localStorage.setItem('moose_gh_token', p.get('token').trim());
-  }
+  if(p.has('token')) localStorage.setItem('moose_gh_token', p.get('token').trim());
   if(!p.has('sync') && !p.has('token')) return;
   const today = DB.today();
   let synced = [];
 
-  // Weight
   if(p.has('weight')){
     const kg = parseFloat(p.get('weight'));
     if(kg>30 && kg<300){
       const log = DB.get('weight_log', []);
       const existing = log.findIndex(e=>e.date===today);
       if(existing>=0) log[existing].kg=kg; else log.push({date:today,kg});
-      DB.set('weight_log', log);
-      synced.push('Kilo: '+kg+'kg');
+      DB.set('weight_log', log); synced.push('Kilo: '+kg+'kg');
     }
   }
-
-  // Steps
-  if(p.has('steps')){
-    const s = parseInt(p.get('steps'));
-    if(s>=0 && s<200000){ DB.set('steps_'+today, s); synced.push('Adım: '+s.toLocaleString()); }
-  }
-
-  // Blood Pressure
-  if(p.has('bp_sys') && p.has('bp_dia')){
-    const sys=parseInt(p.get('bp_sys')), dia=parseInt(p.get('bp_dia'));
-    const pulse=p.has('pulse')?parseInt(p.get('pulse')):null;
+  if(p.has('steps')){ const s=parseInt(p.get('steps')); if(s>=0&&s<200000){DB.set('steps_'+today,s);synced.push('Adım: '+s.toLocaleString())} }
+  if(p.has('bp_sys')&&p.has('bp_dia')){
+    const sys=parseInt(p.get('bp_sys')),dia=parseInt(p.get('bp_dia')),pulse=p.has('pulse')?parseInt(p.get('pulse')):null;
     if(sys>60&&sys<260&&dia>30&&dia<160){
-      const log = DB.get('bp_log', []);
-      const now = new Date();
-      log.push({date:today, time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}), sys, dia, pulse});
-      DB.set('bp_log', log);
-      synced.push('Tansiyon: '+sys+'/'+dia+(pulse?' ♥'+pulse:''));
+      const log=DB.get('bp_log',[]);const now=new Date();
+      log.push({date:today,time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),sys,dia,pulse});
+      DB.set('bp_log',log);synced.push('Tansiyon: '+sys+'/'+dia+(pulse?' ♥'+pulse:''));
     }
   }
-
-  // Heart Rate (resting)
-  if(p.has('hr') && !p.has('bp_sys')){
-    const hr = parseInt(p.get('hr'));
-    if(hr>30&&hr<220){
-      DB.set('hr_'+today, hr);
-      synced.push('Nabız: '+hr+' bpm');
-    }
-  }
-
-  // Sleep (hours)
-  if(p.has('sleep')){
-    const sl = parseFloat(p.get('sleep'));
-    if(sl>0&&sl<24){ DB.set('sleep_'+today, sl); synced.push('Uyku: '+sl.toFixed(1)+' saat'); }
-  }
-
-  // Active Energy (kcal burned)
-  if(p.has('energy')){
-    const en = parseInt(p.get('energy'));
-    if(en>=0&&en<10000){ DB.set('energy_'+today, en); synced.push('Aktif Enerji: '+en+' kcal'); }
-  }
-
-  // Food entry
+  if(p.has('hr')&&!p.has('bp_sys')){const hr=parseInt(p.get('hr'));if(hr>30&&hr<220){DB.set('hr_'+today,hr);synced.push('Nabız: '+hr+' bpm')}}
+  if(p.has('sleep')){const sl=parseFloat(p.get('sleep'));if(sl>0&&sl<24){DB.set('sleep_'+today,sl);synced.push('Uyku: '+sl.toFixed(1)+' saat')}}
+  if(p.has('energy')){const en=parseInt(p.get('energy'));if(en>=0&&en<10000){DB.set('energy_'+today,en);synced.push('Aktif Enerji: '+en+' kcal')}}
   if(p.has('food')){
-    const foods = DB.get('foods_'+today, []);
-    foods.push({
-      name: decodeURIComponent(p.get('food')),
-      meal: decodeURIComponent(p.get('meal')||'Öğle'),
-      cal: parseInt(p.get('cal'))||0,
-      pro: parseInt(p.get('pro'))||0,
-      fat: parseInt(p.get('fat'))||0,
-      carb: parseInt(p.get('carb'))||0
-    });
-    DB.set('foods_'+today, foods);
-    synced.push(decodeURIComponent(p.get('food'))+': '+p.get('cal')+' kcal');
+    const foods=DB.get('foods_'+today,[]);
+    foods.push({name:decodeURIComponent(p.get('food')),meal:decodeURIComponent(p.get('meal')||'Öğle'),cal:parseInt(p.get('cal'))||0,pro:parseInt(p.get('pro'))||0,fat:parseInt(p.get('fat'))||0,carb:parseInt(p.get('carb'))||0});
+    DB.set('foods_'+today,foods);synced.push(decodeURIComponent(p.get('food'))+': '+p.get('cal')+' kcal');
   }
-
-  // Water (liters, adds to existing)
-  if(p.has('water')){
-    const w = parseFloat(p.get('water'));
-    if(w>0&&w<20){
-      const current = DB.get('water_'+today, 0);
-      DB.set('water_'+today, current + w);
-      synced.push('Su: +'+w+'L');
-    }
-  }
-
-  // Vitamin check-off (comma-separated ids)
+  if(p.has('water')){const w=parseFloat(p.get('water'));if(w>0&&w<20){DB.set('water_'+today,DB.get('water_'+today,0)+w);synced.push('Su: +'+w+'L')}}
   if(p.has('vit')){
-    const vitLog = DB.get('vitamins_'+today, {});
-    const ids = decodeURIComponent(p.get('vit')).split(',');
-    ids.forEach(id=>{ if(id.trim()) vitLog[id.trim()]=true; });
-    DB.set('vitamins_'+today, vitLog);
-    synced.push('Vitamin: '+ids.length+' işaretlendi ✅');
+    const vitLog=DB.get('vitamins_'+today,{});const ids=decodeURIComponent(p.get('vit')).split(',');
+    ids.forEach(id=>{if(id.trim())vitLog[id.trim()]=true});DB.set('vitamins_'+today,vitLog);synced.push('Vitamin: '+ids.length+' işaretlendi ✅');
   }
 
-  // Clean URL, show notification, re-render
   if(synced.length){
-    window.history.replaceState({}, '', window.location.pathname);
+    window.history.replaceState({},'',window.location.pathname);
     if(typeof render==='function') render();
     setTimeout(()=>{
-      const toast = document.createElement('div');
-      toast.className = 'fixed top-16 left-1/2 -translate-x-1/2 z-[70] px-4 py-3 rounded-xl text-sm font-medium text-white shadow-lg';
-      toast.style.cssText = 'background:linear-gradient(135deg,#10b981,#059669);max-width:90vw;text-align:center;z-index:70';
-      toast.innerHTML = '✅ Sync Tamamlandı!<br><span style="font-size:12px;opacity:.8">'+synced.join(' · ')+'</span>';
-      document.body.appendChild(toast);
-      setTimeout(()=>toast.remove(), 4000);
-    }, 300);
+      const toast=document.createElement('div');
+      toast.className='fixed top-16 left-1/2 -translate-x-1/2 z-[70] px-4 py-3 rounded-xl text-sm font-medium text-white shadow-lg';
+      toast.style.cssText='background:linear-gradient(135deg,#10b981,#059669);max-width:90vw;text-align:center';
+      toast.innerHTML='✅ Sync Tamamlandı!<br><span style="font-size:12px;opacity:.8">'+synced.join(' · ')+'</span>';
+      document.body.appendChild(toast);setTimeout(()=>toast.remove(),4000);
+    },300);
   }
 });
 
 // ==================== THEME ====================
 function toggleTheme(){
-  const html = document.documentElement;
-  html.classList.toggle('dark');
-  const isDark = html.classList.contains('dark');
-  localStorage.setItem('moose_theme', isDark?'dark':'light');
-  document.getElementById('themeBtn').textContent = isDark?'🌙':'☀️';
-  document.querySelector('meta[name=theme-color]').content = isDark?'#0f172a':'#f1f5f9';
+  document.documentElement.classList.toggle('dark');
+  const isDark=document.documentElement.classList.contains('dark');
+  localStorage.setItem('moose_theme',isDark?'dark':'light');
+  document.getElementById('themeBtn').textContent=isDark?'🌙':'☀️';
+  document.querySelector('meta[name=theme-color]').content=isDark?'#0f172a':'#f1f5f9';
 }
-(function(){
-  const t = localStorage.getItem('moose_theme');
-  if(t==='light'){ document.documentElement.classList.remove('dark'); document.getElementById('themeBtn').textContent='☀️'; }
-})();
+(function(){if(localStorage.getItem('moose_theme')==='light'){document.documentElement.classList.remove('dark');document.getElementById('themeBtn').textContent='☀️'}})();
 
 // ==================== GITHUB CLOUD SYNC ====================
-const GH_REPO = 'myyenice-svg/moose_health_app';
-const GH_FILE = 'data.json';
-
-function getGHToken(){ const t=localStorage.getItem('moose_gh_token'); return t?t.trim():null }
-function saveGHToken(){
-  const t = document.getElementById('ghTokenInput').value.trim();
-  if(!t) return;
-  localStorage.setItem('moose_gh_token', t);
-  updateGHUI();
-}
-function clearGHToken(){
-  localStorage.removeItem('moose_gh_token');
-  updateGHUI();
-}
+const GH_REPO='myyenice-svg/moose_health_app';const GH_FILE='data.json';
+function getGHToken(){const t=localStorage.getItem('moose_gh_token');return t?t.trim():null}
+function saveGHToken(){const t=document.getElementById('ghTokenInput').value.trim();if(!t)return;localStorage.setItem('moose_gh_token',t);updateGHUI()}
+function clearGHToken(){localStorage.removeItem('moose_gh_token');updateGHUI()}
 function updateGHUI(){
-  const token = getGHToken();
-  document.getElementById('ghSetup').classList.toggle('hidden', !!token);
-  document.getElementById('ghConnected').classList.toggle('hidden', !token);
-  document.getElementById('syncStatus').textContent = token ? '🟢 Bağlı' : '🔴 Token yok';
+  const token=getGHToken();
+  document.getElementById('ghSetup').classList.toggle('hidden',!!token);
+  document.getElementById('ghConnected').classList.toggle('hidden',!token);
+  document.getElementById('syncStatus').textContent=token?'🟢 Bağlı':'🔴 Token yok';
 }
-
 function getAllData(){
-  const data = {};
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(k.startsWith('moose_') && k!=='moose_gh_token' && k!=='moose_theme') data[k]=localStorage.getItem(k);
-  }
-  return data;
+  const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('moose_')&&k!=='moose_gh_token'&&k!=='moose_theme')data[k]=localStorage.getItem(k)}return data;
 }
 
 async function cloudSave(){
-  const token = getGHToken();
-  if(!token) return alert('Token gerekli!');
-  const btn = event.target; btn.textContent='⏳'; btn.disabled=true;
+  const token=getGHToken();if(!token)return alert('Token gerekli!');
+  const btn=event.target;btn.textContent='⏳';btn.disabled=true;
   try{
-    // Get current file SHA (needed for update)
-    let sha = null;
-    try{
-      const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
-        headers:{'Authorization':'token '+token}
-      });
-      if(res.ok){ const j=await res.json(); sha=j.sha; }
-    }catch{}
-
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));
-    const body = {message:'Moose Fitness data sync '+DB.today(), content};
-    if(sha) body.sha = sha;
-
-    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
-      method:'PUT',
-      headers:{'Authorization':'token '+token,'Content-Type':'application/json'},
-      body:JSON.stringify(body)
-    });
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    btn.textContent='✅ Yüklendi!';
-    setTimeout(()=>{btn.textContent='⬆️ Yükle';btn.disabled=false},2000);
-  }catch(e){
-    btn.textContent='❌ Hata'; btn.disabled=false;
-    alert('Yükleme hatası: '+e.message);
-    setTimeout(()=>{btn.textContent='⬆️ Yükle'},2000);
-  }
+    let sha=null;try{const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(res.ok){sha=(await res.json()).sha}}catch{}
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));
+    const body={message:'Moose Fitness data sync '+DB.today(),content};if(sha)body.sha=sha;
+    const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    btn.textContent='✅ Yüklendi!';setTimeout(()=>{btn.textContent='⬆️ Yükle';btn.disabled=false},2000);
+  }catch(e){btn.textContent='❌ Hata';btn.disabled=false;alert('Yükleme hatası: '+e.message);setTimeout(()=>{btn.textContent='⬆️ Yükle'},2000)}
 }
 
 async function cloudLoad(){
-  const token = getGHToken();
-  if(!token) return alert('Token gerekli!');
-  const btn = event.target; btn.textContent='⏳'; btn.disabled=true;
+  const token=getGHToken();if(!token)return alert('Token gerekli!');
+  const btn=event.target;btn.textContent='⏳';btn.disabled=true;
   try{
-    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{
-      headers:{'Authorization':'token '+token}
-    });
-    if(!res.ok) throw new Error('Dosya bulunamadı');
-    const j = await res.json();
-    const data = JSON.parse(decodeURIComponent(escape(atob(j.content))));
-    let count=0;
-    for(const[k,v] of Object.entries(data)){
-      if(k.startsWith('moose_')){ localStorage.setItem(k,v); count++; }
-    }
-    btn.textContent='✅ '+count+' veri!';
-    render();
-    setTimeout(()=>{btn.textContent='⬇️ İndir';btn.disabled=false},2000);
-  }catch(e){
-    btn.textContent='❌ Hata'; btn.disabled=false;
-    alert('İndirme hatası: '+e.message);
-    setTimeout(()=>{btn.textContent='⬇️ İndir'},2000);
-  }
+    const res=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});
+    if(!res.ok)throw new Error('Dosya bulunamadı');
+    const j=await res.json();const data=JSON.parse(decodeURIComponent(escape(atob(j.content))));
+    let count=0;for(const[k,v] of Object.entries(data)){if(k.startsWith('moose_')){localStorage.setItem(k,v);count++}}
+    btn.textContent='✅ '+count+' veri!';render();setTimeout(()=>{btn.textContent='⬇️ İndir';btn.disabled=false},2000);
+  }catch(e){btn.textContent='❌ Hata';btn.disabled=false;alert('İndirme hatası: '+e.message);setTimeout(()=>{btn.textContent='⬇️ İndir'},2000)}
 }
 
-// Auto-save to cloud after any data change (debounced)
-let _cloudSaveTimer=null;
-const _origDBSet = DB.set.bind(DB);
-DB.set = function(key, val){
-  _origDBSet(key, val);
-  if(getGHToken() && !_cloudSaveTimer){
-    _cloudSaveTimer = setTimeout(()=>{
-      _cloudSaveTimer=null;
-      // Silent auto-save
-      const token=getGHToken(); if(!token) return;
-      (async()=>{
-        try{
-          let sha=null;
-          try{ const r=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}}); if(r.ok){const j=await r.json();sha=j.sha;} }catch{}
-          const content=btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));
-          const body={message:'Auto-sync '+new Date().toISOString(),content};
-          if(sha) body.sha=sha;
-          await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
-        }catch{}
-      })();
-    }, 10000); // 10 saniye debounce
+// Auto-save debounced
+let _cloudSaveTimer=null;const _origDBSet=DB.set.bind(DB);
+DB.set=function(key,val){
+  _origDBSet(key,val);
+  if(getGHToken()&&!_cloudSaveTimer){
+    _cloudSaveTimer=setTimeout(()=>{_cloudSaveTimer=null;const token=getGHToken();if(!token)return;
+      (async()=>{try{let sha=null;try{const r=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r.ok)sha=(await r.json()).sha}catch{}
+      const content=btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));const body={message:'Auto-sync '+new Date().toISOString(),content};if(sha)body.sha=sha;
+      await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)})}catch{}})();
+    },10000);
   }
 };
 
-// Auto-load from cloud on startup
-window.addEventListener('DOMContentLoaded', function(){
-  updateGHUI();
-  const token=getGHToken();
+// Auto-load on startup
+window.addEventListener('DOMContentLoaded',function(){
+  updateGHUI();const token=getGHToken();
   if(token){
     fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}})
-    .then(r=>r.ok?r.json():null)
-    .then(j=>{
-      if(!j) return;
-      const data=JSON.parse(decodeURIComponent(escape(atob(j.content))));
-      let updated=false;
-      for(const[k,v] of Object.entries(data)){
-        if(k.startsWith('moose_') && k!=='moose_gh_token' && k!=='moose_theme' && k!=='moose_app_version'){ localStorage.setItem(k,v); updated=true; }
-      }
-      if(updated) render();
-    }).catch(()=>{});
+    .then(r=>r.ok?r.json():null).then(j=>{if(!j)return;const data=JSON.parse(decodeURIComponent(escape(atob(j.content))));
+      let updated=false;for(const[k,v] of Object.entries(data)){if(k.startsWith('moose_')&&k!=='moose_gh_token'&&k!=='moose_theme'&&k!=='moose_app_version'){localStorage.setItem(k,v);updated=true}}
+      if(updated)render()}).catch(()=>{});
   }
 });
 
-// ==================== QUICK SYNC (Dashboard button) ====================
+// ==================== QUICK SYNC ====================
 async function quickSync(btn){
-  const log=document.getElementById('syncLog');
-  if(log){log.classList.remove('hidden');log.innerHTML='Başlatılıyor...';}
+  const log=document.getElementById('syncLog');if(log){log.classList.remove('hidden');log.innerHTML='Başlatılıyor...';}
   const token=getGHToken();
-  if(!token){
-    if(log) log.innerHTML='❌ Token bulunamadı. 💾 → Token Kaydet yapın.';
-    btn.innerHTML='❌ Token yok!';setTimeout(()=>{btn.innerHTML='☁️ Sync'},2000);return;
-  }
-  btn.innerHTML='⏳ İndiriliyor...'; btn.disabled=true;
-  if(log) log.innerHTML='Token: ...'+token.slice(-6)+' ✅<br>GitHub API çağrılıyor...';
+  if(!token){if(log)log.innerHTML='❌ Token bulunamadı.';btn.innerHTML='❌ Token yok!';setTimeout(()=>{btn.innerHTML='☁️ Sync'},2000);return}
+  btn.innerHTML='⏳ İndiriliyor...';btn.disabled=true;
+  if(log)log.innerHTML='Token: ...'+token.slice(-6)+' ✅<br>GitHub API çağrılıyor...';
   try{
-    // 1. Download cloud data
     let sha=null;
     const dlRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token,'Accept':'application/vnd.github+json'}});
-    if(log) log.innerHTML+='<br>API yanıt: '+dlRes.status;
-    if(dlRes.ok){
-      const j=await dlRes.json();
-      sha=j.sha;
-      const rawContent=atob(j.content.replace(/\n/g,''));
-      const cloud=JSON.parse(rawContent);
+    if(log)log.innerHTML+='<br>API yanıt: '+dlRes.status;
+    if(dlRes.ok){const j=await dlRes.json();sha=j.sha;const cloud=JSON.parse(atob(j.content.replace(/\n/g,'')));
       const keys=Object.keys(cloud).filter(k=>k.startsWith('moose_')&&k!=='moose_gh_token'&&k!=='moose_theme'&&k!=='moose_app_version');
-      if(log) log.innerHTML+='<br>Cloud veri: '+keys.length+' anahtar';
-      keys.forEach(k=>localStorage.setItem(k,cloud[k]));
-      if(log) log.innerHTML+='<br>localStorage güncellendi ✅';
-    }else{
-      const errText=await dlRes.text();
-      if(log) log.innerHTML+='<br>❌ API hata: '+errText.slice(0,100);
-    }
-
+      if(log)log.innerHTML+='<br>Cloud veri: '+keys.length;keys.forEach(k=>localStorage.setItem(k,cloud[k]));
+      if(log)log.innerHTML+='<br>localStorage güncellendi ✅'}
+    else{if(log)log.innerHTML+='<br>❌ API hata: '+(await dlRes.text()).slice(0,100)}
     btn.innerHTML='⏳ Yükleniyor...';
-
-    // 2. Upload
-    if(!sha){try{const r2=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r2.ok){sha=(await r2.json()).sha;}}catch{}}
-    const allData=getAllData();
-    if(log) log.innerHTML+='<br>Yüklenecek: '+Object.keys(allData).length+' anahtar';
-    const content=btoa(unescape(encodeURIComponent(JSON.stringify(allData,null,2))));
-    const body={message:'Sync '+DB.today(),content};
-    if(sha) body.sha=sha;
+    if(!sha){try{const r2=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r2.ok)sha=(await r2.json()).sha}catch{}}
+    const allData=getAllData();if(log)log.innerHTML+='<br>Yüklenecek: '+Object.keys(allData).length;
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(allData,null,2))));const body={message:'Sync '+DB.today(),content};if(sha)body.sha=sha;
     const upRes=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(log) log.innerHTML+='<br>Upload: '+upRes.status;
-
-    btn.innerHTML='✅ Sync Tamam!';
-    setTimeout(()=>location.reload(),1000);
-  }catch(e){
-    if(log) log.innerHTML+='<br>❌ Hata: '+e.message;
-    btn.innerHTML='❌ '+e.message.slice(0,30);
-    setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},4000);
-  }
+    if(log)log.innerHTML+='<br>Upload: '+upRes.status;
+    btn.innerHTML='✅ Sync Tamam!';setTimeout(()=>location.reload(),1000);
+  }catch(e){if(log)log.innerHTML+='<br>❌ Hata: '+e.message;btn.innerHTML='❌ '+e.message.slice(0,30);setTimeout(()=>{btn.innerHTML='☁️ Sync';btn.disabled=false},4000)}
 }
 
 function clearTodayData(){
-  if(!confirm('Bugünün verilerini silmek istediğinize emin misiniz? (öğün, su, adım sıfırlanacak)')) return;
-  const today = DB.today();
-  ['foods','water','steps','vitamins','gym','hr','sleep','energy'].forEach(key=>{
-    localStorage.removeItem('moose_'+key+'_'+today);
-  });
+  if(!confirm('⚠️ Bugünün tüm verilerini (öğünler, su, adım, vitaminler, spor) silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz. Geçmiş günlerin verileri etkilenmez.'))return;
+  const today=DB.today();
+  ['foods','water','steps','vitamins','gym','hr','sleep','energy'].forEach(key=>localStorage.removeItem('moose_'+key+'_'+today));
   render();
+  // Show toast
+  const toast=document.createElement('div');
+  toast.className='fixed top-16 left-1/2 -translate-x-1/2 z-[70] px-4 py-3 rounded-xl text-sm font-medium text-white shadow-lg';
+  toast.style.cssText='background:linear-gradient(135deg,#f87171,#ef4444);max-width:90vw;text-align:center';
+  toast.innerHTML='🗑️ Bugünün verileri temizlendi!<br><span style="font-size:12px;opacity:.8">Yeni gün, temiz sayfa ✨</span>';
+  document.body.appendChild(toast);setTimeout(()=>toast.remove(),3000);
+  // Force immediate cloud save so cleared state syncs to GitHub
+  const token=getGHToken();
+  if(token){
+    (async()=>{try{
+      let sha=null;
+      try{const r=await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{'Authorization':'token '+token}});if(r.ok)sha=(await r.json()).sha}catch{}
+      const content=btoa(unescape(encodeURIComponent(JSON.stringify(getAllData(),null,2))));
+      const body={message:'Clear today '+today,content};if(sha)body.sha=sha;
+      await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{'Authorization':'token '+token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    }catch{}})();
+  }
 }
 
 // ==================== SYNC (FILE) ====================
-function showSyncModal(){ document.getElementById('syncModal').classList.remove('hidden'); updateGHUI(); }
+function showSyncModal(){document.getElementById('syncModal').classList.remove('hidden');updateGHUI()}
 function exportData(){
-  const data = {};
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(k.startsWith('moose_')) data[k]=localStorage.getItem(k);
-  }
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=`moose-backup-${DB.today()}.json`;
-  a.click();
-  URL.revokeObjectURL(a.href);
+  const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('moose_'))data[k]=localStorage.getItem(k)}
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=`moose-backup-${DB.today()}.json`;a.click();URL.revokeObjectURL(a.href);
 }
 function importData(e){
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(ev){
-    try{
-      const data=JSON.parse(ev.target.result);
-      let count=0;
-      for(const[k,v] of Object.entries(data)){
-        if(k.startsWith('moose_')){ localStorage.setItem(k,v); count++; }
-      }
-      alert(`✅ ${count} veri başarıyla geri yüklendi!`);
-      document.getElementById('syncModal').classList.add('hidden');
-      render();
-    }catch{ alert('❌ Geçersiz dosya formatı!') }
-  };
+  const file=e.target.files[0];if(!file)return;const reader=new FileReader();
+  reader.onload=function(ev){try{const data=JSON.parse(ev.target.result);let count=0;
+    for(const[k,v] of Object.entries(data)){if(k.startsWith('moose_')){localStorage.setItem(k,v);count++}}
+    alert(`✅ ${count} veri geri yüklendi!`);document.getElementById('syncModal').classList.add('hidden');render()}catch{alert('❌ Geçersiz dosya!')}};
   reader.readAsText(file);
 }
 
 // ==================== NAVIGATION ====================
-let currentTab = 'dashboard';
-let currentSubTab = {};
+let currentTab='dashboard';let currentSubTab={};
 
 function navigate(tab){
-  currentTab = tab;
-  document.querySelectorAll('.tab-btn').forEach(b=>{
-    b.classList.toggle('tab-active', b.dataset.tab===tab);
-  });
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('tab-active',b.dataset.tab===tab));
   render();
 }
-
-function setSubTab(parent, sub){
-  currentSubTab[parent] = sub;
-  render();
-}
+function setSubTab(parent,sub){currentSubTab[parent]=sub;render()}
 
 function render(){
-  const m = document.getElementById('mainContent');
-  m.innerHTML = '';
-  m.className = 'max-w-lg mx-auto px-4 pt-4 fade-in';
-  const views = {dashboard:renderDashboard, takip:renderTakip, gym:renderGym, saglik:renderSaglik, rapor:renderRapor};
-  (views[currentTab]||renderDashboard)(m);
+  const m=document.getElementById('mainContent');m.innerHTML='';m.className='max-w-lg mx-auto px-4 pt-4 fade-in';
+  ({dashboard:renderDashboard,takip:renderTakip,gym:renderGym,saglik:renderSaglik,rapor:renderRapor}[currentTab]||renderDashboard)(m);
 }
 
-// ==================== DASHBOARD ====================
+// ==================== DASHBOARD (BENTO LAYOUT) ====================
 function renderDashboard(el){
-  const foods = todayFoods();
-  const cal = foods.reduce((s,f)=>s+f.cal,0);
-  const pro = foods.reduce((s,f)=>s+f.pro,0);
-  const fat = foods.reduce((s,f)=>s+f.fat,0);
-  const carb = foods.reduce((s,f)=>s+f.carb,0);
-  const water = todayWater();
-  const weight = latestWeight();
-  const steps = todaySteps();
-  const quote = QUOTES[Math.floor(Math.random()*QUOTES.length)];
-  const weightDiff = (weight - PROFILE.targetWeight).toFixed(1);
-  const calPct = Math.min(100, Math.round(cal/PROFILE.dailyCal*100));
-  const waterPct = Math.min(100, Math.round(water/3.5*100));
-  const stepPct = Math.min(100, Math.round(steps/PROFILE.stepsTarget*100));
-  const circumference = 2*Math.PI*54;
-  const stepOffset = circumference - (stepPct/100)*circumference;
+  const foods=todayFoods();
+  const cal=foods.reduce((s,f)=>s+f.cal,0);
+  const pro=foods.reduce((s,f)=>s+f.pro,0);
+  const fat=foods.reduce((s,f)=>s+f.fat,0);
+  const carb=foods.reduce((s,f)=>s+f.carb,0);
+  const water=todayWater();
+  const weight=latestWeight();
+  const steps=todaySteps();
+  const quote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  const weightDiff=(weight-PROFILE.targetWeight).toFixed(1);
+  const calPct=Math.min(100,Math.round(cal/PROFILE.dailyCal*100));
+  const waterPct=Math.min(100,Math.round(water/3.5*100));
+  const stepPct=Math.min(100,Math.round(steps/PROFILE.stepsTarget*100));
+  const circumference=2*Math.PI*54;
+  const stepOffset=circumference-(stepPct/100)*circumference;
+
+  // Readiness
+  const readiness=calcReadinessScore();
+  const rc=readinessColor(readiness.total);
+  const readCirc=2*Math.PI*44;
+  const readOffset=readCirc-((readiness.total/100)*readCirc);
 
   el.innerHTML = `
-  <div class="card mb-4 text-center bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border-indigo-500/20">
+  <!-- Motivational Quote -->
+  <div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15 animate-shimmer" role="complementary" aria-label="Günün Sözü">
     <p class="text-sm italic text-slate-300">${quote}</p>
   </div>
 
-  <button onclick="quickSync(this)" id="syncBtn" class="w-full mb-4 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;min-height:48px;border:none">
-    ☁️ Sync
-  </button>
-  <button onclick="clearTodayData()" class="w-full py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white min-height:48px border:none">
-    🗑️ Bugünü Temizle
-  </button>
-  <div id="syncLog" class="text-xs text-slate-400 mb-4 hidden"></div>
+  <!-- BENTO GRID: 6 cards -->
+  <div class="bento-grid mb-4">
 
-  <!-- Step Counter Ring -->
-  <div class="card mb-4 text-center">
-    <h3 class="text-sm font-semibold text-slate-300 mb-3">🚶 Günlük Adım</h3>
-    <div class="relative inline-block mb-3">
-      <svg width="140" height="140" viewBox="0 0 120 120">
-        <circle cx="60" cy="60" r="54" fill="none" class="step-ring-bg" stroke-width="8"/>
-        <circle cx="60" cy="60" r="54" fill="none" stroke="#8b5cf6" stroke-width="8"
-          stroke-dasharray="${circumference}" stroke-dashoffset="${stepOffset}"
-          stroke-linecap="round" transform="rotate(-90 60 60)" class="progress-ring"/>
-        <text x="60" y="55" text-anchor="middle" fill="currentColor" font-size="22" font-weight="700">${steps.toLocaleString()}</text>
-        <text x="60" y="72" text-anchor="middle" fill="#94a3b8" font-size="10">${PROFILE.stepsTarget.toLocaleString()} hedef</text>
-      </svg>
+    <!-- 1. Daily Readiness Score (span 2) -->
+    <div class="bento-card span-2 animate-pulse-glow" role="region" aria-label="Günlük Hazırlık Skoru" style="background:${rc.bg}">
+      <div class="flex items-center gap-4">
+        <div class="relative flex-shrink-0">
+          <svg width="110" height="110" viewBox="0 0 100 100" class="readiness-ring" role="img" aria-label="Readiness skoru ${readiness.total}">
+            <circle cx="50" cy="50" r="44" fill="none" stroke="var(--border-subtle)" stroke-width="7" opacity=".3"/>
+            <circle cx="50" cy="50" r="44" fill="none" stroke="${rc.stroke}" stroke-width="7"
+              stroke-dasharray="${readCirc}" stroke-dashoffset="${readOffset}"
+              stroke-linecap="round" transform="rotate(-90 50 50)"
+              style="animation:ringFill .8s cubic-bezier(.4,0,.2,1);--target-offset:${readOffset}"/>
+            <text x="50" y="46" text-anchor="middle" fill="currentColor" font-size="24" font-weight="800" class="readiness-score-text">${readiness.total}</text>
+            <text x="50" y="62" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="500">${rc.label}</text>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h2 class="text-sm font-bold text-slate-300 mb-2">🧠 Günlük Hazırlık</h2>
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">⚖️ Kilo</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-emerald-500" style="width:${readiness.weightScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.weightScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">🚶 Adım</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-purple-500" style="width:${readiness.stepsScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.stepsScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">💧 Su</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-cyan-500" style="width:${readiness.waterScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.waterScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">😴 Uyku</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-indigo-500" style="width:${readiness.sleepScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.sleepScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">⚡ Enerji</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-amber-500" style="width:${readiness.energyScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.energyScore}</span></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center gap-2 max-w-xs mx-auto">
-      <input type="number" id="stepsInput" placeholder="Adım gir..." value="${steps||''}" class="flex-1 text-sm text-center">
-      <button onclick="saveSteps()" class="btn-primary btn-sm">Kaydet</button>
-    </div>
-  </div>
 
-  <div class="grid grid-cols-2 gap-3 mb-4">
-    <div class="card text-center">
-      <div class="text-3xl font-bold text-indigo-400">${cal}</div>
-      <div class="text-xs text-slate-400 mt-1">${PROFILE.dailyCal} kcal hedef</div>
-      <div class="macro-bar mt-2"><div class="macro-fill bg-indigo-500" style="width:${calPct}%"></div></div>
+    <!-- 2. Steps Ring -->
+    <div class="bento-card text-center" role="region" aria-label="Adım Sayacı">
+      <h3 class="text-xs font-semibold text-slate-400 mb-2">🚶 Adım</h3>
+      <div class="relative inline-block">
+        <svg width="100" height="100" viewBox="0 0 120 120" role="img" aria-label="${steps.toLocaleString()} adım">
+          <circle cx="60" cy="60" r="54" fill="none" class="step-ring-bg" stroke-width="7"/>
+          <circle cx="60" cy="60" r="54" fill="none" stroke="#8b5cf6" stroke-width="7"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${stepOffset}"
+            stroke-linecap="round" transform="rotate(-90 60 60)" class="progress-ring"/>
+          <text x="60" y="56" text-anchor="middle" fill="currentColor" font-size="20" font-weight="700">${steps>=1000?(steps/1000).toFixed(1)+'k':steps}</text>
+          <text x="60" y="72" text-anchor="middle" fill="#94a3b8" font-size="9">/${(PROFILE.stepsTarget/1000).toFixed(0)}k</text>
+        </svg>
+      </div>
+      <div class="flex items-center gap-1 mt-2">
+        <input type="number" id="stepsInput" placeholder="Adım" value="${steps||''}" class="flex-1 text-xs text-center" style="min-height:36px" aria-label="Adım gir">
+        <button onclick="saveSteps()" class="btn-primary btn-sm text-xs" style="min-width:52px">✓</button>
+      </div>
     </div>
-    <div class="card text-center">
-      <div class="text-3xl font-bold text-cyan-400">${water.toFixed(1)}L</div>
-      <div class="text-xs text-slate-400 mt-1">${PROFILE.waterTarget}L hedef</div>
-      <div class="macro-bar mt-2"><div class="macro-fill bg-cyan-500" style="width:${waterPct}%"></div></div>
+
+    <!-- 3. Calories & Macros -->
+    <div class="bento-card text-center" role="region" aria-label="Kalori Takibi">
+      <h3 class="text-xs font-semibold text-slate-400 mb-1">🔥 Kalori</h3>
+      <div class="text-3xl font-bold text-indigo-400 animate-count">${cal}</div>
+      <div class="text-xs text-slate-500 mb-2">/ ${PROFILE.dailyCal} kcal</div>
+      <div class="macro-bar mb-2"><div class="macro-fill bg-gradient-to-r from-indigo-500 to-purple-500" style="width:${calPct}%"></div></div>
+      <div class="grid grid-cols-3 gap-1 text-xs">
+        <div><span class="font-bold text-red-400">${pro}g</span><div class="text-slate-500">P</div></div>
+        <div><span class="font-bold text-yellow-400">${fat}g</span><div class="text-slate-500">Y</div></div>
+        <div><span class="font-bold text-blue-400">${carb}g</span><div class="text-slate-500">K</div></div>
+      </div>
     </div>
-    <div class="card text-center">
-      <div class="text-3xl font-bold text-emerald-400">${weight}</div>
-      <div class="text-xs text-slate-400 mt-1">kg · hedefe ${weightDiff}kg</div>
+
+    <!-- 4. Water -->
+    <div class="bento-card text-center" role="region" aria-label="Su Takibi">
+      <h3 class="text-xs font-semibold text-slate-400 mb-1">💧 Su</h3>
+      <div class="text-3xl font-bold text-cyan-400 animate-count">${water.toFixed(1)}<span class="text-lg">L</span></div>
+      <div class="text-xs text-slate-500 mb-2">/ ${PROFILE.waterTarget}L</div>
+      <div class="macro-bar mb-2"><div class="macro-fill bg-gradient-to-r from-cyan-500 to-blue-500" style="width:${waterPct}%"></div></div>
+      <div class="flex gap-1 justify-center mt-1">
+        <button onclick="addWater(0.25)" class="btn-primary btn-sm text-xs" style="padding:4px 10px;min-height:30px">+1</button>
+        <button onclick="addWater(0.5)" class="btn-primary btn-sm text-xs" style="padding:4px 10px;min-height:30px">+2</button>
+        <button onclick="addWater(-0.25)" class="btn-sm text-xs border border-slate-600 text-slate-300 rounded-lg" style="padding:4px 8px;min-height:30px">−1</button>
+      </div>
+    </div>
+
+    <!-- 5. Weight -->
+    <div class="bento-card text-center" role="region" aria-label="Kilo Takibi">
+      <h3 class="text-xs font-semibold text-slate-400 mb-1">⚖️ Kilo</h3>
+      <div class="text-3xl font-bold text-emerald-400 animate-count">${weight}</div>
+      <div class="text-xs text-slate-500">hedefe <span class="${parseFloat(weightDiff)<=0?'text-emerald-400':'text-amber-400'}">${weightDiff}kg</span></div>
       <div class="macro-bar mt-2"><div class="macro-fill bg-emerald-500" style="width:${Math.min(100,Math.round((PROFILE.startWeight-weight)/(PROFILE.startWeight-PROFILE.targetWeight)*100))}%"></div></div>
     </div>
-    <div class="card text-center">
-      <div class="text-3xl font-bold text-purple-400">${stepPct}%</div>
-      <div class="text-xs text-slate-400 mt-1">adım tamamlama</div>
-      <div class="macro-bar mt-2"><div class="macro-fill bg-purple-500" style="width:${stepPct}%"></div></div>
+
+    <!-- 6. AI Wellness Chat (span 2) -->
+    <div class="bento-card span-2" role="region" aria-label="AI Wellness Asistan">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm animate-breathe">🤖</div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-300">AI Wellness Asistan</h3>
+          <div class="text-xs text-slate-500">Sağlığınla ilgili sorular sor</div>
+        </div>
+      </div>
+      <div id="chatMessages" class="chat-container neu-inset p-3 mb-3" style="min-height:80px" role="log" aria-label="Sohbet mesajları">
+        ${chatHistory.length===0?'<div class="text-xs text-slate-500 text-center py-4 animate-breathe">Merhaba! 👋 Sağlığınla ilgili merak ettiklerini sor.</div>':''}
+      </div>
+      <form onsubmit="event.preventDefault();sendChatMessage()" class="flex gap-2">
+        <input type="text" id="chatInput" placeholder="Mesaj yaz..." class="flex-1 text-sm" aria-label="Mesaj gir" autocomplete="off">
+        <button type="submit" class="btn-primary btn-sm flex items-center gap-1" aria-label="Gönder">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          Gönder
+        </button>
+      </form>
     </div>
   </div>
 
-  <div class="card mb-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">Makrolar</h3>
+  <!-- Sync & Actions -->
+  <div class="flex gap-2 mb-4">
+    <button onclick="quickSync(this)" id="syncBtn" class="flex-1 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 btn-primary" style="min-height:48px">☁️ Sync</button>
+    <button onclick="clearTodayData()" class="py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 border border-red-500/30 text-red-400 hover:bg-red-500/10" style="min-height:48px;border-radius:16px" title="Bugünün verilerini temizle">🗑️ Bugünü Temizle</button>
+  </div>
+  <div id="syncLog" class="text-xs text-slate-400 mb-4 hidden"></div>
+
+  <!-- Macros Detail -->
+  <div class="bento-card mb-4">
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">📊 Makro Detay</h3>
     <div class="space-y-2">
       <div class="flex items-center justify-between text-xs">
         <span class="text-red-400 font-medium w-16">Protein</span>
@@ -659,7 +808,8 @@ function renderDashboard(el){
     </div>
   </div>
 
-  <div class="card mb-4">
+  <!-- Goals -->
+  <div class="bento-card mb-4">
     <div class="flex items-center justify-between mb-3">
       <h3 class="text-sm font-semibold text-slate-300">🎯 Hedefler</h3>
       <button onclick="showGoalModal()" class="btn-primary btn-sm text-xs">+ Ekle</button>
@@ -667,54 +817,48 @@ function renderDashboard(el){
     <div id="goalsList">${renderGoals()}</div>
   </div>
 
-  <div id="goalModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden">
+  <div id="goalModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden" role="dialog" aria-modal="true" aria-label="Yeni Hedef">
     <div class="card w-80">
       <h3 class="font-semibold mb-3">Yeni Hedef</h3>
-      <input id="goalText" placeholder="Hedef açıklaması" class="mb-2 text-sm">
-      <input id="goalTarget" type="date" class="mb-3 text-sm">
+      <input id="goalText" placeholder="Hedef açıklaması" class="mb-2 text-sm" aria-label="Hedef açıklaması">
+      <input id="goalTarget" type="date" class="mb-3 text-sm" aria-label="Hedef tarihi">
       <div class="flex gap-2">
         <button onclick="addGoal()" class="btn-primary btn-sm flex-1">Kaydet</button>
         <button onclick="document.getElementById('goalModal').classList.add('hidden')" class="btn-sm flex-1 border border-slate-600 text-slate-300 rounded-lg">İptal</button>
       </div>
     </div>
   </div>`;
+
+  // Render chat messages if they exist
+  if(chatHistory.length > 0) renderChatMessages();
 }
 
 function saveSteps(){
-  const v = parseInt(document.getElementById('stepsInput').value)||0;
-  DB.set('steps_'+DB.today(), v);
-  render();
+  const v=parseInt(document.getElementById('stepsInput').value)||0;
+  DB.set('steps_'+DB.today(),v);render();
 }
 
 function renderGoals(){
-  const g = goals();
-  if(!g.length) return '<p class="text-xs text-slate-500">Henüz hedef yok</p>';
+  const g=goals();
+  if(!g.length)return '<p class="text-xs text-slate-500">Henüz hedef yok</p>';
   return g.map((goal,i)=>`
-    <div class="flex items-center gap-2 py-1.5 ${i?'border-t border-slate-700':''}">
-      <button onclick="toggleGoal(${i})" class="text-lg min-w-[44px] min-h-[44px] flex items-center justify-center">${goal.done?'✅':'⬜'}</button>
+    <div class="flex items-center gap-2 py-1.5 ${i?'border-t border-slate-700/50':''}">
+      <button onclick="toggleGoal(${i})" class="text-lg min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="${goal.done?'Tamamlandı':'Tamamlanmadı'}: ${goal.text}">${goal.done?'✅':'⬜'}</button>
       <span class="flex-1 text-sm ${goal.done?'line-through text-slate-500':''}">${goal.text}</span>
       ${goal.date?`<span class="text-xs text-slate-500">${goal.date}</span>`:''}
-      <button onclick="removeGoal(${i})" class="text-xs text-red-400 hover:text-red-300 min-w-[44px] min-h-[44px] flex items-center justify-center">✕</button>
+      <button onclick="removeGoal(${i})" class="text-xs text-red-400 hover:text-red-300 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Hedefi sil">✕</button>
     </div>`).join('');
 }
 
-function showGoalModal(){ document.getElementById('goalModal').classList.remove('hidden') }
-function addGoal(){
-  const text=document.getElementById('goalText').value.trim();
-  if(!text)return;
-  const g=goals();
-  g.push({text,date:document.getElementById('goalTarget').value,done:false});
-  DB.set('goals',g);
-  document.getElementById('goalModal').classList.add('hidden');
-  render();
-}
-function toggleGoal(i){ const g=goals(); g[i].done=!g[i].done; DB.set('goals',g); render() }
-function removeGoal(i){ const g=goals(); g.splice(i,1); DB.set('goals',g); render() }
+function showGoalModal(){document.getElementById('goalModal').classList.remove('hidden')}
+function addGoal(){const text=document.getElementById('goalText').value.trim();if(!text)return;const g=goals();g.push({text,date:document.getElementById('goalTarget').value,done:false});DB.set('goals',g);document.getElementById('goalModal').classList.add('hidden');render()}
+function toggleGoal(i){const g=goals();g[i].done=!g[i].done;DB.set('goals',g);render()}
+function removeGoal(i){const g=goals();g.splice(i,1);DB.set('goals',g);render()}
 
 // ==================== TAKIP (Food + Water + Weight + Diet) ====================
 function renderTakip(el){
-  const sub = currentSubTab.takip || 'food';
-  el.innerHTML = `
+  const sub=currentSubTab.takip||'food';
+  el.innerHTML=`
   <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
     <button onclick="setSubTab('takip','food')" class="sub-tab ${sub==='food'?'active':''}">🍽️ Öğün</button>
     <button onclick="setSubTab('takip','water')" class="sub-tab ${sub==='water'?'active':''}">💧 Su</button>
@@ -722,21 +866,16 @@ function renderTakip(el){
     <button onclick="setSubTab('takip','diet')" class="sub-tab ${sub==='diet'?'active':''}">📋 Diyet</button>
   </div>
   <div id="takipContent" class="slide-in"></div>`;
-  const container = el.querySelector('#takipContent');
-  const views = {food:renderFood, water:renderWater, weight:renderWeight, diet:renderDiet};
-  (views[sub]||renderFood)(container);
+  ({food:renderFood,water:renderWater,weight:renderWeight,diet:renderDiet}[sub]||renderFood)(el.querySelector('#takipContent'));
 }
 
 function renderFood(el){
-  const foods = todayFoods();
-  const cal = foods.reduce((s,f)=>s+f.cal,0);
-  const pro = foods.reduce((s,f)=>s+f.pro,0);
-  const fat = foods.reduce((s,f)=>s+f.fat,0);
-  const carb = foods.reduce((s,f)=>s+f.carb,0);
-
-  el.innerHTML = `
+  const foods=todayFoods();
+  const cal=foods.reduce((s,f)=>s+f.cal,0);const pro=foods.reduce((s,f)=>s+f.pro,0);
+  const fat=foods.reduce((s,f)=>s+f.fat,0);const carb=foods.reduce((s,f)=>s+f.carb,0);
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">🍽️ Öğün Takibi</h2>
-  <div class="card mb-4">
+  <div class="bento-card mb-4">
     <div class="grid grid-cols-4 gap-2 text-center text-xs mb-3">
       <div><div class="text-lg font-bold text-indigo-400">${cal}</div><div class="text-slate-400">${PROFILE.dailyCal} kcal</div></div>
       <div><div class="text-lg font-bold text-red-400">${pro}g</div><div class="text-slate-400">Protein</div></div>
@@ -746,8 +885,7 @@ function renderFood(el){
     <div class="macro-bar"><div class="macro-fill bg-gradient-to-r from-indigo-500 to-purple-500" style="width:${Math.min(100,Math.round(cal/PROFILE.dailyCal*100))}%"></div></div>
     <div class="text-xs text-slate-400 mt-1 text-right">Kalan: ${Math.max(0,PROFILE.dailyCal-cal)} kcal</div>
   </div>
-
-  <div class="card mb-4">
+  <div class="bento-card mb-4">
     <h3 class="text-sm font-semibold mb-3">Yeni Öğün Ekle</h3>
     <input id="foodName" placeholder="Yemek adı" class="mb-2 text-sm">
     <div class="grid grid-cols-2 gap-2 mb-2">
@@ -759,57 +897,39 @@ function renderFood(el){
       <input id="foodCarb" type="number" placeholder="Karb (g)" class="text-sm">
     </div>
     <select id="foodMeal" class="mb-3 text-sm">
-      <option value="Kahvaltı">🌅 Kahvaltı</option>
-      <option value="Ara Öğün 1">🥤 Ara Öğün 1</option>
-      <option value="Öğle">☀️ Öğle</option>
-      <option value="Ara Öğün 2">🍎 Ara Öğün 2</option>
-      <option value="Akşam">🌙 Akşam</option>
-      <option value="Ara Öğün 3">🥛 Ara Öğün 3</option>
+      <option value="Kahvaltı">🌅 Kahvaltı</option><option value="Ara Öğün 1">🥤 Ara Öğün 1</option>
+      <option value="Öğle">☀️ Öğle</option><option value="Ara Öğün 2">🍎 Ara Öğün 2</option>
+      <option value="Akşam">🌙 Akşam</option><option value="Ara Öğün 3">🥛 Ara Öğün 3</option>
     </select>
     <button onclick="addFood()" class="btn-primary w-full text-sm">+ Öğün Ekle</button>
   </div>
-
   <div class="space-y-2">
     ${foods.length?foods.map((f,i)=>`
-      <div class="card flex items-center justify-between py-2 px-3">
-        <div class="flex-1">
-          <div class="text-sm font-medium">${f.name}</div>
-          <div class="text-xs text-slate-400">${f.meal} · ${f.cal}kcal · P:${f.pro}g Y:${f.fat}g K:${f.carb}g</div>
-        </div>
-        <button onclick="removeFood(${i})" class="text-red-400 text-xs hover:text-red-300 min-w-[44px] min-h-[44px] flex items-center justify-center">✕</button>
+      <div class="bento-card flex items-center justify-between py-2 px-3">
+        <div class="flex-1"><div class="text-sm font-medium">${f.name}</div><div class="text-xs text-slate-400">${f.meal} · ${f.cal}kcal · P:${f.pro}g Y:${f.fat}g K:${f.carb}g</div></div>
+        <button onclick="removeFood(${i})" class="text-red-400 text-xs min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Öğünü sil">✕</button>
       </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-4">Bugün henüz öğün eklenmedi</p>'}
   </div>`;
 }
 
 function addFood(){
-  const name=document.getElementById('foodName').value.trim();
-  if(!name)return;
-  const f=todayFoods();
-  f.push({
-    name, meal:document.getElementById('foodMeal').value,
-    cal:parseInt(document.getElementById('foodCal').value)||0,
-    pro:parseInt(document.getElementById('foodPro').value)||0,
-    fat:parseInt(document.getElementById('foodFat').value)||0,
-    carb:parseInt(document.getElementById('foodCarb').value)||0
-  });
-  DB.set('foods_'+DB.today(), f);
-  render();
+  const name=document.getElementById('foodName').value.trim();if(!name)return;
+  const f=todayFoods();f.push({name,meal:document.getElementById('foodMeal').value,cal:parseInt(document.getElementById('foodCal').value)||0,pro:parseInt(document.getElementById('foodPro').value)||0,fat:parseInt(document.getElementById('foodFat').value)||0,carb:parseInt(document.getElementById('foodCarb').value)||0});
+  DB.set('foods_'+DB.today(),f);render();
 }
-function removeFood(i){ const f=todayFoods(); f.splice(i,1); DB.set('foods_'+DB.today(), f); render() }
+function removeFood(i){const f=todayFoods();f.splice(i,1);DB.set('foods_'+DB.today(),f);render()}
 
 // ==================== WATER ====================
 function renderWater(el){
-  const water = todayWater();
-  const glasses = Math.round(water/0.25);
-  const target = 14;
-  el.innerHTML = `
+  const water=todayWater();const glasses=Math.round(water/0.25);const target=14;
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">💧 Su Takibi</h2>
-  <div class="card text-center mb-4">
+  <div class="bento-card text-center mb-4">
     <div class="text-5xl font-bold text-cyan-400 mb-1">${water.toFixed(2)}L</div>
     <div class="text-sm text-slate-400 mb-4">${PROFILE.waterTarget}L hedef · ${glasses}/${target} bardak</div>
     <div class="macro-bar h-3 mb-4"><div class="macro-fill bg-gradient-to-r from-cyan-500 to-blue-500" style="width:${Math.min(100,Math.round(water/PROFILE.waterTarget*100))}%"></div></div>
     <div class="grid grid-cols-7 gap-2 mb-4">
-      ${Array.from({length:target},(_,i)=>`<button onclick="setWater(${i+1})" class="water-drop text-2xl min-h-[44px]${i<glasses?' filled':''}">💧</button>`).join('')}
+      ${Array.from({length:target},(_,i)=>`<button onclick="setWater(${i+1})" class="water-drop text-2xl min-h-[44px]${i<glasses?' filled':''}" aria-label="${i+1}. bardak">💧</button>`).join('')}
     </div>
     <div class="flex gap-2 justify-center">
       <button onclick="addWater(0.25)" class="btn-primary btn-sm">+1 Bardak</button>
@@ -818,200 +938,101 @@ function renderWater(el){
     </div>
   </div>`;
 }
-function addWater(amount){ DB.set('water_'+DB.today(), Math.max(0, todayWater()+amount)); render() }
-function setWater(glasses){ DB.set('water_'+DB.today(), glasses*0.25); render() }
+function addWater(amount){DB.set('water_'+DB.today(),Math.max(0,todayWater()+amount));render()}
+function setWater(glasses){DB.set('water_'+DB.today(),glasses*0.25);render()}
 
 // ==================== WEIGHT ====================
 function renderWeight(el){
-  const log = weightLog();
-  el.innerHTML = `
+  const log=weightLog();
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">⚖️ Kilo Takibi</h2>
-  <div class="card mb-4">
+  <div class="bento-card mb-4">
     <div class="flex items-center justify-between mb-3">
-      <div>
-        <div class="text-3xl font-bold text-emerald-400">${latestWeight()} kg</div>
-        <div class="text-xs text-slate-400">Başlangıç: ${PROFILE.startWeight}kg · Hedef: ${PROFILE.targetWeight}kg</div>
-      </div>
-      <div class="text-right">
-        <div class="text-lg font-bold ${PROFILE.startWeight-latestWeight()>0?'text-emerald-400':'text-red-400'}">${(PROFILE.startWeight-latestWeight())>0?'-':'+'} ${Math.abs(PROFILE.startWeight-latestWeight()).toFixed(1)}kg</div>
-        <div class="text-xs text-slate-400">toplam değişim</div>
-      </div>
+      <div><div class="text-3xl font-bold text-emerald-400">${latestWeight()} kg</div><div class="text-xs text-slate-400">Başlangıç: ${PROFILE.startWeight}kg · Hedef: ${PROFILE.targetWeight}kg</div></div>
+      <div class="text-right"><div class="text-lg font-bold ${PROFILE.startWeight-latestWeight()>0?'text-emerald-400':'text-red-400'}">${(PROFILE.startWeight-latestWeight())>0?'-':'+'}${Math.abs(PROFILE.startWeight-latestWeight()).toFixed(1)}kg</div><div class="text-xs text-slate-400">toplam değişim</div></div>
     </div>
     <div class="flex gap-2">
-      <input id="weightInput" type="number" step="0.1" placeholder="Kilo gir (kg)" class="flex-1 text-sm">
+      <input id="weightInput" type="number" step="0.1" placeholder="Kilo gir (kg)" class="flex-1 text-sm" aria-label="Kilo gir">
       <button onclick="addWeight()" class="btn-primary btn-sm">Kaydet</button>
     </div>
   </div>
-  <div class="card mb-4"><canvas id="weightChart" height="200"></canvas></div>
-  <div class="space-y-1">
-    ${log.slice().reverse().slice(0,10).map(e=>`
-      <div class="flex justify-between text-sm py-1.5 border-b border-slate-700/50">
-        <span class="text-slate-400">${e.date}</span>
-        <span class="font-medium">${e.kg} kg</span>
-      </div>`).join('')}
+  <div class="bento-card mb-4"><canvas id="weightChart" height="200"></canvas></div>
+  <div class="space-y-1">${log.slice().reverse().slice(0,10).map(e=>`
+    <div class="flex justify-between text-sm py-1.5 border-b border-slate-700/50"><span class="text-slate-400">${e.date}</span><span class="font-medium">${e.kg} kg</span></div>`).join('')}
   </div>`;
-  if(log.length>1) setTimeout(()=>drawWeightChart(log),50);
+  if(log.length>1)setTimeout(()=>drawWeightChart(log),50);
 }
 
-function addWeight(){
-  const v=parseFloat(document.getElementById('weightInput').value);
-  if(!v)return;
-  const log=weightLog();
-  log.push({date:DB.today(), kg:v});
-  DB.set('weight_log', log);
-  render();
-}
+function addWeight(){const v=parseFloat(document.getElementById('weightInput').value);if(!v)return;const log=weightLog();log.push({date:DB.today(),kg:v});DB.set('weight_log',log);render()}
 
 function drawWeightChart(log){
-  const ctx=document.getElementById('weightChart');
-  if(!ctx)return;
-  new Chart(ctx,{
-    type:'line',
-    data:{labels:log.map(e=>e.date.slice(5)),datasets:[
-      {label:'Kilo (kg)',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3,pointRadius:4},
-      {label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}
-    ]},
-    options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
-  });
+  const ctx=document.getElementById('weightChart');if(!ctx)return;
+  new Chart(ctx,{type:'line',data:{labels:log.map(e=>e.date.slice(5)),datasets:[
+    {label:'Kilo (kg)',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3,pointRadius:4},
+    {label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}
+  ]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(30,41,59,.5)'}},y:{ticks:{color:'#64748b'},grid:{color:'rgba(30,41,59,.5)'}}}}});
 }
 
 // ==================== DIET ====================
 function renderDiet(el){
-  const days = [
-    {day:'Pazartesi', meals:[
-      {t:'Kahvaltı',d:'3 yumurta (haşlanmış) + 1 dilim tam buğday ekmek + 30g beyaz peynir + domates-salatalık + yeşil çay',c:420,p:28,f:22,k:30},
-      {t:'Ara Öğün',d:'1 scoop whey protein + 1 muz',c:280,p:30,f:3,k:35},
-      {t:'Öğle',d:'150g ızgara tavuk + 1 kase bulgur pilavı + yeşil salata (zeytinyağlı)',c:550,p:45,f:15,k:55},
-      {t:'Ara Öğün',d:'30g badem + 1 elma',c:250,p:7,f:15,k:25},
-      {t:'Akşam',d:'200g ızgara somon + haşlanmış brokoli + 1 dilim ekmek',c:550,p:48,f:22,k:30},
-      {t:'Ara Öğün',d:'200g yoğurt + 1 yemek kaşığı bal',c:250,p:12,f:5,k:40}
-    ]},
-    {day:'Salı', meals:[
-      {t:'Kahvaltı',d:'Yulaf ezmesi (50g) + süt + 1 yemek kaşığı fıstık ezmesi + muz',c:450,p:18,f:16,k:55},
-      {t:'Ara Öğün',d:'2 haşlanmış yumurta + 5 zeytin',c:230,p:14,f:16,k:2},
-      {t:'Öğle',d:'150g köfte + yeşil mercimek çorbası + salata',c:560,p:42,f:20,k:50},
-      {t:'Ara Öğün',d:'1 scoop whey + 30g ceviz',c:300,p:28,f:18,k:8},
-      {t:'Akşam',d:'200g tavuk sote (sebzeli) + 1 kase yoğurt',c:480,p:45,f:12,k:35},
-      {t:'Ara Öğün',d:'Lor peyniri (100g) + domates',c:180,p:20,f:5,k:5}
-    ]},
-    {day:'Çarşamba', meals:[
-      {t:'Kahvaltı',d:'Peynirli omlet (3 yumurta + 30g kaşar) + tam buğday ekmek',c:440,p:30,f:25,k:25},
-      {t:'Ara Öğün',d:'Protein bar + 1 portakal',c:280,p:22,f:8,k:35},
-      {t:'Öğle',d:'200g ızgara biftek + esmer pirinç + mevsim salatası',c:580,p:50,f:18,k:48},
-      {t:'Ara Öğün',d:'200g yoğurt + granola (30g)',c:230,p:12,f:6,k:32},
-      {t:'Akşam',d:'Ton balıklı salata (150g ton) + avokado + ekmek',c:520,p:40,f:22,k:35},
-      {t:'Ara Öğün',d:'1 bardak süt + 1 yemek kaşığı bal',c:200,p:8,f:5,k:28}
-    ]},
-    {day:'Perşembe', meals:[
-      {t:'Kahvaltı',d:'Smoothie: süt + muz + yulaf + fıstık ezmesi + whey',c:480,p:35,f:15,k:50},
-      {t:'Ara Öğün',d:'Çavdar ekmeği + avokado + yumurta',c:280,p:12,f:18,k:22},
-      {t:'Öğle',d:'Tavuk dürüm (200g tavuk + lavaş + sebze)',c:530,p:42,f:14,k:52},
-      {t:'Ara Öğün',d:'30g badem + 30g kuru üzüm',c:250,p:7,f:14,k:25},
-      {t:'Akşam',d:'Sebzeli tavuk güveç + bulgur pilavı',c:500,p:40,f:12,k:50},
-      {t:'Ara Öğün',d:'200g süzme yoğurt + 5 adet ceviz',c:260,p:18,f:14,k:12}
-    ]},
-    {day:'Cuma', meals:[
-      {t:'Kahvaltı',d:'3 yumurtalı menemen + ekmek + peynir',c:450,p:26,f:24,k:30},
-      {t:'Ara Öğün',d:'1 scoop whey protein + 1 elma',c:250,p:28,f:2,k:28},
-      {t:'Öğle',d:'Izgara levrek (200g) + patates püresi + salata',c:540,p:42,f:16,k:50},
-      {t:'Ara Öğün',d:'Lor peyniri + domates + ceviz',c:250,p:18,f:14,k:8},
-      {t:'Akşam',d:'200g ızgara tavuk + kinoa salatası',c:520,p:48,f:14,k:45},
-      {t:'Ara Öğün',d:'1 bardak kefir + 1 yemek kaşığı bal',c:200,p:8,f:4,k:30}
-    ]},
-    {day:'Cumartesi', meals:[
-      {t:'Kahvaltı',d:'Yulaf pankek (2 adet) + muz + bal + fıstık ezmesi',c:460,p:20,f:16,k:58},
-      {t:'Ara Öğün',d:'Protein smoothie (süt + whey + yulaf)',c:300,p:32,f:6,k:30},
-      {t:'Öğle',d:'Izgara köfte (200g) + bulgur + cacık',c:560,p:44,f:20,k:48},
-      {t:'Ara Öğün',d:'1 avuç karışık kuruyemiş + 1 muz',c:280,p:8,f:16,k:30},
-      {t:'Akşam',d:'Fırında sebzeli tavuk (200g) + pilav',c:500,p:42,f:12,k:50},
-      {t:'Ara Öğün',d:'200g yoğurt + yaban mersini',c:200,p:10,f:4,k:28}
-    ]},
-    {day:'Pazar', meals:[
-      {t:'Kahvaltı',d:'Serpme kahvaltı: yumurta, peynir, zeytin, domates, ekmek',c:500,p:25,f:28,k:35},
-      {t:'Ara Öğün',d:'1 scoop whey + 1 portakal',c:250,p:28,f:2,k:30},
-      {t:'Öğle',d:'Etli nohut yemeği + pilav + ayran',c:550,p:38,f:16,k:58},
-      {t:'Ara Öğün',d:'Lor peyniri + ceviz + bal',c:250,p:16,f:14,k:16},
-      {t:'Akşam',d:'Izgara somon (200g) + ıspanak sote + ekmek',c:500,p:44,f:20,k:28},
-      {t:'Ara Öğün',d:'1 bardak süt + 1 muz',c:250,p:12,f:5,k:38}
-    ]}
+  const days=[
+    {day:'Pazartesi',meals:[{t:'Kahvaltı',d:'3 yumurta (haşlanmış) + 1 dilim tam buğday ekmek + 30g beyaz peynir + domates-salatalık + yeşil çay',c:420,p:28,f:22,k:30},{t:'Ara Öğün',d:'1 scoop whey protein + 1 muz',c:280,p:30,f:3,k:35},{t:'Öğle',d:'150g ızgara tavuk + 1 kase bulgur pilavı + yeşil salata (zeytinyağlı)',c:550,p:45,f:15,k:55},{t:'Ara Öğün',d:'30g badem + 1 elma',c:250,p:7,f:15,k:25},{t:'Akşam',d:'200g ızgara somon + haşlanmış brokoli + 1 dilim ekmek',c:550,p:48,f:22,k:30},{t:'Ara Öğün',d:'200g yoğurt + 1 yemek kaşığı bal',c:250,p:12,f:5,k:40}]},
+    {day:'Salı',meals:[{t:'Kahvaltı',d:'Yulaf ezmesi (50g) + süt + 1 yemek kaşığı fıstık ezmesi + muz',c:450,p:18,f:16,k:55},{t:'Ara Öğün',d:'2 haşlanmış yumurta + 5 zeytin',c:230,p:14,f:16,k:2},{t:'Öğle',d:'150g köfte + yeşil mercimek çorbası + salata',c:560,p:42,f:20,k:50},{t:'Ara Öğün',d:'1 scoop whey + 30g ceviz',c:300,p:28,f:18,k:8},{t:'Akşam',d:'200g tavuk sote (sebzeli) + 1 kase yoğurt',c:480,p:45,f:12,k:35},{t:'Ara Öğün',d:'Lor peyniri (100g) + domates',c:180,p:20,f:5,k:5}]},
+    {day:'Çarşamba',meals:[{t:'Kahvaltı',d:'Peynirli omlet (3 yumurta + 30g kaşar) + tam buğday ekmek',c:440,p:30,f:25,k:25},{t:'Ara Öğün',d:'Protein bar + 1 portakal',c:280,p:22,f:8,k:35},{t:'Öğle',d:'200g ızgara biftek + esmer pirinç + mevsim salatası',c:580,p:50,f:18,k:48},{t:'Ara Öğün',d:'200g yoğurt + granola (30g)',c:230,p:12,f:6,k:32},{t:'Akşam',d:'Ton balıklı salata (150g ton) + avokado + ekmek',c:520,p:40,f:22,k:35},{t:'Ara Öğün',d:'1 bardak süt + 1 yemek kaşığı bal',c:200,p:8,f:5,k:28}]},
+    {day:'Perşembe',meals:[{t:'Kahvaltı',d:'Smoothie: süt + muz + yulaf + fıstık ezmesi + whey',c:480,p:35,f:15,k:50},{t:'Ara Öğün',d:'Çavdar ekmeği + avokado + yumurta',c:280,p:12,f:18,k:22},{t:'Öğle',d:'Tavuk dürüm (200g tavuk + lavaş + sebze)',c:530,p:42,f:14,k:52},{t:'Ara Öğün',d:'30g badem + 30g kuru üzüm',c:250,p:7,f:14,k:25},{t:'Akşam',d:'Sebzeli tavuk güveç + bulgur pilavı',c:500,p:40,f:12,k:50},{t:'Ara Öğün',d:'200g süzme yoğurt + 5 adet ceviz',c:260,p:18,f:14,k:12}]},
+    {day:'Cuma',meals:[{t:'Kahvaltı',d:'3 yumurtalı menemen + ekmek + peynir',c:450,p:26,f:24,k:30},{t:'Ara Öğün',d:'1 scoop whey protein + 1 elma',c:250,p:28,f:2,k:28},{t:'Öğle',d:'Izgara levrek (200g) + patates püresi + salata',c:540,p:42,f:16,k:50},{t:'Ara Öğün',d:'Lor peyniri + domates + ceviz',c:250,p:18,f:14,k:8},{t:'Akşam',d:'200g ızgara tavuk + kinoa salatası',c:520,p:48,f:14,k:45},{t:'Ara Öğün',d:'1 bardak kefir + 1 yemek kaşığı bal',c:200,p:8,f:4,k:30}]},
+    {day:'Cumartesi',meals:[{t:'Kahvaltı',d:'Yulaf pankek (2 adet) + muz + bal + fıstık ezmesi',c:460,p:20,f:16,k:58},{t:'Ara Öğün',d:'Protein smoothie (süt + whey + yulaf)',c:300,p:32,f:6,k:30},{t:'Öğle',d:'Izgara köfte (200g) + bulgur + cacık',c:560,p:44,f:20,k:48},{t:'Ara Öğün',d:'1 avuç karışık kuruyemiş + 1 muz',c:280,p:8,f:16,k:30},{t:'Akşam',d:'Fırında sebzeli tavuk (200g) + pilav',c:500,p:42,f:12,k:50},{t:'Ara Öğün',d:'200g yoğurt + yaban mersini',c:200,p:10,f:4,k:28}]},
+    {day:'Pazar',meals:[{t:'Kahvaltı',d:'Serpme kahvaltı: yumurta, peynir, zeytin, domates, ekmek',c:500,p:25,f:28,k:35},{t:'Ara Öğün',d:'1 scoop whey + 1 portakal',c:250,p:28,f:2,k:30},{t:'Öğle',d:'Etli nohut yemeği + pilav + ayran',c:550,p:38,f:16,k:58},{t:'Ara Öğün',d:'Lor peyniri + ceviz + bal',c:250,p:16,f:14,k:16},{t:'Akşam',d:'Izgara somon (200g) + ıspanak sote + ekmek',c:500,p:44,f:20,k:28},{t:'Ara Öğün',d:'1 bardak süt + 1 muz',c:250,p:12,f:5,k:38}]}
   ];
-
-  el.innerHTML = `
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">📋 7 Günlük Diyet Planı</h2>
   <p class="text-xs text-slate-400 mb-4">Günlük ~2.300 kcal · P:170-180g · Y:70-80g · K:200-250g</p>
   <div class="space-y-3">
-    ${days.map(day=>{
-      const tc=day.meals.reduce((s,m)=>s+m.c,0);
-      const tp=day.meals.reduce((s,m)=>s+m.p,0);
-      return `
-      <details class="card meal-card">
-        <summary class="font-semibold text-emerald-400 cursor-pointer flex justify-between items-center min-h-[44px]">
-          <span>${day.day}</span>
-          <span class="text-xs text-slate-400 font-normal">${tc} kcal · P:${tp}g</span>
-        </summary>
-        <div class="mt-3 space-y-2">
-          ${day.meals.map(m=>`
-            <div class="py-1.5 border-t border-slate-700/50">
-              <div class="flex justify-between text-xs">
-                <span class="font-medium text-slate-300">${m.t}</span>
-                <span class="text-slate-500">${m.c}kcal · P:${m.p} Y:${m.f} K:${m.k}</span>
-              </div>
-              <div class="text-xs text-slate-400 mt-0.5">${m.d}</div>
-            </div>`).join('')}
-        </div>
-      </details>`}).join('')}
+    ${days.map(day=>{const tc=day.meals.reduce((s,m)=>s+m.c,0);const tp=day.meals.reduce((s,m)=>s+m.p,0);
+      return `<details class="bento-card meal-card"><summary class="font-semibold text-emerald-400 cursor-pointer flex justify-between items-center min-h-[44px]"><span>${day.day}</span><span class="text-xs text-slate-400 font-normal">${tc} kcal · P:${tp}g</span></summary>
+        <div class="mt-3 space-y-2">${day.meals.map(m=>`<div class="py-1.5 border-t border-slate-700/50"><div class="flex justify-between text-xs"><span class="font-medium text-slate-300">${m.t}</span><span class="text-slate-500">${m.c}kcal · P:${m.p} Y:${m.f} K:${m.k}</span></div><div class="text-xs text-slate-400 mt-0.5">${m.d}</div></div>`).join('')}</div></details>`}).join('')}
   </div>`;
 }
 
-// ==================== SAGLIK (Vitamins + BP) ====================
+// ==================== SAGLIK ====================
 function renderSaglik(el){
-  const sub = currentSubTab.saglik || 'vitamins';
-  el.innerHTML = `
+  const sub=currentSubTab.saglik||'vitamins';
+  el.innerHTML=`
   <div class="flex gap-2 mb-4">
     <button onclick="setSubTab('saglik','vitamins')" class="sub-tab ${sub==='vitamins'?'active':''}">💊 Vitamin</button>
     <button onclick="setSubTab('saglik','bp')" class="sub-tab ${sub==='bp'?'active':''}">❤️ Tansiyon</button>
   </div>
   <div id="saglikContent" class="slide-in"></div>`;
-  const container = el.querySelector('#saglikContent');
-  if(sub==='bp') renderBP(container); else renderVitamins(container);
+  (sub==='bp'?renderBP:renderVitamins)(el.querySelector('#saglikContent'));
 }
 
-// ==================== VITAMINS ====================
-const VITAMINS = [
-  {id:'folbiol', name:'Folbiol 5mg (Folik Asit) ⏳3 hafta', emoji:'💗', desc:'Hücre yenilenmesi, DNA sentezi, kan yapımı (reçeteli) — 20 tablet (~8 Mart bitiş)', when:'Sabah aç karnına'},
-  {id:'tiopatib_sabah', name:'Tiopati-B (SABAH)', emoji:'💜', desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)', when:'Sabah aç karnına'},
-  {id:'tiopatib_aksam', name:'Tiopati-B (AKŞAM)', emoji:'💜', desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)', when:'Akşam aç karnına'},
-  {id:'lipanthyl', name:'Lipanthyl 160mg (Fenofibrat) ⏳2 hafta', emoji:'❤️', desc:'Kolesterol/trigliserit ilacı (reçeteli) — sadece 2 hafta (~1 Mart bitiş)', when:'Akşam tok karnına (yemekten sonra)'},
-  {id:'ginseng', name:'Kore Kırmızı Ginsengi (3000mg)', emoji:'🌿', desc:'Enerji, kan dolaşımı, beyin fonksiyonu', when:'Sabah aç karnına'},
-  {id:'probiotics', name:'Probiyotik (Physician\'s Choice 60B)', emoji:'🦠', desc:'Sindirim, bağırsak sağlığı — 10 suş + prebiyotik', when:'Sabah aç karnına (kahvaltıdan 15dk önce)'},
-  {id:'multivitamin', name:'Multivitamin (2 tablet)', emoji:'💊', desc:'A, C, D, E, K, B vitaminleri, Çinko, Selenyum, BCAA, Zerdeçal', when:'Kahvaltıyla birlikte'},
-  {id:'omega3', name:'Omega-3 (Balık Yağı)', emoji:'🐟', desc:'Kalp, beyin, bel ağrısı (anti-inflamatuar)', when:'Öğle veya akşam yemekle', missing:true},
-  {id:'magnesium', name:'Magnezyum (300-400mg)', emoji:'🧲', desc:'Kas gevşetme, uyku, bel ağrısı', when:'Akşam yatmadan', missing:true},
-  {id:'creatine', name:'Kreatin (5g)', emoji:'💪', desc:'Kas gücü, gym performansı', when:'Günün herhangi saati (suyla)', missing:true},
-  {id:'larginine', name:'L-Arginin (3-5g)', emoji:'🔥', desc:'Kan dolaşımı, erektil fonksiyon, ginseng ile sinerji', when:'Sabah veya antrenman öncesi', missing:true},
+const VITAMINS=[
+  {id:'folbiol',name:'Folbiol 5mg (Folik Asit) ⏳3 hafta',emoji:'💗',desc:'Hücre yenilenmesi, DNA sentezi, kan yapımı (reçeteli)',when:'Sabah aç karnına'},
+  {id:'tiopatib_sabah',name:'Tiopati-B (SABAH)',emoji:'💜',desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)',when:'Sabah aç karnına'},
+  {id:'tiopatib_aksam',name:'Tiopati-B (AKŞAM)',emoji:'💜',desc:'Alfa Lipoik Asit 600mg + B1 250mg + B12 1mg (reçeteli)',when:'Akşam aç karnına'},
+  {id:'lipanthyl',name:'Lipanthyl 160mg (Fenofibrat) ⏳2 hafta',emoji:'❤️',desc:'Kolesterol/trigliserit ilacı (reçeteli)',when:'Akşam tok karnına (yemekten sonra)'},
+  {id:'ginseng',name:'Kore Kırmızı Ginsengi (3000mg)',emoji:'🌿',desc:'Enerji, kan dolaşımı, beyin fonksiyonu',when:'Sabah aç karnına'},
+  {id:'probiotics',name:'Probiyotik (Physician\'s Choice 60B)',emoji:'🦠',desc:'Sindirim, bağırsak sağlığı',when:'Sabah aç karnına (kahvaltıdan 15dk önce)'},
+  {id:'multivitamin',name:'Multivitamin (2 tablet)',emoji:'💊',desc:'A, C, D, E, K, B vitaminleri, Çinko, Selenyum, BCAA, Zerdeçal',when:'Kahvaltıyla birlikte'},
+  {id:'omega3',name:'Omega-3 (Balık Yağı)',emoji:'🐟',desc:'Kalp, beyin, bel ağrısı (anti-inflamatuar)',when:'Öğle veya akşam yemekle',missing:true},
+  {id:'magnesium',name:'Magnezyum (300-400mg)',emoji:'🧲',desc:'Kas gevşetme, uyku, bel ağrısı',when:'Akşam yatmadan',missing:true},
+  {id:'creatine',name:'Kreatin (5g)',emoji:'💪',desc:'Kas gücü, gym performansı',when:'Günün herhangi saati (suyla)',missing:true},
+  {id:'larginine',name:'L-Arginin (3-5g)',emoji:'🔥',desc:'Kan dolaşımı, erektil fonksiyon, ginseng ile sinerji',when:'Sabah veya antrenman öncesi',missing:true},
 ];
 
 function renderVitamins(el){
-  const log = vitaminLog();
-  const taken = Object.values(log).filter(v=>v).length;
-  const total = VITAMINS.length;
-  const pct = Math.round(taken/total*100);
-
-  el.innerHTML = `
+  const log=vitaminLog();const taken=Object.values(log).filter(v=>v).length;const total=VITAMINS.length;const pct=Math.round(taken/total*100);
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">💊 Vitamin & Takviye</h2>
-  
-  <div class="card mb-4 text-center">
+  <div class="bento-card mb-4 text-center">
     <div class="text-3xl font-bold text-purple-400">${taken}/${total}</div>
     <div class="text-xs text-slate-400 mt-1">Bugün alınan</div>
     <div class="macro-bar mt-2"><div class="macro-fill bg-purple-500" style="width:${pct}%"></div></div>
   </div>
-
   <div class="space-y-2">
-    ${VITAMINS.map(v=>{
-      const done = log[v.id] || false;
-      return `
-      <div class="card flex items-center gap-3 py-2 px-3 ${done?'opacity-60':''}">
-        <button onclick="toggleVitamin('${v.id}')" class="text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center">${done?'✅':v.emoji}</button>
+    ${VITAMINS.map(v=>{const done=log[v.id]||false;return `
+      <div class="bento-card flex items-center gap-3 py-2 px-3 ${done?'opacity-60':''}">
+        <button onclick="toggleVitamin('${v.id}')" class="text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="${done?'Alındı':'Alınmadı'}: ${v.name}">${done?'✅':v.emoji}</button>
         <div class="flex-1">
           <div class="text-sm font-medium ${done?'line-through text-slate-500':''}">${v.name} ${v.missing?'<span class="text-xs text-red-400 font-normal">(SATIN AL)</span>':''}</div>
           <div class="text-xs text-slate-400">${v.desc}</div>
@@ -1019,8 +1040,7 @@ function renderVitamins(el){
         </div>
       </div>`}).join('')}
   </div>
-
-  <div class="card mt-4">
+  <div class="bento-card mt-4">
     <h3 class="text-sm font-semibold text-slate-300 mb-2">🔔 Hatırlatma Programı</h3>
     <div class="text-xs text-slate-400 space-y-1.5">
       <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 07:30</span><span>Sabah aç karnına: Folbiol, Tiopati-B, Ginseng, Probiyotik, L-Arginin</span></div>
@@ -1032,8 +1052,7 @@ function renderVitamins(el){
     </div>
     <p class="text-xs text-slate-500 mt-2 italic">📱 Hatırlatmalar Telegram bot üzerinden gönderilir.</p>
   </div>
-
-  <div class="card mt-4">
+  <div class="bento-card mt-4">
     <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Öneriler</h3>
     <div class="text-xs text-slate-400 space-y-1">
       <p>• <strong>Kilo verirken</strong> en önemli: Multivitamin, D Vitamini, Omega-3, Magnezyum</p>
@@ -1044,46 +1063,23 @@ function renderVitamins(el){
   </div>`;
 }
 
-function toggleVitamin(id){
-  const log = vitaminLog();
-  log[id] = !log[id];
-  DB.set('vitamins_'+DB.today(), log);
-  render();
-}
+function toggleVitamin(id){const log=vitaminLog();log[id]=!log[id];DB.set('vitamins_'+DB.today(),log);render()}
 
 // ==================== BLOOD PRESSURE ====================
 function renderBP(el){
-  const log = bpLog();
-  const latest = log.length ? log[log.length-1] : null;
-  
-  function bpCategory(sys,dia){
-    if(sys<120 && dia<80) return {label:'Normal',color:'text-emerald-400'};
-    if(sys<130 && dia<80) return {label:'Yükselmiş',color:'text-yellow-400'};
-    if(sys<140 || dia<90) return {label:'Hipertansiyon 1',color:'text-orange-400'};
-    if(sys>=140 || dia>=90) return {label:'Hipertansiyon 2',color:'text-red-400'};
-    return {label:'—',color:'text-slate-400'};
-  }
-
-  const cat = latest ? bpCategory(latest.sys, latest.dia) : null;
-
-  el.innerHTML = `
+  const log=bpLog();const latest=log.length?log[log.length-1]:null;
+  function bpCat(sys,dia){if(sys<120&&dia<80)return{label:'Normal',color:'text-emerald-400'};if(sys<130&&dia<80)return{label:'Yükselmiş',color:'text-yellow-400'};if(sys<140||dia<90)return{label:'Hipertansiyon 1',color:'text-orange-400'};return{label:'Hipertansiyon 2',color:'text-red-400'}}
+  const cat=latest?bpCat(latest.sys,latest.dia):null;
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">❤️ Tansiyon Takibi</h2>
-  
-  ${latest ? `
-  <div class="card mb-4 text-center">
+  ${latest?`<div class="bento-card mb-4 text-center">
     <div class="text-4xl font-bold"><span class="text-red-400">${latest.sys}</span><span class="text-slate-500">/</span><span class="text-blue-400">${latest.dia}</span></div>
     <div class="text-sm text-slate-400 mt-1">mmHg</div>
-    <div class="flex items-center justify-center gap-2 mt-2">
-      <span class="text-lg">💓</span>
-      <span class="text-xl font-bold text-pink-400">${latest.pulse || '—'}</span>
-      <span class="text-sm text-slate-400">bpm</span>
-    </div>
+    <div class="flex items-center justify-center gap-2 mt-2"><span class="text-lg">💓</span><span class="text-xl font-bold text-pink-400">${latest.pulse||'—'}</span><span class="text-sm text-slate-400">bpm</span></div>
     <div class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-semibold ${cat.color}" style="background:rgba(0,0,0,.3)">${cat.label}</div>
     <div class="text-xs text-slate-500 mt-1">${latest.date} ${latest.time||''}</div>
-  </div>` : `
-  <div class="card mb-4 text-center"><p class="text-sm text-slate-500 py-4">Henüz tansiyon kaydı yok</p></div>`}
-
-  <div class="card mb-4">
+  </div>`:`<div class="bento-card mb-4 text-center"><p class="text-sm text-slate-500 py-4">Henüz tansiyon kaydı yok</p></div>`}
+  <div class="bento-card mb-4">
     <h3 class="text-sm font-semibold mb-3">Yeni Ölçüm Ekle</h3>
     <div class="grid grid-cols-3 gap-2 mb-2">
       <div><label class="text-xs text-slate-400">Sistolik</label><input id="bpSys" type="number" placeholder="120" class="text-sm text-center"></div>
@@ -1092,24 +1088,14 @@ function renderBP(el){
     </div>
     <button onclick="addBP()" class="btn-primary w-full text-sm mt-2">+ Kaydet</button>
   </div>
-
-  <div class="card mb-4"><canvas id="bpChart" height="200"></canvas></div>
-
-  <div class="space-y-1">
-    ${log.slice().reverse().slice(0,15).map(e=>{
-      const c = bpCategory(e.sys,e.dia);
-      return `
-      <div class="flex justify-between items-center text-sm py-1.5 border-b border-slate-700/50">
-        <span class="text-slate-400 text-xs">${e.date} ${e.time||''}</span>
-        <div class="flex items-center gap-2">
-          <span class="font-medium">${e.sys}/${e.dia}</span>
-          <span class="text-pink-400 text-xs">♥${e.pulse||'—'}</span>
-          <span class="text-xs ${c.color}">${c.label}</span>
-        </div>
-      </div>`}).join('')}
+  <div class="bento-card mb-4"><canvas id="bpChart" height="200"></canvas></div>
+  <div class="space-y-1">${log.slice().reverse().slice(0,15).map(e=>{const c=bpCat(e.sys,e.dia);return `
+    <div class="flex justify-between items-center text-sm py-1.5 border-b border-slate-700/50">
+      <span class="text-slate-400 text-xs">${e.date} ${e.time||''}</span>
+      <div class="flex items-center gap-2"><span class="font-medium">${e.sys}/${e.dia}</span><span class="text-pink-400 text-xs">♥${e.pulse||'—'}</span><span class="text-xs ${c.color}">${c.label}</span></div>
+    </div>`}).join('')}
   </div>
-
-  <div class="card mt-4">
+  <div class="bento-card mt-4">
     <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Referans Değerler</h3>
     <div class="space-y-1 text-xs">
       <div class="flex justify-between"><span class="text-emerald-400">Normal</span><span class="text-slate-400">&lt;120 / &lt;80</span></div>
@@ -1118,335 +1104,193 @@ function renderBP(el){
       <div class="flex justify-between"><span class="text-red-400">Hipertansiyon 2</span><span class="text-slate-400">≥140 / ≥90</span></div>
     </div>
   </div>`;
-
-  if(log.length>1) setTimeout(()=>{
-    const ctx=document.getElementById('bpChart');
-    if(!ctx)return;
-    new Chart(ctx,{
-      type:'line',
-      data:{labels:log.map(e=>e.date.slice(5)),datasets:[
-        {label:'Sistolik',data:log.map(e=>e.sys),borderColor:'#f87171',fill:false,tension:.3,pointRadius:4},
-        {label:'Diastolik',data:log.map(e=>e.dia),borderColor:'#60a5fa',fill:false,tension:.3,pointRadius:4},
-        {label:'Nabız',data:log.map(e=>e.pulse),borderColor:'#f472b6',borderDash:[4,4],fill:false,tension:.3,pointRadius:3}
-      ]},
-      options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
-    });
+  if(log.length>1)setTimeout(()=>{const ctx=document.getElementById('bpChart');if(!ctx)return;
+    new Chart(ctx,{type:'line',data:{labels:log.map(e=>e.date.slice(5)),datasets:[
+      {label:'Sistolik',data:log.map(e=>e.sys),borderColor:'#f87171',fill:false,tension:.3,pointRadius:4},
+      {label:'Diastolik',data:log.map(e=>e.dia),borderColor:'#60a5fa',fill:false,tension:.3,pointRadius:4},
+      {label:'Nabız',data:log.map(e=>e.pulse),borderColor:'#f472b6',borderDash:[4,4],fill:false,tension:.3,pointRadius:3}
+    ]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(30,41,59,.5)'}},y:{ticks:{color:'#64748b'},grid:{color:'rgba(30,41,59,.5)'}}}}});
   },50);
 }
 
 function addBP(){
-  const sys=parseInt(document.getElementById('bpSys').value);
-  const dia=parseInt(document.getElementById('bpDia').value);
-  const pulse=parseInt(document.getElementById('bpPulse').value)||null;
-  if(!sys||!dia)return;
-  const log=bpLog();
-  const now=new Date();
-  log.push({date:DB.today(), time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}), sys, dia, pulse});
-  DB.set('bp_log', log);
-  render();
+  const sys=parseInt(document.getElementById('bpSys').value),dia=parseInt(document.getElementById('bpDia').value),pulse=parseInt(document.getElementById('bpPulse').value)||null;
+  if(!sys||!dia)return;const log=bpLog();const now=new Date();
+  log.push({date:DB.today(),time:now.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),sys,dia,pulse});
+  DB.set('bp_log',log);render();
 }
 
 // ==================== GYM ====================
-const GYM_PROGRAM = {
-  'Pazartesi': {title:'Üst Vücut', color:'#6366f1', exercises:['Bench Press 4×10','Barbell Row 4×10','Shoulder Press 3×12','Bicep Curl 3×12','Tricep Dips 3×12','Eliptik Bisiklet 20dk']},
-  'Çarşamba': {title:'Alt Vücut', color:'#10b981', exercises:['Squat 4×10','Leg Press 4×10','Lunges 3×12','Calf Raises 3×15','Leg Curls 3×12','Bisiklet 20dk']},
-  'Cuma': {title:'Full Body + Kardiyo', color:'#f59e0b', exercises:['Deadlift 4×8','Pull-ups 3×max','Chest Fly 3×12','Eliptik Bisiklet 30dk']},
-  'Rehabilitasyon': {title:'Bel Rehabilitasyonu', color:'#f59e0b', exercises:['Cat-Cow 2×15','Bird-Dog 2×10','Dead Hang 3×30sn','Hip Flexor Stretch 2×30sn']}
+const GYM_PROGRAM={
+  'Pazartesi':{title:'Üst Vücut',color:'#6366f1',exercises:['Bench Press 4×10','Barbell Row 4×10','Shoulder Press 3×12','Bicep Curl 3×12','Tricep Dips 3×12','Eliptik Bisiklet 20dk']},
+  'Çarşamba':{title:'Alt Vücut',color:'#10b981',exercises:['Squat 4×10','Leg Press 4×10','Lunges 3×12','Calf Raises 3×15','Leg Curls 3×12','Bisiklet 20dk']},
+  'Cuma':{title:'Full Body + Kardiyo',color:'#f59e0b',exercises:['Deadlift 4×8','Pull-ups 3×max','Chest Fly 3×12','Eliptik Bisiklet 30dk']},
+  'Rehabilitasyon':{title:'Bel Rehabilitasyonu',color:'#f59e0b',exercises:['Cat-Cow 2×15','Bird-Dog 2×10','Dead Hang 3×30sn','Hip Flexor Stretch 2×30sn']}
 };
 
 function renderGym(el){
-  const sub = currentSubTab.gym || 'program';
-  el.innerHTML = `
+  const sub=currentSubTab.gym||'program';
+  el.innerHTML=`
   <div class="flex gap-2 mb-4">
     <button onclick="setSubTab('gym','program')" class="sub-tab ${sub==='program'?'active':''}">📋 Program</button>
     <button onclick="setSubTab('gym','log')" class="sub-tab ${sub==='log'?'active':''}">📝 Kayıt</button>
     <button onclick="setSubTab('gym','history')" class="sub-tab ${sub==='history'?'active':''}">📊 Geçmiş</button>
   </div>
   <div id="gymContent" class="slide-in"></div>`;
-  const container = el.querySelector('#gymContent');
-  if(sub==='log') renderGymLog(container);
-  else if(sub==='history') renderGymHistory(container);
-  else renderGymProgram(container);
+  ({program:renderGymProgram,log:renderGymLog,history:renderGymHistory}[sub]||renderGymProgram)(el.querySelector('#gymContent'));
 }
 
 function renderGymProgram(el){
-  el.innerHTML = `
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı</h2>
   <p class="text-xs text-slate-400 mb-4">Haftada 3 gün + her seans sonrası bel rehabilitasyonu</p>
-
-  <div class="card workout-card mb-3">
+  <div class="bento-card workout-card mb-3">
     <h3 class="font-semibold text-indigo-400 mb-2">📅 Pazartesi — Üst Vücut</h3>
     <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bench Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/chest/barbell-bench-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Barbell Row</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Shoulder Press</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/shoulders/barbell-overhead-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bicep Curl</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/biceps/barbell-curl" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Tricep Dips</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/triceps/tricep-dips" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bench Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/chest/barbell-bench-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Barbell Row</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Shoulder Press</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/shoulders/barbell-overhead-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bicep Curl</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/biceps/barbell-curl" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Tricep Dips</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/triceps/tricep-dips" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
       <div class="text-xs text-cyan-400 mt-2">🫀 20dk Eliptik Bisiklet</div>
     </div>
   </div>
-
-  <div class="card workout-card mb-3" style="border-left-color:#10b981">
+  <div class="bento-card workout-card mb-3" style="border-left-color:#10b981">
     <h3 class="font-semibold text-emerald-400 mb-2">📅 Çarşamba — Alt Vücut</h3>
     <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Squat</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-squat" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/quads/leg-press" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Lunges</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-lunge" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Calf Raises</span><span class="text-slate-400">3×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/calves/calf-raise" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Curls</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/hamstrings/leg-curl" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Squat</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-squat" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/quads/leg-press" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Lunges</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-lunge" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Calf Raises</span><span class="text-slate-400">3×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/calves/calf-raise" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Curls</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/hamstrings/leg-curl" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
       <div class="text-xs text-cyan-400 mt-2">🚴 20dk Bisiklet</div>
     </div>
   </div>
-
-  <div class="card workout-card mb-3" style="border-left-color:#f59e0b">
+  <div class="bento-card workout-card mb-3" style="border-left-color:#f59e0b">
     <h3 class="font-semibold text-amber-400 mb-2">📅 Cuma — Full Body + Kardiyo</h3>
     <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Deadlift</span><span class="text-slate-400">4×8</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/glutes/barbell-deadlift" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Pull-ups</span><span class="text-slate-400">3×max</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lats/pull-up" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Chest Fly</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/dumbbells/male/chest/dumbbell-fly" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Deadlift</span><span class="text-slate-400">4×8</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/glutes/barbell-deadlift" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Pull-ups</span><span class="text-slate-400">3×max</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lats/pull-up" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Chest Fly</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/dumbbells/male/chest/dumbbell-fly" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
       <div class="text-xs text-cyan-400 mt-2">🫀 30dk Eliptik Bisiklet</div>
     </div>
   </div>
-
-  <div class="card rehab-card mb-3">
+  <div class="bento-card rehab-card mb-3">
     <h3 class="font-semibold text-amber-400 mb-2">🧘 Bel Rehabilitasyonu <span class="text-xs font-normal text-slate-400">(her seans sonrası)</span></h3>
     <div class="space-y-2 text-sm">
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Cat-Cow (Kedi-İnek)</span><span class="text-slate-400">2×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/abdominals/cat-cow" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Bird-Dog</span><span class="text-slate-400">2×10 (her taraf)</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lower-back/bird-dog" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Dead Hang (Asılma)</span><span class="text-slate-400">3×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/forearms/dead-hang" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details class="group"><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Hip Flexor Stretch</span><span class="text-slate-400">2×30sn (her taraf)</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/stretches/male/hip-flexors/kneeling-hip-flexor-stretch" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Cat-Cow</span><span class="text-slate-400">2×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/abdominals/cat-cow" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Bird-Dog</span><span class="text-slate-400">2×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lower-back/bird-dog" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Dead Hang</span><span class="text-slate-400">3×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/forearms/dead-hang" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Hip Flexor Stretch</span><span class="text-slate-400">2×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/stretches/male/hip-flexors/kneeling-hip-flexor-stretch" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
     </div>
   </div>
-
-  <div class="card">
+  <div class="bento-card">
     <h3 class="font-semibold text-slate-300 mb-2">📝 Günlük Hedef</h3>
-    <div class="flex items-center gap-2 text-sm">
-      <span class="text-2xl">🚶</span>
-      <span>Her gün <strong class="text-amber-400">10.000 adım</strong></span>
-    </div>
+    <div class="flex items-center gap-2 text-sm"><span class="text-2xl">🚶</span><span>Her gün <strong class="text-amber-400">10.000 adım</strong></span></div>
   </div>`;
 }
 
 // ==================== GYM LOG ====================
 function renderGymLog(el){
-  const today = DB.today();
-  const existing = gymLog(today);
-  const allExercises = [
-    'Bench Press','Barbell Row','Shoulder Press','Bicep Curl','Tricep Dips',
-    'Squat','Leg Press','Lunges','Calf Raises','Leg Curls',
-    'Deadlift','Pull-ups','Chest Fly',
-    'Cat-Cow','Bird-Dog','Dead Hang','Hip Flexor Stretch',
-    'Eliptik Bisiklet','Bisiklet'
-  ];
-
-  let exerciseRows = '';
-  if(existing && existing.exercises){
-    existing.exercises.forEach((ex,i)=>{
-      exerciseRows += gymExerciseRow(i, ex.name, ex.weight, ex.sets, ex.reps);
-    });
-  } else {
-    exerciseRows = gymExerciseRow(0,'','','','');
-  }
-
-  el.innerHTML = `
+  const today=DB.today();const existing=gymLog(today);
+  const allExercises=['Bench Press','Barbell Row','Shoulder Press','Bicep Curl','Tricep Dips','Squat','Leg Press','Lunges','Calf Raises','Leg Curls','Deadlift','Pull-ups','Chest Fly','Cat-Cow','Bird-Dog','Dead Hang','Hip Flexor Stretch','Eliptik Bisiklet','Bisiklet'];
+  let exerciseRows='';
+  if(existing&&existing.exercises){existing.exercises.forEach((ex,i)=>{exerciseRows+=gymExerciseRow(i,ex.name,ex.weight,ex.sets,ex.reps)})}
+  else{exerciseRows=gymExerciseRow(0,'','','','')}
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">📝 Antrenman Kaydı</h2>
-  <div class="card mb-4">
-    <div class="flex items-center gap-2 mb-3">
-      <label class="text-sm text-slate-400">Tarih:</label>
-      <input type="date" id="gymDate" value="${today}" class="text-sm flex-1">
-    </div>
-    <div class="flex items-center gap-2 mb-3">
-      <label class="text-sm text-slate-400">Notlar:</label>
-      <input type="text" id="gymNotes" placeholder="Opsiyonel notlar..." value="${existing?.notes||''}" class="text-sm flex-1">
-    </div>
-    <div id="gymExercises" class="space-y-2 mb-3">
-      ${exerciseRows}
-    </div>
+  <div class="bento-card mb-4">
+    <div class="flex items-center gap-2 mb-3"><label class="text-sm text-slate-400">Tarih:</label><input type="date" id="gymDate" value="${today}" class="text-sm flex-1"></div>
+    <div class="flex items-center gap-2 mb-3"><label class="text-sm text-slate-400">Notlar:</label><input type="text" id="gymNotes" placeholder="Opsiyonel notlar..." value="${existing?.notes||''}" class="text-sm flex-1"></div>
+    <div id="gymExercises" class="space-y-2 mb-3">${exerciseRows}</div>
     <div class="flex gap-2">
       <button onclick="addGymExerciseRow()" class="btn-sm border border-slate-600 text-slate-300 rounded-lg flex-1">+ Egzersiz Ekle</button>
       <button onclick="saveGymLog()" class="btn-primary btn-sm flex-1">💾 Kaydet</button>
     </div>
   </div>
-  
   <datalist id="exerciseList">${allExercises.map(e=>`<option value="${e}">`).join('')}</datalist>`;
 }
 
-function gymExerciseRow(i, name, weight, sets, reps){
+function gymExerciseRow(i,name,weight,sets,reps){
   return `<div class="grid grid-cols-12 gap-1 items-center gym-row">
     <input list="exerciseList" placeholder="Egzersiz" value="${name}" class="col-span-4 text-xs gym-name">
     <input type="number" placeholder="kg" value="${weight}" class="col-span-2 text-xs text-center gym-weight">
     <input type="number" placeholder="set" value="${sets}" class="col-span-2 text-xs text-center gym-sets">
     <input type="number" placeholder="rep" value="${reps}" class="col-span-2 text-xs text-center gym-reps">
-    <button onclick="this.closest('.gym-row').remove()" class="col-span-2 text-red-400 text-xs min-h-[44px]">✕</button>
+    <button onclick="this.closest('.gym-row').remove()" class="col-span-2 text-red-400 text-xs min-h-[44px]" aria-label="Egzersizi sil">✕</button>
   </div>`;
 }
 
-function addGymExerciseRow(){
-  const container = document.getElementById('gymExercises');
-  const div = document.createElement('div');
-  div.innerHTML = gymExerciseRow(container.children.length,'','','','');
-  container.appendChild(div.firstElementChild);
-}
+function addGymExerciseRow(){const c=document.getElementById('gymExercises');const d=document.createElement('div');d.innerHTML=gymExerciseRow(c.children.length,'','','','');c.appendChild(d.firstElementChild)}
 
 function saveGymLog(){
-  const date = document.getElementById('gymDate').value;
-  const notes = document.getElementById('gymNotes').value;
-  const rows = document.querySelectorAll('.gym-row');
-  const exercises = [];
-  rows.forEach(row=>{
-    const name = row.querySelector('.gym-name').value.trim();
-    if(!name) return;
-    exercises.push({
-      name,
-      weight: parseFloat(row.querySelector('.gym-weight').value)||0,
-      sets: parseInt(row.querySelector('.gym-sets').value)||0,
-      reps: parseInt(row.querySelector('.gym-reps').value)||0
-    });
-  });
-  if(!exercises.length){ alert('En az bir egzersiz girin!'); return; }
-  DB.set('gym_'+date, {date, notes, exercises, savedAt: new Date().toISOString()});
-  alert('✅ Antrenman kaydedildi!');
+  const date=document.getElementById('gymDate').value;const notes=document.getElementById('gymNotes').value;
+  const exercises=[];document.querySelectorAll('.gym-row').forEach(row=>{
+    const name=row.querySelector('.gym-name').value.trim();if(!name)return;
+    exercises.push({name,weight:parseFloat(row.querySelector('.gym-weight').value)||0,sets:parseInt(row.querySelector('.gym-sets').value)||0,reps:parseInt(row.querySelector('.gym-reps').value)||0})});
+  if(!exercises.length){alert('En az bir egzersiz girin!');return}
+  DB.set('gym_'+date,{date,notes,exercises,savedAt:new Date().toISOString()});alert('✅ Antrenman kaydedildi!');
 }
 
 // ==================== GYM HISTORY ====================
 function renderGymHistory(el){
-  // Find all gym logs
-  const logs = [];
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(k.startsWith('moose_gym_') && k.length===21){
-      const date = k.slice(10);
-      const data = DB.get('gym_'+date);
-      if(data) logs.push(data);
-    }
-  }
+  const logs=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('moose_gym_')&&k.length===21){const data=DB.get('gym_'+k.slice(10));if(data)logs.push(data)}}
   logs.sort((a,b)=>b.date.localeCompare(a.date));
-
-  el.innerHTML = `
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">📊 Antrenman Geçmişi</h2>
-  ${logs.length ? logs.map(log=>`
-    <div class="card mb-3 workout-card">
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="font-semibold text-indigo-400 text-sm">${log.date}</h3>
-        <span class="text-xs text-slate-400">${log.exercises.length} egzersiz</span>
-      </div>
+  ${logs.length?logs.map(log=>`
+    <div class="bento-card mb-3 workout-card">
+      <div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-indigo-400 text-sm">${log.date}</h3><span class="text-xs text-slate-400">${log.exercises.length} egzersiz</span></div>
       ${log.notes?`<p class="text-xs text-slate-400 mb-2 italic">${log.notes}</p>`:''}
-      <div class="space-y-1">
-        ${log.exercises.map(ex=>`
-          <div class="flex justify-between text-xs py-1 border-b border-slate-700/50">
-            <span>${ex.name}</span>
-            <span class="text-slate-400">${ex.weight}kg · ${ex.sets}×${ex.reps}</span>
-          </div>`).join('')}
-      </div>
-      <button onclick="if(confirm('Bu kaydı silmek istediğine emin misin?')){localStorage.removeItem('moose_gym_${log.date}');render()}" class="text-xs text-red-400 mt-2 hover:text-red-300">🗑️ Sil</button>
-    </div>`).join('') : '<p class="text-sm text-slate-500 text-center py-8">Henüz antrenman kaydı yok. Kayıt sekmesinden ilk antrenmanını ekle!</p>'}`;
+      <div class="space-y-1">${log.exercises.map(ex=>`<div class="flex justify-between text-xs py-1 border-b border-slate-700/50"><span>${ex.name}</span><span class="text-slate-400">${ex.weight}kg · ${ex.sets}×${ex.reps}</span></div>`).join('')}</div>
+      <button onclick="if(confirm('Sil?')){localStorage.removeItem('moose_gym_${log.date}');render()}" class="text-xs text-red-400 mt-2">🗑️ Sil</button>
+    </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-8">Henüz antrenman kaydı yok.</p>'}`;
 }
 
-// ==================== RAPOR (Progress + Weekly Report) ====================
+// ==================== RAPOR ====================
 function renderRapor(el){
-  const sub = currentSubTab.rapor || 'weekly';
-  el.innerHTML = `
+  const sub=currentSubTab.rapor||'weekly';
+  el.innerHTML=`
   <div class="flex gap-2 mb-4">
     <button onclick="setSubTab('rapor','weekly')" class="sub-tab ${sub==='weekly'?'active':''}">📅 Haftalık</button>
     <button onclick="setSubTab('rapor','progress')" class="sub-tab ${sub==='progress'?'active':''}">📊 İlerleme</button>
   </div>
   <div id="raporContent" class="slide-in"></div>`;
-  const container = el.querySelector('#raporContent');
-  if(sub==='progress') renderProgress(container); else renderWeeklyReport(container);
+  (sub==='progress'?renderProgress:renderWeeklyReport)(el.querySelector('#raporContent'));
 }
 
-// ==================== WEEKLY REPORT ====================
 function renderWeeklyReport(el){
-  const today = new Date();
-  const dayOfWeek = today.getDay(); // 0=Sun
-  const monday = new Date(today);
-  monday.setDate(today.getDate() - ((dayOfWeek+6)%7));
-  
-  let totalCal=0, totalPro=0, totalWater=0, daysWithFood=0, daysWithWater=0;
-  let workoutCount=0;
-  let vitaminDays=0, vitaminTotal=0;
-  const weekDates=[];
-  
-  for(let i=0;i<7;i++){
-    const d=new Date(monday);
-    d.setDate(monday.getDate()+i);
-    if(d>today) break;
-    const ds=d.toISOString().slice(0,10);
-    weekDates.push(ds);
-    
-    const foods=DB.get('foods_'+ds,[]);
-    const cal=foods.reduce((s,f)=>s+f.cal,0);
-    const pro=foods.reduce((s,f)=>s+f.pro,0);
-    if(cal>0){ totalCal+=cal; totalPro+=pro; daysWithFood++; }
-    
-    const water=DB.get('water_'+ds,0);
-    if(water>0){ totalWater+=water; daysWithWater++; }
-    
-    const gym=DB.get('gym_'+ds,null);
-    if(gym) workoutCount++;
-    
-    const vit=DB.get('vitamins_'+ds,{});
-    const taken=Object.values(vit).filter(v=>v).length;
-    if(Object.keys(vit).length>0){ vitaminDays++; vitaminTotal+=taken; }
+  const today=new Date();const dayOfWeek=today.getDay();const monday=new Date(today);monday.setDate(today.getDate()-((dayOfWeek+6)%7));
+  let totalCal=0,totalPro=0,totalWater=0,daysWithFood=0,daysWithWater=0,workoutCount=0,vitaminDays=0,vitaminTotal=0;const weekDates=[];
+  for(let i=0;i<7;i++){const d=new Date(monday);d.setDate(monday.getDate()+i);if(d>today)break;const ds=d.toISOString().slice(0,10);weekDates.push(ds);
+    const foods=DB.get('foods_'+ds,[]);const cal=foods.reduce((s,f)=>s+f.cal,0);const pro=foods.reduce((s,f)=>s+f.pro,0);
+    if(cal>0){totalCal+=cal;totalPro+=pro;daysWithFood++}
+    const water=DB.get('water_'+ds,0);if(water>0){totalWater+=water;daysWithWater++}
+    if(DB.get('gym_'+ds,null))workoutCount++;
+    const vit=DB.get('vitamins_'+ds,{});const taken=Object.values(vit).filter(v=>v).length;if(Object.keys(vit).length>0){vitaminDays++;vitaminTotal+=taken}
   }
+  const avgCal=daysWithFood?Math.round(totalCal/daysWithFood):0;const avgPro=daysWithFood?Math.round(totalPro/daysWithFood):0;
+  const avgWater=daysWithWater?(totalWater/daysWithWater).toFixed(1):0;const vitPct=vitaminDays?Math.round(vitaminTotal/(vitaminDays*VITAMINS.length)*100):0;
+  const wlog=weightLog();const weekWeights=wlog.filter(w=>weekDates.includes(w.date));
+  let weightChange='—';if(weekWeights.length>=2){weightChange=(weekWeights[weekWeights.length-1].kg-weekWeights[0].kg).toFixed(1);weightChange=(parseFloat(weightChange)>0?'+':'')+weightChange+'kg'}
+  const score=(avgCal>0&&avgCal<=PROFILE.dailyCal+100?25:0)+(avgPro>=150?25:avgPro>=100?15:0)+(workoutCount>=2?25:workoutCount>=1?15:0)+(vitPct>=70?25:vitPct>=40?15:0);
+  let grade='🟡',gradeText='Devam Et';if(score>=80){grade='🟢';gradeText='Harika Gidiyorsun!'}else if(score<50){grade='🔴';gradeText='Kendine Çeki Düzen Ver!'}else{gradeText='İyi Ama Daha İyisi Var'}
 
-  const avgCal = daysWithFood ? Math.round(totalCal/daysWithFood) : 0;
-  const avgPro = daysWithFood ? Math.round(totalPro/daysWithFood) : 0;
-  const avgWater = daysWithWater ? (totalWater/daysWithWater).toFixed(1) : 0;
-  const vitPct = vitaminDays ? Math.round(vitaminTotal/(vitaminDays*VITAMINS.length)*100) : 0;
-
-  // Weight change this week
-  const wlog = weightLog();
-  const weekWeights = wlog.filter(w=>weekDates.includes(w.date));
-  let weightChange = '—';
-  if(weekWeights.length>=2){
-    weightChange = (weekWeights[weekWeights.length-1].kg - weekWeights[0].kg).toFixed(1);
-    weightChange = (parseFloat(weightChange)>0?'+':'')+weightChange+'kg';
-  }
-
-  // Grade
-  let grade='🟡', gradeText='Devam Et';
-  const score = (avgCal>0&&avgCal<=PROFILE.dailyCal+100?25:0) + (avgPro>=150?25:avgPro>=100?15:0) + (workoutCount>=2?25:workoutCount>=1?15:0) + (vitPct>=70?25:vitPct>=40?15:0);
-  if(score>=80){grade='🟢';gradeText='Harika Gidiyorsun!'} else if(score>=50){grade='🟡';gradeText='İyi Ama Daha İyisi Var'} else{grade='🔴';gradeText='Kendine Çeki Düzen Ver!'}
-
-  el.innerHTML = `
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">📅 Haftalık Rapor</h2>
-  <p class="text-xs text-slate-400 mb-4">${weekDates[0] || '—'} → ${weekDates[weekDates.length-1] || '—'}</p>
-
-  <div class="card mb-4 text-center bg-gradient-to-br from-indigo-900/40 to-purple-900/40 border-indigo-500/20">
-    <div class="text-4xl mb-1">${grade}</div>
-    <div class="text-lg font-bold">${gradeText}</div>
-    <div class="text-xs text-slate-400 mt-1">Skor: ${score}/100</div>
+  <p class="text-xs text-slate-400 mb-4">${weekDates[0]||'—'} → ${weekDates[weekDates.length-1]||'—'}</p>
+  <div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15">
+    <div class="text-4xl mb-1">${grade}</div><div class="text-lg font-bold">${gradeText}</div><div class="text-xs text-slate-400 mt-1">Skor: ${score}/100</div>
   </div>
-
-  <div class="grid grid-cols-2 gap-3 mb-4">
-    <div class="card text-center">
-      <div class="text-2xl font-bold text-indigo-400">${avgCal}</div>
-      <div class="text-xs text-slate-400">Ort. Kalori</div>
-    </div>
-    <div class="card text-center">
-      <div class="text-2xl font-bold text-red-400">${avgPro}g</div>
-      <div class="text-xs text-slate-400">Ort. Protein</div>
-    </div>
-    <div class="card text-center">
-      <div class="text-2xl font-bold text-cyan-400">${avgWater}L</div>
-      <div class="text-xs text-slate-400">Ort. Su</div>
-    </div>
-    <div class="card text-center">
-      <div class="text-2xl font-bold text-amber-400">${workoutCount}</div>
-      <div class="text-xs text-slate-400">Antrenman</div>
-    </div>
-    <div class="card text-center">
-      <div class="text-2xl font-bold text-purple-400">${vitPct}%</div>
-      <div class="text-xs text-slate-400">Vitamin Uyumu</div>
-    </div>
-    <div class="card text-center">
-      <div class="text-2xl font-bold ${weightChange.includes('-')?'text-emerald-400':'text-red-400'}">${weightChange}</div>
-      <div class="text-xs text-slate-400">Kilo Değişimi</div>
-    </div>
+  <div class="bento-grid mb-4">
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-indigo-400">${avgCal}</div><div class="text-xs text-slate-400">Ort. Kalori</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-red-400">${avgPro}g</div><div class="text-xs text-slate-400">Ort. Protein</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-cyan-400">${avgWater}L</div><div class="text-xs text-slate-400">Ort. Su</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-amber-400">${workoutCount}</div><div class="text-xs text-slate-400">Antrenman</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-purple-400">${vitPct}%</div><div class="text-xs text-slate-400">Vitamin Uyumu</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold ${weightChange.includes('-')?'text-emerald-400':'text-red-400'}">${weightChange}</div><div class="text-xs text-slate-400">Kilo Değişimi</div></div>
   </div>
-
-  <div class="card">
+  <div class="bento-card">
     <h3 class="text-sm font-semibold text-slate-300 mb-2">💡 Öneriler</h3>
     <div class="text-xs text-slate-400 space-y-1">
       ${avgCal===0?'<p>• 📝 Bu hafta öğün kaydı yok. Yediklerini kaydetmeye başla!</p>':''}
@@ -1459,106 +1303,42 @@ function renderWeeklyReport(el){
   </div>`;
 }
 
-// ==================== PROGRESS ====================
 function renderProgress(el){
-  const log = weightLog();
-  const last30 = [];
-  for(let i=29;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i);
-    const ds=d.toISOString().slice(0,10);
-    const foods=DB.get('foods_'+ds,[]);
-    last30.push({date:ds, cal:foods.reduce((s,f)=>s+f.cal,0)});
-  }
-
-  el.innerHTML = `
+  const log=weightLog();const last30=[];
+  for(let i=29;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().slice(0,10);const foods=DB.get('foods_'+ds,[]);last30.push({date:ds,cal:foods.reduce((s,f)=>s+f.cal,0)})}
+  el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">📊 İlerleme</h2>
-  <div class="card mb-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">Kilo Trendi</h3>
-    <canvas id="progressWeightChart" height="200"></canvas>
-    ${log.length<2?'<p class="text-xs text-slate-500 text-center mt-2">En az 2 kilo kaydı gerekli</p>':''}
-  </div>
-  <div class="card mb-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">Kalori Uyumu (Son 30 Gün)</h3>
-    <canvas id="progressCalChart" height="200"></canvas>
-  </div>
-  <div class="card mb-4">
+  <div class="bento-card mb-4"><h3 class="text-sm font-semibold text-slate-300 mb-2">Kilo Trendi</h3><canvas id="progressWeightChart" height="200"></canvas>${log.length<2?'<p class="text-xs text-slate-500 text-center mt-2">En az 2 kilo kaydı gerekli</p>':''}</div>
+  <div class="bento-card mb-4"><h3 class="text-sm font-semibold text-slate-300 mb-2">Kalori Uyumu (Son 30 Gün)</h3><canvas id="progressCalChart" height="200"></canvas></div>
+  <div class="bento-card mb-4">
     <h3 class="text-sm font-semibold text-slate-300 mb-2">Özet İstatistikler</h3>
-    <div class="grid grid-cols-2 gap-3 text-center text-sm">
-      <div class="p-2 rounded-lg bg-slate-800">
-        <div class="text-xl font-bold text-emerald-400">${log.length}</div>
-        <div class="text-xs text-slate-400">Kilo Kaydı</div>
-      </div>
-      <div class="p-2 rounded-lg bg-slate-800">
-        <div class="text-xl font-bold text-indigo-400">${last30.filter(d=>d.cal>0).length}</div>
-        <div class="text-xs text-slate-400">Öğün Kaydı (30g)</div>
-      </div>
-      <div class="p-2 rounded-lg bg-slate-800">
-        <div class="text-xl font-bold text-cyan-400">${log.length>=2?(log[0].kg-log[log.length-1].kg).toFixed(1):'—'}</div>
-        <div class="text-xs text-slate-400">Verilen Kilo (kg)</div>
-      </div>
-      <div class="p-2 rounded-lg bg-slate-800">
-        <div class="text-xl font-bold text-amber-400">${goals().filter(g=>g.done).length}/${goals().length}</div>
-        <div class="text-xs text-slate-400">Hedef Tamamlama</div>
-      </div>
+    <div class="bento-grid text-center text-sm">
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-emerald-400">${log.length}</div><div class="text-xs text-slate-400">Kilo Kaydı</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-indigo-400">${last30.filter(d=>d.cal>0).length}</div><div class="text-xs text-slate-400">Öğün Kaydı (30g)</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-cyan-400">${log.length>=2?(log[0].kg-log[log.length-1].kg).toFixed(1):'—'}</div><div class="text-xs text-slate-400">Verilen Kilo</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-amber-400">${goals().filter(g=>g.done).length}/${goals().length}</div><div class="text-xs text-slate-400">Hedef</div></div>
     </div>
   </div>`;
-
   setTimeout(()=>{
-    if(log.length>1){
-      const ctx=document.getElementById('progressWeightChart');
-      if(ctx) new Chart(ctx,{
-        type:'line',
-        data:{labels:log.map(e=>e.date.slice(5)),datasets:[
-          {label:'Kilo',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3},
-          {label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}
-        ]},
-        options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
-      });
-    }
-    const ctx2=document.getElementById('progressCalChart');
-    if(ctx2) new Chart(ctx2,{
-      type:'bar',
-      data:{labels:last30.map(d=>d.date.slice(8)),datasets:[
-        {label:'Kalori',data:last30.map(d=>d.cal),backgroundColor:last30.map(d=>d.cal>PROFILE.dailyCal?'rgba(239,68,68,.6)':d.cal>0?'rgba(99,102,241,.6)':'rgba(51,65,85,.3)'),borderRadius:4},
-      ]},
-      options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}}}}
-    });
+    if(log.length>1){const ctx=document.getElementById('progressWeightChart');if(ctx)new Chart(ctx,{type:'line',data:{labels:log.map(e=>e.date.slice(5)),datasets:[{label:'Kilo',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3},{label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b'},grid:{color:'rgba(30,41,59,.5)'}},y:{ticks:{color:'#64748b'},grid:{color:'rgba(30,41,59,.5)'}}}}})}
+    const ctx2=document.getElementById('progressCalChart');if(ctx2)new Chart(ctx2,{type:'bar',data:{labels:last30.map(d=>d.date.slice(8)),datasets:[{label:'Kalori',data:last30.map(d=>d.cal),backgroundColor:last30.map(d=>d.cal>PROFILE.dailyCal?'rgba(239,68,68,.6)':d.cal>0?'rgba(99,102,241,.6)':'rgba(51,65,85,.3)'),borderRadius:4}]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8'}}},scales:{x:{ticks:{color:'#64748b',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#64748b'},grid:{color:'rgba(30,41,59,.5)'}}}}});
   },50);
 }
 
 // ==================== AUTO-UPDATE ====================
-// Unregister any old service workers (they cause cache issues)
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.getRegistrations().then(regs=>{
-    regs.forEach(r=>r.unregister());
-  });
-}
-// Check for updates every time app opens - compare GitHub commit SHA
+if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(regs=>{regs.forEach(r=>r.unregister())})}
 (async function checkUpdate(){
-  try{
-    const res=await fetch('https://api.github.com/repos/myyenice-svg/moose_health_app/commits/main',{headers:{'Accept':'application/vnd.github.sha'}});
-    if(!res.ok) return;
-    const latestSHA=await res.text();
-    const currentSHA=localStorage.getItem('moose_app_version');
-    if(currentSHA && currentSHA!==latestSHA){
-      // New version available! Show update banner
-      const banner=document.createElement('div');
-      banner.className='fixed top-14 left-0 right-0 z-[60] text-center py-2 px-4 text-sm font-medium text-white cursor-pointer';
-      banner.style.background='linear-gradient(135deg,#f59e0b,#d97706)';
-      banner.innerHTML='🔄 Yeni güncelleme var! <b>Yenilemek için tıkla</b>';
-      banner.onclick=function(){
-        localStorage.setItem('moose_app_version',latestSHA);
-        location.reload(true);
-      };
-      document.body.appendChild(banner);
-    } else {
-      localStorage.setItem('moose_app_version',latestSHA);
-    }
+  try{const res=await fetch('https://api.github.com/repos/myyenice-svg/moose_health_app/commits/main',{headers:{'Accept':'application/vnd.github.sha'}});
+    if(!res.ok)return;const latestSHA=await res.text();const currentSHA=localStorage.getItem('moose_app_version');
+    if(currentSHA&&currentSHA!==latestSHA){const banner=document.createElement('div');banner.className='fixed top-14 left-0 right-0 z-[60] text-center py-2 px-4 text-sm font-medium text-white cursor-pointer';
+      banner.style.background='linear-gradient(135deg,#f59e0b,#d97706)';banner.innerHTML='🔄 Yeni güncelleme var! <b>Yenilemek için tıkla</b>';
+      banner.onclick=function(){localStorage.setItem('moose_app_version',latestSHA);location.reload(true)};document.body.appendChild(banner)}
+    else{localStorage.setItem('moose_app_version',latestSHA)}
   }catch{}
 })();
 
 // ==================== INIT ====================
-document.getElementById('headerDate').textContent = new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('headerDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 navigate('dashboard');
 </script>
 </body>
