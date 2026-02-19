@@ -212,6 +212,11 @@ html:not(.dark) .text-slate-500{color:#94a3b8}
 html:not(.dark) .border-slate-700{border-color:#e2e8f0}
 html:not(.dark) .border-slate-700\/50{border-color:rgba(226,232,240,.5)}
 html:not(.dark) .bg-slate-800{background:#f1f5f9}
+/* Gym exercise checkboxes */
+.gym-exercise-row{transition:all .2s}
+.gym-checked .flex-1{text-decoration:line-through;color:#10b981!important;opacity:.7}
+.gym-check-btn{cursor:pointer;user-select:none;transition:transform .15s}
+.gym-check-btn:active{transform:scale(.8)}
 </style>
 </head>
 <body class="min-h-screen pb-24">
@@ -517,7 +522,7 @@ async function quickSync(btn){
 function clearTodayData(){
   if(!confirm('⚠️ Bugünün tüm verilerini (öğünler, su, adım, vitaminler, spor) silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz. Geçmiş günlerin verileri etkilenmez.'))return;
   const today=DB.today();
-  ['foods','water','steps','vitamins','gym','hr','sleep','energy'].forEach(key=>localStorage.removeItem('moose_'+key+'_'+today));
+  ['foods','water','steps','vitamins','gym','hr','sleep','energy','gym_checks'].forEach(key=>localStorage.removeItem('moose_'+key+'_'+today));
   render();
   // Show toast
   const toast=document.createElement('div');
@@ -1045,6 +1050,11 @@ function renderGym(el){
   ({program:renderGymProgram,log:renderGymLog,history:renderGymHistory}[sub]||renderGymProgram)(el.querySelector('#gymContent'));
 }
 
+function getGymChecks(){try{return JSON.parse(localStorage.getItem('moose_gym_checks_'+DB.today()))||{}}catch(e){return{}}}
+function setGymCheck(name,val){const c=getGymChecks();if(val)c[name]=true;else delete c[name];localStorage.setItem('moose_gym_checks_'+DB.today(),JSON.stringify(c))}
+function toggleGymCheck(name,el){const checks=getGymChecks();const newVal=!checks[name];setGymCheck(name,newVal);const row=el.closest('.gym-exercise-row');if(row){row.classList.toggle('gym-checked',newVal);el.textContent=newVal?'✅':'⬜'}}
+function gymExRow(emoji,name,sets,link,linkColor){const checks=getGymChecks();const checked=!!checks[name];return `<div class="gym-exercise-row ${checked?'gym-checked':''}"><details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center gap-2"><span class="gym-check-btn text-lg flex-shrink-0" onclick="event.stopPropagation();toggleGymCheck('${name}',this)">${checked?'✅':'⬜'}</span><span class="flex-1">${emoji} ${name}</span><span class="text-slate-400">${sets}</span></summary><div class="mt-2 text-center"><a href="${link}" target="_blank" class="${linkColor} text-xs underline">📹 Nasıl yapılır?</a></div></details></div>`}
+
 function renderGymProgram(el){
   el.innerHTML=`
   <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı</h2>
@@ -1052,41 +1062,41 @@ function renderGymProgram(el){
   <div class="bento-card workout-card mb-3">
     <h3 class="font-semibold text-indigo-400 mb-2">📅 Pazartesi — Üst Vücut</h3>
     <div class="space-y-2 text-sm">
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bench Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/chest/barbell-bench-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Barbell Row</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Shoulder Press</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/shoulders/barbell-overhead-press" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Bicep Curl</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/biceps/barbell-curl" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>💪 Tricep Dips</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/triceps/tricep-dips" target="_blank" class="text-indigo-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      ${gymExRow('💪','Bench Press','4×10','https://musclewiki.com/barbell/male/chest/barbell-bench-press','text-indigo-400')}
+      ${gymExRow('💪','Barbell Row','4×10','https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row','text-indigo-400')}
+      ${gymExRow('💪','Shoulder Press','3×12','https://musclewiki.com/barbell/male/shoulders/barbell-overhead-press','text-indigo-400')}
+      ${gymExRow('💪','Bicep Curl','3×12','https://musclewiki.com/barbell/male/biceps/barbell-curl','text-indigo-400')}
+      ${gymExRow('💪','Tricep Dips','3×12','https://musclewiki.com/bodyweight/male/triceps/tricep-dips','text-indigo-400')}
       <div class="text-xs text-cyan-400 mt-2">🫀 20dk Eliptik Bisiklet</div>
     </div>
   </div>
   <div class="bento-card workout-card mb-3" style="border-left-color:#10b981">
     <h3 class="font-semibold text-emerald-400 mb-2">📅 Çarşamba — Alt Vücut</h3>
     <div class="space-y-2 text-sm">
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Squat</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-squat" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Press</span><span class="text-slate-400">4×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/quads/leg-press" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Lunges</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/quads/barbell-lunge" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Calf Raises</span><span class="text-slate-400">3×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/calves/calf-raise" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🦵 Leg Curls</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/machine/male/hamstrings/leg-curl" target="_blank" class="text-emerald-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      ${gymExRow('🦵','Squat','4×10','https://musclewiki.com/barbell/male/quads/barbell-squat','text-emerald-400')}
+      ${gymExRow('🦵','Leg Press','4×10','https://musclewiki.com/machine/male/quads/leg-press','text-emerald-400')}
+      ${gymExRow('🦵','Lunges','3×12','https://musclewiki.com/barbell/male/quads/barbell-lunge','text-emerald-400')}
+      ${gymExRow('🦵','Calf Raises','3×15','https://musclewiki.com/machine/male/calves/calf-raise','text-emerald-400')}
+      ${gymExRow('🦵','Leg Curls','3×12','https://musclewiki.com/machine/male/hamstrings/leg-curl','text-emerald-400')}
       <div class="text-xs text-cyan-400 mt-2">🚴 20dk Bisiklet</div>
     </div>
   </div>
   <div class="bento-card workout-card mb-3" style="border-left-color:#f59e0b">
     <h3 class="font-semibold text-amber-400 mb-2">📅 Cuma — Full Body + Kardiyo</h3>
     <div class="space-y-2 text-sm">
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Deadlift</span><span class="text-slate-400">4×8</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/barbell/male/glutes/barbell-deadlift" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Pull-ups</span><span class="text-slate-400">3×max</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lats/pull-up" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🏋️ Chest Fly</span><span class="text-slate-400">3×12</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/dumbbells/male/chest/dumbbell-fly" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      ${gymExRow('🏋️','Deadlift','4×8','https://musclewiki.com/barbell/male/glutes/barbell-deadlift','text-amber-400')}
+      ${gymExRow('🏋️','Pull-ups','3×max','https://musclewiki.com/bodyweight/male/lats/pull-up','text-amber-400')}
+      ${gymExRow('🏋️','Chest Fly','3×12','https://musclewiki.com/dumbbells/male/chest/dumbbell-fly','text-amber-400')}
       <div class="text-xs text-cyan-400 mt-2">🫀 30dk Eliptik Bisiklet</div>
     </div>
   </div>
   <div class="bento-card rehab-card mb-3">
     <h3 class="font-semibold text-amber-400 mb-2">🧘 Bel Rehabilitasyonu <span class="text-xs font-normal text-slate-400">(her seans sonrası)</span></h3>
     <div class="space-y-2 text-sm">
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Cat-Cow</span><span class="text-slate-400">2×15</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/abdominals/cat-cow" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Bird-Dog</span><span class="text-slate-400">2×10</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/lower-back/bird-dog" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Dead Hang</span><span class="text-slate-400">3×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/bodyweight/male/forearms/dead-hang" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
-      <details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center"><span>🧘 Hip Flexor Stretch</span><span class="text-slate-400">2×30sn</span></summary><div class="mt-2 text-center"><a href="https://musclewiki.com/stretches/male/hip-flexors/kneeling-hip-flexor-stretch" target="_blank" class="text-amber-400 text-xs underline">📹 Nasıl yapılır?</a></div></details>
+      ${gymExRow('🧘','Cat-Cow','2×15','https://musclewiki.com/bodyweight/male/abdominals/cat-cow','text-amber-400')}
+      ${gymExRow('🧘','Bird-Dog','2×10','https://musclewiki.com/bodyweight/male/lower-back/bird-dog','text-amber-400')}
+      ${gymExRow('🧘','Dead Hang','3×30sn','https://musclewiki.com/bodyweight/male/forearms/dead-hang','text-amber-400')}
+      ${gymExRow('🧘','Hip Flexor Stretch','2×30sn','https://musclewiki.com/stretches/male/hip-flexors/kneeling-hip-flexor-stretch','text-amber-400')}
     </div>
   </div>
   <div class="bento-card">
