@@ -10,9 +10,11 @@
   "moose_vitamins_2026-02-17": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"tiopatib_aksam\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"lipanthyl\":true,\"magnesium\":true}",
   "moose_gym_2026-02-17": "{\"date\": \"2026-02-17\", \"workout\": \"Upper Body\", \"completed\": true}",
   "moose_steps_2026-02-17": "10000",
-  "moose_app_version": "16235d9bf6d5e4e419b2b3de2d539cb1e0539b20",
+  "moose_app_version": "2fffc9c2c3b1684a7c9186460855c85f5e155b05",
   "moose_foods_2026-02-17": "[{\"name\": \"Turkey Florentina Panini\", \"meal\": \"Ogle\", \"cal\": 550, \"pro\": 30, \"fat\": 25, \"carb\": 40}, {\"name\": \"Caesar Salad + Cod Fish\", \"meal\": \"Ogle\", \"cal\": 450, \"pro\": 42, \"fat\": 18, \"carb\": 15}, {\"name\": \"Banana Cake (1 dilim)\", \"meal\": \"Ara Ogun\", \"cal\": 300, \"pro\": 4, \"fat\": 15, \"carb\": 40}]",
+  "moose_gym_checks_2026-02-19": "{\"Bench Press\":true,\"Barbell Row\":true,\"Shoulder Press\":true,\"Bicep Curl\":true,\"Tricep Dips\":true}",
   "moose_water_2026-02-17": "3.5",
   "moose_weight_log": "[{\"date\":\"2026-02-16\",\"kg\":111},{\"date\":\"2026-02-17\",\"kg\":111},{\"date\":\"2026-02-18\",\"kg\":109}]",
-  "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true}"
+  "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true}",
+  "moose_vitamins_2026-02-19": "{\"folbiol\":true,\"tiopatib_sabah\":true}"
 }
