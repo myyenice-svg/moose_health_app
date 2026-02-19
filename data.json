@@ -16,5 +16,5 @@
   "moose_water_2026-02-17": "3.5",
   "moose_weight_log": "[{\"date\":\"2026-02-16\",\"kg\":111},{\"date\":\"2026-02-17\",\"kg\":111},{\"date\":\"2026-02-18\",\"kg\":109}]",
   "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true}",
-  "moose_vitamins_2026-02-19": "{\"folbiol\":true,\"tiopatib_sabah\":true}"
+  "moose_vitamins_2026-02-19": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true}"
 }
