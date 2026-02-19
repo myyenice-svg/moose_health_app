@@ -47,6 +47,13 @@ tailwind.config = {
   --transition-smooth: all .35s cubic-bezier(.4,0,.2,1);
   --radius-bento: 20px;
   --radius-inner: 14px;
+}
+/* Gym exercise checkboxes */
+.gym-ex-row { transition: all .3s ease; border-radius: 8px; padding: 2px 4px; }
+.gym-checked .gym-ex-name { text-decoration: line-through; color: #34d399 !important; opacity: .7; }
+.gym-checked { background: rgba(52,211,153,.08); }
+.gym-check-btn { user-select: none; -webkit-tap-highlight-color: transparent; }
+:root {
   /* Semantic colors */
   --color-success: #34d399;
   --color-warning: #fbbf24;
@@ -1051,13 +1058,15 @@ function renderGym(el){
 }
 
 function getGymChecks(){try{return JSON.parse(localStorage.getItem('moose_gym_checks_'+DB.today()))||{}}catch(e){return{}}}
+function getGymChecks(){try{return JSON.parse(localStorage.getItem('moose_gym_checks_'+DB.today()))||{}}catch(e){return{}}}
 function setGymCheck(name,val){const c=getGymChecks();if(val)c[name]=true;else delete c[name];localStorage.setItem('moose_gym_checks_'+DB.today(),JSON.stringify(c))}
-function toggleGymCheck(name,el){const checks=getGymChecks();const newVal=!checks[name];setGymCheck(name,newVal);const row=el.closest('.gym-exercise-row');if(row){row.classList.toggle('gym-checked',newVal);el.textContent=newVal?'✅':'⬜'}}
-function gymExRow(emoji,name,sets,link,linkColor){const checks=getGymChecks();const checked=!!checks[name];return `<div class="gym-exercise-row ${checked?'gym-checked':''}"><details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center gap-2"><span class="gym-check-btn text-lg flex-shrink-0" onclick="event.stopPropagation();toggleGymCheck('${name}',this)">${checked?'✅':'⬜'}</span><span class="flex-1">${emoji} ${name}</span><span class="text-slate-400">${sets}</span></summary><div class="mt-2 text-center"><a href="${link}" target="_blank" class="${linkColor} text-xs underline">📹 Nasıl yapılır?</a></div></details></div>`}
+function toggleGymCheck(name,btn){const checks=getGymChecks();const newVal=!checks[name];setGymCheck(name,newVal);const row=btn.closest('.gym-ex-row');if(row){row.classList.toggle('gym-checked',newVal);btn.textContent=newVal?'✅':'⬜'}updateGymProgress()}
+function updateGymProgress(){const checks=getGymChecks();const total=document.querySelectorAll('.gym-ex-row').length;const done=Object.keys(checks).length;const el=document.getElementById('gymProgress');if(el){el.textContent=done>0?`${done}/${total} tamamlandı ✨`:''}}
+function gymExRow(emoji,name,sets,link,linkColor){const checks=getGymChecks();const checked=!!checks[name];return `<div class="gym-ex-row ${checked?'gym-checked':''}"><details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center gap-2"><span class="gym-check-btn text-lg flex-shrink-0 select-none" onclick="event.preventDefault();event.stopPropagation();toggleGymCheck('${name}',this)" style="cursor:pointer">${checked?'✅':'⬜'}</span><span class="flex-1 gym-ex-name">${emoji} ${name}</span><span class="text-slate-400">${sets}</span></summary><div class="mt-2 text-center"><a href="${link}" target="_blank" class="${linkColor} text-xs underline">📹 Nasıl yapılır?</a></div></details></div>`}
 
 function renderGymProgram(el){
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı</h2>
+  <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı <span id="gymProgress" class="text-sm font-normal text-emerald-400 ml-2"></span></h2>
   <p class="text-xs text-slate-400 mb-4">Haftada 3 gün + her seans sonrası bel rehabilitasyonu</p>
   <div class="bento-card workout-card mb-3">
     <h3 class="font-semibold text-indigo-400 mb-2">📅 Pazartesi — Üst Vücut</h3>
@@ -1103,9 +1112,8 @@ function renderGymProgram(el){
     <h3 class="font-semibold text-slate-300 mb-2">📝 Günlük Hedef</h3>
     <div class="flex items-center gap-2 text-sm"><span class="text-2xl">🚶</span><span>Her gün <strong class="text-amber-400">10.000 adım</strong></span></div>
   </div>`;
+  updateGymProgress();
 }
-
-// ==================== GYM LOG ====================
 function renderGymLog(el){
   const today=DB.today();const existing=gymLog(today);
   const allExercises=['Bench Press','Barbell Row','Shoulder Press','Bicep Curl','Tricep Dips','Squat','Leg Press','Lunges','Calf Raises','Leg Curls','Deadlift','Pull-ups','Chest Fly','Cat-Cow','Bird-Dog','Dead Hang','Hip Flexor Stretch','Eliptik Bisiklet','Bisiklet'];
