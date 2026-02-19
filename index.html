@@ -448,7 +448,8 @@ function updateGHUI(){
   document.getElementById('syncStatus').textContent=token?'🟢 Bağlı':'🔴 Token yok';
 }
 function getAllData(){
-  const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('moose_')&&k!=='moose_gh_token'&&k!=='moose_theme')data[k]=localStorage.getItem(k)}return data;
+  const EXCLUDED=['moose_gh_token','moose_theme','moose_chat_history'];
+  const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('moose_')&&!EXCLUDED.includes(k))data[k]=localStorage.getItem(k)}return data;
 }
 
 async function cloudSave(){
