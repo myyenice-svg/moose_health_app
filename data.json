@@ -1,7 +1,7 @@
 {
   "moose_gym_2026-02-19": "{\"date\": \"2026-02-19\", \"notes\": \"Kardiyo + Bacak + Sauna\", \"exercises\": [{\"name\": \"Bisiklet\", \"weight\": 0, \"sets\": 1, \"reps\": 15, \"note\": \"15 dk\"}, {\"name\": \"Eliptik Bisiklet\", \"weight\": 0, \"sets\": 1, \"reps\": 15, \"note\": \"15 dk\"}, {\"name\": \"Legs (Squat/Leg Press/Lunges)\", \"weight\": 0, \"sets\": 3, \"reps\": 12, \"note\": \"15 dk\"}, {\"name\": \"Sauna\", \"weight\": 0, \"sets\": 1, \"reps\": 15, \"note\": \"15 dk\"}], \"savedAt\": \"2026-02-19T18:00:00.000Z\"}",
   "moose_water_2026-02-18": "2.5",
-  "moose_water_2026-02-19": "1",
+  "moose_water_2026-02-19": "2.5",
   "moose_water_2026-02-16": "1.5",
   "moose_vitamins_2026-02-19": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true}",
   "moose_vitamins_2026-02-18": "{\"ginseng\":true,\"folbiol\":true,\"tiopatib_sabah\":true,\"probiotics\":true,\"lipanthyl\":true,\"tiopatib_aksam\":true,\"multivitamin\":true,\"omega3\":true,\"magnesium\":true}",
