@@ -3,7 +3,7 @@
   "moose_water_2026-02-18": "2.5",
   "moose_water_2026-02-19": "2.5",
   "moose_water_2026-02-16": "1.5",
-  "moose_vitamins_2026-02-19": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true}",
+  "moose_vitamins_2026-02-19": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true,\"multivitamin\":true}",
   "moose_vitamins_2026-02-18": "{\"ginseng\":true,\"folbiol\":true,\"tiopatib_sabah\":true,\"probiotics\":true,\"lipanthyl\":true,\"tiopatib_aksam\":true,\"multivitamin\":true,\"omega3\":true,\"magnesium\":true}",
   "moose_foods_2026-02-18": "[{\"name\": \"Chicken Salad + 1 dilim ekmek\", \"meal\": \"Ogle\", \"cal\": 430, \"pro\": 33, \"fat\": 16, \"carb\": 30}, {\"name\": \"15 Badem\", \"meal\": \"Ara Ogun\", \"cal\": 105, \"pro\": 4, \"fat\": 9, \"carb\": 4}, {\"name\": \"Panda Express: Veggies+Lo Mein+Chicken+Shrimp\", \"meal\": \"Aksam\", \"cal\": 1075, \"pro\": 47, \"fat\": 55, \"carb\": 115}]",
   "moose_vitamins_2026-02-17": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"tiopatib_aksam\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"lipanthyl\":true,\"magnesium\":true}",
