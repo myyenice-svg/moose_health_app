@@ -9,7 +9,7 @@
   "moose_gym_2026-02-21": "{\"date\": \"2026-02-21\", \"notes\": \"Voleybol\", \"exercises\": [{\"name\": \"Voleybol\", \"weight\": 0, \"sets\": 1, \"reps\": 0, \"note\": \"1 saat 15 dakika\"}], \"savedAt\": \"2026-02-21T20:00:00.000Z\"}",
   "moose_water_2026-02-20": "2",
   "moose_water_2026-02-17": "3.5",
-  "moose_vitamins_2026-02-20": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"tiopatib_aksam\":false,\"multivitamin\":true}",
+  "moose_vitamins_2026-02-20": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"tiopatib_aksam\":false,\"multivitamin\":true,\"magnesium\":true,\"omega3\":true}",
   "moose_gym_2026-02-19": "{\"date\": \"2026-02-19\", \"notes\": \"Kardiyo + Bacak + Sauna\", \"exercises\": [{\"name\": \"Bisiklet\", \"weight\": 0, \"sets\": 1, \"reps\": 15, \"note\": \"15 dk\"}, {\"name\": \"Eliptik Bisiklet\", \"weight\": 0, \"sets\": 1, \"reps\": 15, \"note\": \"15 dk\"}, {\"name\": \"Legs (Squat/Leg Press/Lunges)\", \"weight\": 0, \"sets\": 3, \"reps\": 12, \"note\": \"15 dk\"}, {\"name\": \"Sauna\", \"weight\": 0, \"sets\": 1, \"reps\": 15, \"note\": \"15 dk\"}], \"savedAt\": \"2026-02-19T18:00:00.000Z\"}",
   "moose_water_2026-02-18": "2.5",
   "moose_foods_2026-02-16": "[{\"name\": \"Menemen+Zeytin+Corba+Tahin\", \"meal\": \"Ogle\", \"cal\": 650, \"pro\": 33, \"fat\": 39, \"carb\": 38}, {\"name\": \"Portakal+Fistik 15 adet\", \"meal\": \"Ara Ogun 1\", \"cal\": 175, \"pro\": 6, \"fat\": 10, \"carb\": 18}, {\"name\": \"Yarim Tavuk+Roka Salatasi+Cacik\", \"meal\": \"Aksam\", \"cal\": 750, \"pro\": 62, \"fat\": 42, \"carb\": 20}, {\"name\": \"Sut+Bal+Muz\", \"meal\": \"Ara Ogun 3\", \"cal\": 290, \"pro\": 9, \"fat\": 5, \"carb\": 46}]",
