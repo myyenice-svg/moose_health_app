@@ -327,15 +327,16 @@ const QUOTES = [
   "Bugün zor, yarın daha kolay olacak. 🌅"
 ];
 
-function todayFoods(){ return DB.get('foods_'+DB.today(), []) }
-function todayWater(){ return DB.get('water_'+DB.today(), 0) }
-function todaySteps(){ return DB.get('steps_'+DB.today(), 0) }
+function todayFoods(d){ return DB.get('foods_'+(d||viewDate), []) }
+function todayWater(d){ return DB.get('water_'+(d||viewDate), 0) }
+function todaySteps(d){ return DB.get('steps_'+(d||viewDate), 0) }
+function isToday(){ return viewDate===DB.today(); }
 function weightLog(){ return DB.get('weight_log', []) }
 function latestWeight(){ const l=weightLog(); return l.length? l[l.length-1].kg : PROFILE.startWeight }
 function goals(){ return DB.get('goals', []) }
-function vitaminLog(d){ return DB.get('vitamins_'+(d||DB.today()), {}) }
+function vitaminLog(d){ return DB.get('vitamins_'+(d||viewDate), {}) }
 function bpLog(){ return DB.get('bp_log', []) }
-function gymLog(d){ return DB.get('gym_'+(d||DB.today()), null) }
+function gymLog(d){ return DB.get('gym_'+(d||viewDate), null) }
 
 // ==================== DAILY READINESS SCORE ====================
 function calcReadinessScore(){
@@ -568,6 +569,22 @@ function importData(e){
 
 // ==================== NAVIGATION ====================
 let currentTab='dashboard';let currentSubTab={};
+let viewDate=DB.today();
+
+function changeViewDate(offset){
+  const d=new Date(viewDate+'T12:00:00');
+  d.setDate(d.getDate()+offset);
+  const nd=d.toISOString().slice(0,10);
+  if(nd>DB.today())return; // no future
+  viewDate=nd;
+  render();
+}
+function goToToday(){viewDate=DB.today();render();}
+function fmtDateTR(iso){
+  const months=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  const [y,m,d]=iso.split('-');
+  return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
+}
 
 function navigate(tab){
   currentTab=tab;
@@ -583,6 +600,7 @@ function render(){
 
 // ==================== DASHBOARD (BENTO LAYOUT) ====================
 function renderDashboard(el){
+  const isHistorical=!isToday();
   const foods=todayFoods();
   const cal=foods.reduce((s,f)=>s+f.cal,0);
   const pro=foods.reduce((s,f)=>s+f.pro,0);
@@ -606,10 +624,20 @@ function renderDashboard(el){
   const readOffset=readCirc-((readiness.total/100)*readCirc);
 
   el.innerHTML = `
-  <!-- Motivational Quote -->
-  <div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15 animate-shimmer" role="complementary" aria-label="Günün Sözü">
-    <p class="text-sm italic text-slate-300">${quote}</p>
+  <!-- Date Navigation -->
+  <div class="flex items-center justify-between mb-3 bento-card py-2 px-3">
+    <button onclick="changeViewDate(-1)" class="text-slate-300 hover:text-white p-1 rounded-lg hover:bg-slate-700 transition text-lg">‹</button>
+    <div class="text-center">
+      <div class="text-sm font-semibold text-slate-200">${fmtDateTR(viewDate)}</div>
+      ${isHistorical?`<div class="text-xs text-amber-400">📋 Geçmiş görünüm · <span onclick="goToToday()" class="underline cursor-pointer">Bugüne dön</span></div>`:'<div class="text-xs text-emerald-400">✅ Bugün</div>'}
+    </div>
+    <button onclick="changeViewDate(1)" class="text-slate-300 p-1 rounded-lg transition text-lg ${isHistorical?'hover:text-white hover:bg-slate-700':'opacity-30 cursor-not-allowed'}">›</button>
   </div>
+
+  <!-- Motivational Quote -->
+  ${!isHistorical?`<div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15 animate-shimmer" role="complementary" aria-label="Günün Sözü">
+    <p class="text-sm italic text-slate-300">${quote}</p>
+  </div>`:''}  
 
   <!-- BENTO GRID: 6 cards -->
   <div class="bento-grid mb-4">
@@ -752,6 +780,7 @@ function renderDashboard(el){
 }
 
 function saveSteps(){
+  if(!isToday())return;
   const v=parseInt(document.getElementById('stepsInput').value)||0;
   DB.set('steps_'+DB.today(),v);render();
 }
@@ -831,11 +860,12 @@ function renderFood(el){
 }
 
 function addFood(){
+  if(!isToday())return;
   const name=document.getElementById('foodName').value.trim();if(!name)return;
   const f=todayFoods();f.push({name,meal:document.getElementById('foodMeal').value,cal:parseInt(document.getElementById('foodCal').value)||0,pro:parseInt(document.getElementById('foodPro').value)||0,fat:parseInt(document.getElementById('foodFat').value)||0,carb:parseInt(document.getElementById('foodCarb').value)||0});
   DB.set('foods_'+DB.today(),f);render();
 }
-function removeFood(i){const f=todayFoods();f.splice(i,1);DB.set('foods_'+DB.today(),f);render()}
+function removeFood(i){if(!isToday())return;const f=todayFoods();f.splice(i,1);DB.set('foods_'+DB.today(),f);render()}
 
 // ==================== WATER ====================
 function renderWater(el){
@@ -856,8 +886,8 @@ function renderWater(el){
     </div>
   </div>`;
 }
-function addWater(amount){DB.set('water_'+DB.today(),Math.max(0,todayWater()+amount));render()}
-function setWater(glasses){DB.set('water_'+DB.today(),glasses*0.25);render()}
+function addWater(amount){if(!isToday())return;DB.set('water_'+DB.today(),Math.max(0,todayWater()+amount));render()}
+function setWater(glasses){if(!isToday())return;DB.set('water_'+DB.today(),glasses*0.25);render()}
 
 // ==================== WEIGHT ====================
 function renderWeight(el){
