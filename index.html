@@ -920,7 +920,16 @@ function renderSaglik(el){
     <button onclick="setSubTab('saglik','vitamins')" class="sub-tab ${sub==='vitamins'?'active':''}">💊 Vitamin</button>
     <button onclick="setSubTab('saglik','bp')" class="sub-tab ${sub==='bp'?'active':''}">❤️ Tansiyon</button>
   </div>
-  <div id="saglikContent" class="slide-in"></div>`;
+  <div id="saglikContent" class="slide-in"></div>
+  <div class="bento-card mt-3 flex items-center justify-between">
+    <div>
+      <div class="text-sm font-semibold text-slate-200">🔔 Yemek Hatırlatmaları</div>
+      <div class="text-xs text-slate-400">13:00 öğlen · 19:00 akşam</div>
+    </div>
+    <button onclick="enableNotifications()" id="notifBtn" class="btn-primary btn-sm text-xs px-3">
+      ${Notification.permission==='granted'?'✅ Aktif':'İzin Ver'}
+    </button>
+  </div>`;
   (sub==='bp'?renderBP:renderVitamins)(el.querySelector('#saglikContent'));
 }
 
@@ -1250,7 +1259,42 @@ function renderProgress(el){
 }
 
 // ==================== AUTO-UPDATE ====================
-if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(regs=>{regs.forEach(r=>r.unregister())})}
+// ==================== NOTIFICATIONS ====================
+async function setupNotifications(){
+  if(!('Notification' in window)||!('serviceWorker' in navigator))return;
+  let perm=Notification.permission;
+  if(perm==='default'){perm=await Notification.requestPermission()}
+  if(perm!=='granted')return;
+  try{
+    const reg=await navigator.serviceWorker.register('./sw.js');
+    await navigator.serviceWorker.ready;
+    reg.active&&reg.active.postMessage({type:'SCHEDULE_REMINDERS'});
+    reg.addEventListener('updatefound',()=>{
+      const sw=reg.installing;
+      sw.addEventListener('statechange',()=>{if(sw.state==='activated')sw.postMessage({type:'SCHEDULE_REMINDERS'})});
+    });
+  }catch(e){console.warn('SW register failed:',e)}
+}
+setupNotifications();
+
+async function enableNotifications(){
+  const btn=document.getElementById('notifBtn');
+  if(Notification.permission==='granted'){
+    // Test notification
+    const reg=await navigator.serviceWorker.ready;
+    reg.active&&reg.active.postMessage({type:'TEST_NOTIFICATION'});
+    if(btn)btn.textContent='✅ Aktif';
+    return;
+  }
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){
+    await setupNotifications();
+    if(btn)btn.textContent='✅ Aktif';
+    alert('✅ Bildirimler aktif! Artık 13:00 ve 19:00\'da hatırlatma alacaksın.');
+  } else {
+    alert('⚠️ Telefon ayarlarından bu siteye bildirim iznini ver.');
+  }
+}
 (async function checkUpdate(){
   try{const res=await fetch('https://api.github.com/repos/myyenice-svg/moose_health_app/commits/main',{headers:{'Accept':'application/vnd.github.sha'}});
     if(!res.ok)return;const latestSHA=await res.text();const currentSHA=localStorage.getItem('moose_app_version');
