@@ -19,7 +19,7 @@
   "moose_steps_2026-02-16": "8750",
   "moose_foods_2026-02-21": "[{\"name\": \"Multigrain Croissant\", \"meal\": \"Sabah\", \"cal\": 270, \"pro\": 6, \"fat\": 14, \"carb\": 31}, {\"name\": \"Veggie Burger + Patates Kizartmasi\", \"meal\": \"Ogle\", \"cal\": 740, \"pro\": 16, \"fat\": 34, \"carb\": 89}, {\"name\": \"Margarita Pizza (3 dilim) + Diet Kola\", \"meal\": \"Aksam\", \"cal\": 572, \"pro\": 24, \"fat\": 18, \"carb\": 78}]",
   "moose_steps_2026-02-17": "10000",
-  "moose_app_version": "e451fc9b251f808eac406a9d7ba115f11be4edb6",
+  "moose_app_version": "9c8881c427c32d23a3462de2deb409af890781b1",
   "moose_foods_2026-02-19": "[{\"name\": \"Cranberry Muffin (x2) + Siyah Kahve\", \"meal\": \"Sabah\", \"cal\": 385, \"pro\": 5, \"fat\": 14, \"carb\": 59}, {\"name\": \"Chicken Salad + Sparkling Water\", \"meal\": \"Ogle\", \"cal\": 350, \"pro\": 30, \"fat\": 15, \"carb\": 10}, {\"name\": \"Chipotle Bowl: Double Steak+Brown Rice+Black Beans+Guac\", \"meal\": \"Aksam\", \"cal\": 870, \"pro\": 56, \"fat\": 38, \"carb\": 76}]",
   "moose_foods_2026-02-17": "[{\"name\": \"Turkey Florentina Panini\", \"meal\": \"Ogle\", \"cal\": 550, \"pro\": 30, \"fat\": 25, \"carb\": 40}, {\"name\": \"Caesar Salad + Cod Fish\", \"meal\": \"Ogle\", \"cal\": 450, \"pro\": 42, \"fat\": 18, \"carb\": 15}, {\"name\": \"Banana Cake (1 dilim)\", \"meal\": \"Ara Ogun\", \"cal\": 300, \"pro\": 4, \"fat\": 15, \"carb\": 40}]",
   "moose_gym_checks_2026-02-20": "{\"Chest Fly\":true,\"Pull-ups\":true,\"Deadlift\":true}",
