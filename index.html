@@ -927,7 +927,7 @@ function renderSaglik(el){
       <div class="text-xs text-slate-400">13:00 öğlen · 19:00 akşam</div>
     </div>
     <button onclick="enableNotifications()" id="notifBtn" class="btn-primary btn-sm text-xs px-3">
-      ${Notification.permission==='granted'?'✅ Aktif':'İzin Ver'}
+      ${(typeof Notification!=='undefined'&&Notification.permission==='granted')?'✅ Aktif':'İzin Ver'}
     </button>
   </div>`;
   (sub==='bp'?renderBP:renderVitamins)(el.querySelector('#saglikContent'));
@@ -1279,10 +1279,13 @@ setupNotifications();
 
 async function enableNotifications(){
   const btn=document.getElementById('notifBtn');
+  if(typeof Notification==='undefined'||!('serviceWorker' in navigator)){
+    alert('⚠️ Bu cihaz/tarayıcı bildirimleri desteklemiyor.\n\niOS: Safari → Paylaş → Ana Ekrana Ekle yaparak aç.\nAndroid: Chrome gerekli.');
+    return;
+  }
   if(Notification.permission==='granted'){
-    // Test notification
-    const reg=await navigator.serviceWorker.ready;
-    reg.active&&reg.active.postMessage({type:'TEST_NOTIFICATION'});
+    const reg=await navigator.serviceWorker.ready.catch(()=>null);
+    if(reg&&reg.active)reg.active.postMessage({type:'TEST_NOTIFICATION'});
     if(btn)btn.textContent='✅ Aktif';
     return;
   }
@@ -1290,9 +1293,9 @@ async function enableNotifications(){
   if(perm==='granted'){
     await setupNotifications();
     if(btn)btn.textContent='✅ Aktif';
-    alert('✅ Bildirimler aktif! Artık 13:00 ve 19:00\'da hatırlatma alacaksın.');
+    alert('✅ Bildirimler aktif! Her gün 13:00 ve 19:00\'da hatırlatma alacaksın.');
   } else {
-    alert('⚠️ Telefon ayarlarından bu siteye bildirim iznini ver.');
+    alert('⚠️ İzin verilmedi. Telefon Ayarları → Safari/Chrome → Bildirimler\'den izni aç.');
   }
 }
 (async function checkUpdate(){
