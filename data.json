@@ -19,6 +19,7 @@
   "moose_steps_2026-02-17": "10000",
   "moose_app_version": "9d9a1527fdfcf714a5ee8ac5103ff31352e5bfad",
   "moose_foods_2026-02-17": "[{\"name\": \"Turkey Florentina Panini\", \"meal\": \"Ogle\", \"cal\": 550, \"pro\": 30, \"fat\": 25, \"carb\": 40}, {\"name\": \"Caesar Salad + Cod Fish\", \"meal\": \"Ogle\", \"cal\": 450, \"pro\": 42, \"fat\": 18, \"carb\": 15}, {\"name\": \"Banana Cake (1 dilim)\", \"meal\": \"Ara Ogun\", \"cal\": 300, \"pro\": 4, \"fat\": 15, \"carb\": 40}]",
+  "moose_gym_checks_2026-02-20": "{\"Chest Fly\":true,\"Pull-ups\":true,\"Deadlift\":true}",
   "moose_weight_log": "[{\"date\":\"2026-02-16\",\"kg\":111},{\"date\":\"2026-02-17\",\"kg\":111},{\"date\":\"2026-02-18\",\"kg\":109}]",
   "moose_vitamins_2026-02-16": "{\"folbiol\":true,\"tiopatib_sabah\":true,\"ginseng\":true,\"probiotics\":true,\"multivitamin\":true,\"tiopatib_aksam\":true,\"lipanthyl\":true}"
 }
