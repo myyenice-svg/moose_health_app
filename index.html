@@ -237,7 +237,6 @@ html:not(.dark) .bg-slate-800{background:#f1f5f9}
 <h1 class="text-lg font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">Moose Fitness</h1>
 </div>
 <div class="flex items-center gap-2">
-<button onclick="toggleLanguage()" id="langBtn" class="text-xs px-2 py-1 rounded-lg border border-slate-600 text-slate-300" title="Switch language" aria-label="Switch language">EN</button>
 <button onclick="toggleTheme()" id="themeBtn" class="text-lg p-1" title="Tema Değiştir" aria-label="Tema Değiştir">🌙</button>
 <button onclick="showSyncModal()" class="text-lg p-1" title="Veri Yedekle/Geri Yükle" aria-label="Veri Yönetimi">💾</button>
 <div class="text-xs text-slate-400" id="headerDate"></div>
@@ -272,7 +271,7 @@ html:not(.dark) .bg-slate-800{background:#f1f5f9}
 📤 Verileri Yükle (JSON)
 <input type="file" accept=".json" onchange="importData(event)" class="hidden">
 </label>
-<button onclick="document.getElementById('syncModal').classList.add('hidden')" class="btn-sm w-full border border-slate-600 text-slate-300 rounded-lg">${t('close')}</button>
+<button onclick="document.getElementById('syncModal').classList.add('hidden')" class="btn-sm w-full border border-slate-600 text-slate-300 rounded-lg">Kapat</button>
 </div>
 </div>
 
@@ -315,316 +314,18 @@ const DB = {
 
 const PROFILE = { height:190, startWeight:111, targetWeight:96, dailyCal:2300, protein:[170,180], fat:[70,80], carbs:[200,250], waterTarget:3.5, stepsTarget:10000 };
 
-const I18N = {
-  tr: {
-    langButton: 'EN',
-    dateToday: '✅ Bugün',
-    dateHistory: '📋 Geçmiş görünüm · <span onclick="goToToday()" class="underline cursor-pointer">Bugüne dön</span>',
-    quoteLabel: 'Günün Sözü',
-    readinessRegion: 'Günlük Hazırlık Skoru',
-    readinessTitle: '${t('readinessTitle')}',
-    readinessWeight: '${t('readinessWeight')}',
-    readinessSteps: '${t('readinessSteps')}',
-    readinessWater: '${t('readinessWater')}',
-    readinessSleep: '${t('readinessSleep')}',
-    readinessEnergy: '${t('readinessEnergy')}',
-    stepsTitle: '${t('readinessSteps')}',
-    stepsPlaceholder: 'Adım',
-    caloriesTitle: '🔥 Kalori',
-    waterTitle: '${t('readinessWater')}',
-    weightTitle: '${t('readinessWeight')}',
-    toGoal: 'hedefe',
-    sync: '☁️ Sync',
-    clearToday: '🗑️ Bugünü Temizle',
-    macrosDetail: '${t('macrosDetail')}',
-    fatShort: 'Y',
-    carbShort: 'K',
-    goals: '${t('goals')}',
-    add: '${t('add')}',
-    newGoal: '${t('newGoal')}',
-    goalDesc: 'Hedef açıklaması',
-    goalDate: 'Hedef tarihi',
-    save: 'Kaydet',
-    close: 'Kapat',
-    trackingMeal: '🍽️ Öğün',
-    trackingWater: '${t('readinessWater')}',
-    trackingWeight: '${t('readinessWeight')}',
-    trackingDiet: '📋 Diyet',
-    mealTracking: '🍽️ Öğün Takibi',
-    protein: 'Protein',
-    fat: 'Yağ',
-    carb: 'Karb',
-    remaining: 'Kalan',
-    addMeal: 'Yeni Öğün Ekle',
-    foodName: 'Yemek adı',
-    caloriesPlaceholder: 'Kalori (kcal)',
-    proteinPlaceholder: 'Protein (g)',
-    fatPlaceholder: 'Yağ (g)',
-    carbPlaceholder: 'Karb (g)',
-    addMealBtn: '+ Öğün Ekle',
-    noMeals: '${t('noMeals')}',
-    deleteMeal: 'Öğünü sil',
-    waterTracking: '${t('readinessWater')} Takibi',
-    waterTarget: 'hedef',
-    glass: 'bardak',
-    add1Glass: '+1 Bardak',
-    add2Glass: '+2 Bardak',
-    minus1Glass: '-1 Bardak',
-    weightTracking: '${t('readinessWeight')} Takibi',
-    start: 'Başlangıç',
-    target: 'Hedef',
-    totalChange: '${t('totalChange')}',
-    enterWeight: 'Kilo gir (kg)',
-    weightChart: 'Kilo (kg)',
-    dietPlan: '📋 7 Günlük Diyet Planı',
-    healthVitamin: '💊 Vitamin',
-    healthBp: '❤️ Tansiyon',
-    mealReminders: '${t('mealReminders')}',
-    lunchEvening: '${t('lunchEvening')}',
-    active: '✅ Aktif',
-    allow: 'İzin Ver',
-    vitaminSupplement: '💊 Vitamin & Takviye',
-    takenToday: '${t('takenToday')}',
-    buy: '${t('buy')}',
-    taken: 'Alındı',
-    notTaken: 'Alınmadı',
-    reminderProgram: '${t('reminderProgram')}',
-    remindersViaBot: '${t('remindersViaBot')}',
-    suggestions: '${t('suggestions')}',
-    bloodPressure: '❤️ Tansiyon Takibi',
-    noBp: '${t('noBp')}',
-    addMeasurement: '${t('addMeasurement')}',
-    systolic: 'Sistolik',
-    diastolic: 'Diastolik',
-    pulse: 'Nabız',
-    addRecord: '+ Kaydet',
-    refValues: '${t('refValues')}',
-    normal: 'Normal',
-    elevated: 'Yükselmiş',
-    hypertension1: 'Hipertansiyon 1',
-    hypertension2: 'Hipertansiyon 2',
-    gymProgramTab: '📋 Program',
-    gymLogTab: '📝 Kayıt',
-    gymHistoryTab: '📊 Geçmiş',
-    workoutProgram: '${t('workoutProgram')}',
-    weekly3days: '${t('weekly3days')}',
-    mondayUpper: '${t('mondayUpper')}',
-    wednesdayLower: '${t('wednesdayLower')}',
-    fridayFull: '${t('fridayFull')}',
-    rehab: '${t('rehab')}',
-    afterEachSession: '${t('afterEachSession')}',
-    howTo: '${t('howTo')}',
-    dailyGoal: '${t('dailyGoal')}',
-    everyDay10k: '${t('everyDay10k')}',
-    workoutLog: '📝 ${t('workouts')} Kaydı',
-    date: 'Tarih:',
-    notes: 'Notlar:',
-    optionalNotes: 'Opsiyonel notlar...',
-    addExercise: '+ Egzersiz Ekle',
-    exercise: 'Egzersiz',
-    deleteExercise: 'Egzersizi sil',
-    enterOneExercise: 'En az bir egzersiz girin!',
-    workoutSaved: '✅ ${t('workouts')} kaydedildi!',
-    workoutHistory: '📊 ${t('workouts')} Geçmişi',
-    exerciseCount: 'egzersiz',
-    delete: '🗑️ Sil',
-    noWorkoutHistory: '${t('noWorkoutHistory')}',
-    reportWeekly: '📅 Haftalık',
-    reportProgress: '📊 İlerleme',
-    weeklyReport: '📅 Haftalık Rapor',
-    score: 'Skor',
-    avgCalories: '${t('avgCalories')}',
-    avgProtein: '${t('avgProtein')}',
-    avgWater: '${t('avgWater')}',
-    workouts: '${t('workouts')}',
-    vitaminCompliance: '${t('vitaminCompliance')}',
-    weightChange: '${t('weightChange')}',
-    progress: '📊 İlerleme',
-    weightTrend: '${t('weightTrend')}',
-    calCompliance: '${t('calCompliance')}',
-    summaryStats: '${t('summaryStats')}',
-    weightRecords: '${t('weightRecords')}',
-    mealRecords30: '${t('mealRecords30')}',
-    lostWeight: '${t('lostWeight')}',
-    goalsShort: 'Hedef',
-    noWeight2: '${t('noWeight2')}'
-  },
-  en: {
-    langButton: 'TR',
-    dateToday: '✅ Today',
-    dateHistory: '📋 History view · <span onclick="goToToday()" class="underline cursor-pointer">Back to today</span>',
-    quoteLabel: 'Quote of the Day',
-    readinessRegion: 'Daily Readiness Score',
-    readinessTitle: '🧠 Daily Readiness',
-    readinessWeight: '⚖️ Weight',
-    readinessSteps: '🚶 Steps',
-    readinessWater: '💧 Water',
-    readinessSleep: '😴 Sleep',
-    readinessEnergy: '⚡ Energy',
-    stepsTitle: '🚶 Steps',
-    stepsPlaceholder: 'Steps',
-    caloriesTitle: '🔥 Calories',
-    waterTitle: '💧 Water',
-    weightTitle: '⚖️ Weight',
-    toGoal: 'to goal',
-    sync: '☁️ Sync',
-    clearToday: '🗑️ Clear Today',
-    macrosDetail: '📊 Macro Details',
-    fatShort: 'F',
-    carbShort: 'C',
-    goals: '🎯 Goals',
-    add: '+ Add',
-    newGoal: 'New Goal',
-    goalDesc: 'Goal description',
-    goalDate: 'Goal date',
-    save: 'Save',
-    close: 'Close',
-    trackingMeal: '🍽️ Meals',
-    trackingWater: '💧 Water',
-    trackingWeight: '⚖️ Weight',
-    trackingDiet: '📋 Diet',
-    mealTracking: '🍽️ Meal Tracking',
-    protein: 'Protein',
-    fat: 'Fat',
-    carb: 'Carbs',
-    remaining: 'Remaining',
-    addMeal: 'Add New Meal',
-    foodName: 'Food name',
-    caloriesPlaceholder: 'Calories (kcal)',
-    proteinPlaceholder: 'Protein (g)',
-    fatPlaceholder: 'Fat (g)',
-    carbPlaceholder: 'Carbs (g)',
-    addMealBtn: '+ Add Meal',
-    noMeals: 'No meals added today yet',
-    deleteMeal: 'Delete meal',
-    waterTracking: '💧 Water Tracking',
-    waterTarget: 'target',
-    glass: 'glasses',
-    add1Glass: '+1 Glass',
-    add2Glass: '+2 Glasses',
-    minus1Glass: '-1 Glass',
-    weightTracking: '⚖️ Weight Tracking',
-    start: 'Start',
-    target: 'Target',
-    totalChange: 'total change',
-    enterWeight: 'Enter weight (kg)',
-    weightChart: 'Weight (kg)',
-    dietPlan: '📋 7-Day Diet Plan',
-    healthVitamin: '💊 Vitamins',
-    healthBp: '❤️ Blood Pressure',
-    mealReminders: '🔔 Meal Reminders',
-    lunchEvening: '1:00 PM lunch · 7:00 PM dinner',
-    active: '✅ Active',
-    allow: 'Allow',
-    vitaminSupplement: '💊 Vitamins & Supplements',
-    takenToday: 'Taken today',
-    buy: '(BUY)',
-    taken: 'Taken',
-    notTaken: 'Not taken',
-    reminderProgram: '🔔 Reminder Schedule',
-    remindersViaBot: '📱 Reminders are sent via Telegram bot.',
-    suggestions: '📌 Suggestions',
-    bloodPressure: '❤️ Blood Pressure Tracking',
-    noBp: 'No blood pressure records yet',
-    addMeasurement: 'Add New Measurement',
-    systolic: 'Systolic',
-    diastolic: 'Diastolic',
-    pulse: 'Pulse',
-    addRecord: '+ Save',
-    refValues: '📌 Reference Values',
-    normal: 'Normal',
-    elevated: 'Elevated',
-    hypertension1: 'Hypertension 1',
-    hypertension2: 'Hypertension 2',
-    gymProgramTab: '📋 Program',
-    gymLogTab: '📝 Log',
-    gymHistoryTab: '📊 History',
-    workoutProgram: '🏋️ Workout Program',
-    weekly3days: '3 days per week + back rehab after each session',
-    mondayUpper: '📅 Monday — Upper Body',
-    wednesdayLower: '📅 Wednesday — Lower Body',
-    fridayFull: '📅 Friday — Full Body + Cardio',
-    rehab: '🧘 Back Rehabilitation',
-    afterEachSession: '(after each session)',
-    howTo: '📹 How to do it?',
-    dailyGoal: '📝 Daily Goal',
-    everyDay10k: 'Every day <strong class="text-amber-400">10,000 steps</strong>',
-    workoutLog: '📝 Workout Log',
-    date: 'Date:',
-    notes: 'Notes:',
-    optionalNotes: 'Optional notes...',
-    addExercise: '+ Add Exercise',
-    exercise: 'Exercise',
-    deleteExercise: 'Delete exercise',
-    enterOneExercise: 'Enter at least one exercise!',
-    workoutSaved: '✅ Workout saved!',
-    workoutHistory: '📊 Workout History',
-    exerciseCount: 'exercises',
-    delete: '🗑️ Delete',
-    noWorkoutHistory: 'No workout history yet.',
-    reportWeekly: '📅 Weekly',
-    reportProgress: '📊 Progress',
-    weeklyReport: '📅 Weekly Report',
-    score: 'Score',
-    avgCalories: 'Avg. Calories',
-    avgProtein: 'Avg. Protein',
-    avgWater: 'Avg. Water',
-    workouts: 'Workouts',
-    vitaminCompliance: 'Vitamin Compliance',
-    weightChange: 'Weight Change',
-    progress: '📊 Progress',
-    weightTrend: 'Weight Trend',
-    calCompliance: 'Calorie Compliance (Last 30 Days)',
-    summaryStats: 'Summary Stats',
-    weightRecords: 'Weight Records',
-    mealRecords30: 'Meal Records (30d)',
-    lostWeight: 'Weight Lost',
-    goalsShort: 'Goals',
-    noWeight2: 'At least 2 weight entries required'
-  }
-};
-
-let currentLang = localStorage.getItem('moose_lang') || 'tr';
-function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || I18N.tr[key] || key }
-function toggleLanguage(){ currentLang = currentLang === 'tr' ? 'en' : 'tr'; localStorage.setItem('moose_lang', currentLang); renderStaticTexts(); render(); }
-function renderStaticTexts(){
-  const langBtn=document.getElementById('langBtn'); if(langBtn) langBtn.textContent=t('langButton');
-  const themeBtn=document.getElementById('themeBtn'); if(themeBtn){ const txt=currentLang==='tr'?'Tema Değiştir':'Toggle Theme'; themeBtn.title=txt; themeBtn.setAttribute('aria-label',txt); }
-  const headerDate=document.getElementById('headerDate'); if(headerDate) headerDate.textContent=fmtDate(viewDate);
-  const nav=document.querySelector('nav[role="navigation"]'); if(nav) nav.setAttribute('aria-label', currentLang==='tr'?'Ana Navigasyon':'Main Navigation');
-  document.querySelector('[data-tab="dashboard"]')?.setAttribute('aria-label', currentLang==='tr'?'Ana Sayfa':'Home');
-  document.querySelector('[data-tab="takip"]')?.setAttribute('aria-label', currentLang==='tr'?'Takip':'Tracking');
-  document.querySelector('[data-tab="gym"]')?.setAttribute('aria-label', currentLang==='tr'?'Spor':'Gym');
-  document.querySelector('[data-tab="saglik"]')?.setAttribute('aria-label', currentLang==='tr'?'Sağlık':'Health');
-  document.querySelector('[data-tab="rapor"]')?.setAttribute('aria-label', currentLang==='tr'?'Rapor':'Reports');
-}
-
-const QUOTES = {
-  tr: [
-    "Başarı, her gün tekrarlanan küçük çabaların toplamıdır. 💪",
-    "Vücudun seni bırakmak istediğinde, aklın devam etmeli. 🔥",
-    "Bugün yaptığın seçimler, yarınki bedenini şekillendirir. 🎯",
-    "Acı geçicidir, gurur kalıcıdır. 🏆",
-    "Kendinle yarış, dünkü halini yen. 🦌",
-    "Disiplin, motivasyonun bittiği yerde başlar. ⚡",
-    "Her adım, hedefe bir adım daha yakın. 🚶",
-    "Güçlü ol, değişim seni bekliyor. 💎",
-    "Hayal et, planla, uygula, başar. 🌟",
-    "Bugün zor, yarın daha kolay olacak. 🌅"
-  ],
-  en: [
-    "Success is the sum of small efforts repeated every day. 💪",
-    "When your body wants to quit, your mind should continue. 🔥",
-    "The choices you make today shape tomorrow's body. 🎯",
-    "Pain is temporary, pride is permanent. 🏆",
-    "Compete with yourself, beat yesterday's version. 🦌",
-    "Discipline begins where motivation ends. ⚡",
-    "Every step brings you closer to the goal. 🚶",
-    "Stay strong, change is waiting for you. 💎",
-    "Imagine, plan, execute, achieve. 🌟",
-    "Today is hard, tomorrow will be easier. 🌅"
-  ]
-};
+const QUOTES = [
+  "Başarı, her gün tekrarlanan küçük çabaların toplamıdır. 💪",
+  "Vücudun seni bırakmak istediğinde, aklın devam etmeli. 🔥",
+  "Bugün yaptığın seçimler, yarınki bedenini şekillendirir. 🎯",
+  "Acı geçicidir, gurur kalıcıdır. 🏆",
+  "Kendinle yarış, dünkü halini yen. 🦌",
+  "Disiplin, motivasyonun bittiği yerde başlar. ⚡",
+  "Her adım, hedefe bir adım daha yakın. 🚶",
+  "Güçlü ol, değişim seni bekliyor. 💎",
+  "Hayal et, planla, uygula, başar. 🌟",
+  "Bugün zor, yarın daha kolay olacak. 🌅"
+];
 
 function todayFoods(d){ return DB.get('foods_'+(d||viewDate), []) }
 function todayWater(d){ return DB.get('water_'+(d||viewDate), 0) }
@@ -884,12 +585,6 @@ function fmtDateTR(iso){
   const [y,m,d]=iso.split('-');
   return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
 }
-function fmtDateEN(iso){
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const [y,m,d]=iso.split('-');
-  return `${months[parseInt(m)-1]} ${parseInt(d)}, ${y}`;
-}
-function fmtDate(iso){ return currentLang==='tr' ? fmtDateTR(iso) : fmtDateEN(iso); }
 
 function navigate(tab){
   currentTab=tab;
@@ -899,13 +594,6 @@ function navigate(tab){
 function setSubTab(parent,sub){currentSubTab[parent]=sub;render()}
 
 function render(){
-  renderStaticTexts();
-  const labels = currentLang==='tr' ? {dashboard:'Ana',takip:'Takip',gym:'Spor',saglik:'Sağlık',rapor:'Rapor'} : {dashboard:'Home',takip:'Track',gym:'Gym',saglik:'Health',rapor:'Reports'};
-  document.querySelector('[data-tab="dashboard"]') && (document.querySelector('[data-tab="dashboard"]').lastChild.textContent=labels.dashboard);
-  document.querySelector('[data-tab="takip"]') && (document.querySelector('[data-tab="takip"]').lastChild.textContent=labels.takip);
-  document.querySelector('[data-tab="gym"]') && (document.querySelector('[data-tab="gym"]').lastChild.textContent=labels.gym);
-  document.querySelector('[data-tab="saglik"]') && (document.querySelector('[data-tab="saglik"]').lastChild.textContent=labels.saglik);
-  document.querySelector('[data-tab="rapor"]') && (document.querySelector('[data-tab="rapor"]').lastChild.textContent=labels.rapor);
   const m=document.getElementById('mainContent');m.innerHTML='';m.className='max-w-lg mx-auto px-4 pt-4 fade-in';
   ({dashboard:renderDashboard,takip:renderTakip,gym:renderGym,saglik:renderSaglik,rapor:renderRapor}[currentTab]||renderDashboard)(m);
 }
@@ -921,7 +609,7 @@ function renderDashboard(el){
   const water=todayWater();
   const weight=latestWeight();
   const steps=todaySteps();
-  const quoteSet=QUOTES[currentLang]||QUOTES.tr; const quote=quoteSet[Math.floor(Math.random()*quoteSet.length)];
+  const quote=QUOTES[Math.floor(Math.random()*QUOTES.length)];
   const weightDiff=(weight-PROFILE.targetWeight).toFixed(1);
   const calPct=Math.min(100,Math.round(cal/PROFILE.dailyCal*100));
   const waterPct=Math.min(100,Math.round(water/3.5*100));
@@ -940,14 +628,14 @@ function renderDashboard(el){
   <div class="flex items-center justify-between mb-3 bento-card py-2 px-3">
     <button onclick="changeViewDate(-1)" class="text-slate-300 hover:text-white p-1 rounded-lg hover:bg-slate-700 transition text-lg">‹</button>
     <div class="text-center">
-      <div class="text-sm font-semibold text-slate-200">${fmtDate(viewDate)}</div>
-      ${isHistorical?`<div class="text-xs text-amber-400">${t('dateHistory')}</div>`:`<div class="text-xs text-emerald-400">${t('dateToday')}</div>`}
+      <div class="text-sm font-semibold text-slate-200">${fmtDateTR(viewDate)}</div>
+      ${isHistorical?`<div class="text-xs text-amber-400">📋 Geçmiş görünüm · <span onclick="goToToday()" class="underline cursor-pointer">Bugüne dön</span></div>`:'<div class="text-xs text-emerald-400">✅ Bugün</div>'}
     </div>
     <button onclick="changeViewDate(1)" class="text-slate-300 p-1 rounded-lg transition text-lg ${isHistorical?'hover:text-white hover:bg-slate-700':'opacity-30 cursor-not-allowed'}">›</button>
   </div>
 
   <!-- Motivational Quote -->
-  ${!isHistorical?`<div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15 animate-shimmer" role="complementary" aria-label="${t('quoteLabel')}">
+  ${!isHistorical?`<div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15 animate-shimmer" role="complementary" aria-label="Günün Sözü">
     <p class="text-sm italic text-slate-300">${quote}</p>
   </div>`:''}  
 
@@ -955,7 +643,7 @@ function renderDashboard(el){
   <div class="bento-grid mb-4">
 
     <!-- 1. Daily Readiness Score (span 2) -->
-    <div class="bento-card span-2 animate-pulse-glow" role="region" aria-label="${t('readinessRegion')}" style="background:${rc.bg}">
+    <div class="bento-card span-2 animate-pulse-glow" role="region" aria-label="Günlük Hazırlık Skoru" style="background:${rc.bg}">
       <div class="flex items-center gap-4">
         <div class="relative flex-shrink-0">
           <svg width="110" height="110" viewBox="0 0 100 100" class="readiness-ring" role="img" aria-label="Readiness skoru ${readiness.total}">
@@ -969,21 +657,21 @@ function renderDashboard(el){
           </svg>
         </div>
         <div class="flex-1 min-w-0">
-          <h2 class="text-sm font-bold text-slate-300 mb-2">${t('readinessTitle')}</h2>
+          <h2 class="text-sm font-bold text-slate-300 mb-2">🧠 Günlük Hazırlık</h2>
           <div class="space-y-1.5">
-            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">${t('readinessWeight')}</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-emerald-500" style="width:${readiness.weightScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.weightScore}</span></div>
-            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">${t('readinessSteps')}</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-purple-500" style="width:${readiness.stepsScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.stepsScore}</span></div>
-            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">${t('readinessWater')}</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-cyan-500" style="width:${readiness.waterScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.waterScore}</span></div>
-            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">${t('readinessSleep')}</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-indigo-500" style="width:${readiness.sleepScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.sleepScore}</span></div>
-            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">${t('readinessEnergy')}</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-amber-500" style="width:${readiness.energyScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.energyScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">⚖️ Kilo</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-emerald-500" style="width:${readiness.weightScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.weightScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">🚶 Adım</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-purple-500" style="width:${readiness.stepsScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.stepsScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">💧 Su</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-cyan-500" style="width:${readiness.waterScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.waterScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">😴 Uyku</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-indigo-500" style="width:${readiness.sleepScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.sleepScore}</span></div>
+            <div class="flex items-center justify-between text-xs"><span class="text-slate-400">⚡ Enerji</span><div class="flex-1 mx-2 macro-bar h-1.5"><div class="macro-fill bg-amber-500" style="width:${readiness.energyScore*5}%"></div></div><span class="text-slate-500 w-6 text-right">${readiness.energyScore}</span></div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- 2. Steps Ring -->
-    <div class="bento-card text-center" role="region" aria-label="${t('stepsTitle')}">
-      <h3 class="text-xs font-semibold text-slate-400 mb-2">${t('readinessSteps')}</h3>
+    <div class="bento-card text-center" role="region" aria-label="Adım Sayacı">
+      <h3 class="text-xs font-semibold text-slate-400 mb-2">🚶 Adım</h3>
       <div class="relative inline-block">
         <svg width="100" height="100" viewBox="0 0 120 120" role="img" aria-label="${steps.toLocaleString()} adım">
           <circle cx="60" cy="60" r="54" fill="none" class="step-ring-bg" stroke-width="7"/>
@@ -995,27 +683,27 @@ function renderDashboard(el){
         </svg>
       </div>
       <div class="flex items-center gap-1 mt-2">
-        <input type="number" id="stepsInput" placeholder="${t('stepsPlaceholder')}" value="${steps||''}" class="flex-1 text-xs text-center" style="min-height:36px" aria-label="Adım gir">
+        <input type="number" id="stepsInput" placeholder="Adım" value="${steps||''}" class="flex-1 text-xs text-center" style="min-height:36px" aria-label="Adım gir">
         <button onclick="saveSteps()" class="btn-primary btn-sm text-xs" style="min-width:52px">✓</button>
       </div>
     </div>
 
     <!-- 3. Calories & Macros -->
-    <div class="bento-card text-center" role="region" aria-label="${t('caloriesTitle')}">
-      <h3 class="text-xs font-semibold text-slate-400 mb-1">${t('caloriesTitle')}</h3>
+    <div class="bento-card text-center" role="region" aria-label="Kalori Takibi">
+      <h3 class="text-xs font-semibold text-slate-400 mb-1">🔥 Kalori</h3>
       <div class="text-3xl font-bold text-indigo-400 animate-count">${cal}</div>
       <div class="text-xs text-slate-500 mb-2">/ ${PROFILE.dailyCal} kcal</div>
       <div class="macro-bar mb-2"><div class="macro-fill bg-gradient-to-r from-indigo-500 to-purple-500" style="width:${calPct}%"></div></div>
       <div class="grid grid-cols-3 gap-1 text-xs">
         <div><span class="font-bold text-red-400">${pro}g</span><div class="text-slate-500">P</div></div>
-        <div><span class="font-bold text-yellow-400">${fat}g</span><div class="text-slate-500">${t('fatShort')}</div></div>
-        <div><span class="font-bold text-blue-400">${carb}g</span><div class="text-slate-500">${t('carbShort')}</div></div>
+        <div><span class="font-bold text-yellow-400">${fat}g</span><div class="text-slate-500">Y</div></div>
+        <div><span class="font-bold text-blue-400">${carb}g</span><div class="text-slate-500">K</div></div>
       </div>
     </div>
 
     <!-- 4. Water -->
-    <div class="bento-card text-center" role="region" aria-label="${t('waterTitle')}">
-      <h3 class="text-xs font-semibold text-slate-400 mb-1">${t('readinessWater')}</h3>
+    <div class="bento-card text-center" role="region" aria-label="Su Takibi">
+      <h3 class="text-xs font-semibold text-slate-400 mb-1">💧 Su</h3>
       <div class="text-3xl font-bold text-cyan-400 animate-count">${water.toFixed(1)}<span class="text-lg">L</span></div>
       <div class="text-xs text-slate-500 mb-2">/ ${PROFILE.waterTarget}L</div>
       <div class="macro-bar mb-2"><div class="macro-fill bg-gradient-to-r from-cyan-500 to-blue-500" style="width:${waterPct}%"></div></div>
@@ -1027,10 +715,10 @@ function renderDashboard(el){
     </div>
 
     <!-- 5. Weight -->
-    <div class="bento-card text-center" role="region" aria-label="${t('weightTitle')}">
-      <h3 class="text-xs font-semibold text-slate-400 mb-1">${t('readinessWeight')}</h3>
+    <div class="bento-card text-center" role="region" aria-label="Kilo Takibi">
+      <h3 class="text-xs font-semibold text-slate-400 mb-1">⚖️ Kilo</h3>
       <div class="text-3xl font-bold text-emerald-400 animate-count">${weight}</div>
-      <div class="text-xs text-slate-500">${t('toGoal')} <span class="${parseFloat(weightDiff)<=0?'text-emerald-400':'text-amber-400'}">${weightDiff}kg</span></div>
+      <div class="text-xs text-slate-500">hedefe <span class="${parseFloat(weightDiff)<=0?'text-emerald-400':'text-amber-400'}">${weightDiff}kg</span></div>
       <div class="macro-bar mt-2"><div class="macro-fill bg-emerald-500" style="width:${Math.min(100,Math.round((PROFILE.startWeight-weight)/(PROFILE.startWeight-PROFILE.targetWeight)*100))}%"></div></div>
     </div>
 
@@ -1039,14 +727,14 @@ function renderDashboard(el){
 
   <!-- Sync & Actions -->
   <div class="flex gap-2 mb-4">
-    <button onclick="quickSync(this)" id="syncBtn" class="flex-1 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 btn-primary" style="min-height:48px">${t('sync')}</button>
-    <button onclick="clearTodayData()" class="py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 border border-red-500/30 text-red-400 hover:bg-red-500/10" style="min-height:48px;border-radius:16px" title="${t('clearToday')}">${t('clearToday')}</button>
+    <button onclick="quickSync(this)" id="syncBtn" class="flex-1 py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 btn-primary" style="min-height:48px">☁️ Sync</button>
+    <button onclick="clearTodayData()" class="py-3 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 border border-red-500/30 text-red-400 hover:bg-red-500/10" style="min-height:48px;border-radius:16px" title="Bugünün verilerini temizle">🗑️ Bugünü Temizle</button>
   </div>
   <div id="syncLog" class="text-xs text-slate-400 mb-4 hidden"></div>
 
   <!-- Macros Detail -->
   <div class="bento-card mb-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">${t('macrosDetail')}</h3>
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">📊 Makro Detay</h3>
     <div class="space-y-2">
       <div class="flex items-center justify-between text-xs">
         <span class="text-red-400 font-medium w-16">Protein</span>
@@ -1069,19 +757,19 @@ function renderDashboard(el){
   <!-- Goals -->
   <div class="bento-card mb-4">
     <div class="flex items-center justify-between mb-3">
-      <h3 class="text-sm font-semibold text-slate-300">${t('goals')}</h3>
-      <button onclick="showGoalModal()" class="btn-primary btn-sm text-xs">${t('add')}</button>
+      <h3 class="text-sm font-semibold text-slate-300">🎯 Hedefler</h3>
+      <button onclick="showGoalModal()" class="btn-primary btn-sm text-xs">+ Ekle</button>
     </div>
     <div id="goalsList">${renderGoals()}</div>
   </div>
 
-  <div id="goalModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden" role="dialog" aria-modal="true" aria-label="${t('newGoal')}">
+  <div id="goalModal" class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center hidden" role="dialog" aria-modal="true" aria-label="Yeni Hedef">
     <div class="card w-80">
-      <h3 class="font-semibold mb-3">${t('newGoal')}</h3>
-      <input id="goalText" placeholder="${t('goalDesc')}" class="mb-2 text-sm" aria-label="${t('goalDesc')}">
-      <input id="goalTarget" type="date" class="mb-3 text-sm" aria-label="${t('goalDate')}">
+      <h3 class="font-semibold mb-3">Yeni Hedef</h3>
+      <input id="goalText" placeholder="Hedef açıklaması" class="mb-2 text-sm" aria-label="Hedef açıklaması">
+      <input id="goalTarget" type="date" class="mb-3 text-sm" aria-label="Hedef tarihi">
       <div class="flex gap-2">
-        <button onclick="addGoal()" class="btn-primary btn-sm flex-1">${t('save')}</button>
+        <button onclick="addGoal()" class="btn-primary btn-sm flex-1">Kaydet</button>
         <button onclick="document.getElementById('goalModal').classList.add('hidden')" class="btn-sm flex-1 border border-slate-600 text-slate-300 rounded-lg">İptal</button>
       </div>
     </div>
@@ -1119,10 +807,10 @@ function renderTakip(el){
   const sub=currentSubTab.takip||'food';
   el.innerHTML=`
   <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
-    <button onclick="setSubTab('takip','food')" class="sub-tab ${sub==='food'?'active':''}">${t('trackingMeal')}</button>
-    <button onclick="setSubTab('takip','water')" class="sub-tab ${sub==='water'?'active':''}">${t('readinessWater')}</button>
-    <button onclick="setSubTab('takip','weight')" class="sub-tab ${sub==='weight'?'active':''}">${t('readinessWeight')}</button>
-    <button onclick="setSubTab('takip','diet')" class="sub-tab ${sub==='diet'?'active':''}">${t('trackingDiet')}</button>
+    <button onclick="setSubTab('takip','food')" class="sub-tab ${sub==='food'?'active':''}">🍽️ Öğün</button>
+    <button onclick="setSubTab('takip','water')" class="sub-tab ${sub==='water'?'active':''}">💧 Su</button>
+    <button onclick="setSubTab('takip','weight')" class="sub-tab ${sub==='weight'?'active':''}">⚖️ Kilo</button>
+    <button onclick="setSubTab('takip','diet')" class="sub-tab ${sub==='diet'?'active':''}">📋 Diyet</button>
   </div>
   <div id="takipContent" class="slide-in"></div>`;
   ({food:renderFood,water:renderWater,weight:renderWeight,diet:renderDiet}[sub]||renderFood)(el.querySelector('#takipContent'));
@@ -1133,41 +821,41 @@ function renderFood(el){
   const cal=foods.reduce((s,f)=>s+f.cal,0);const pro=foods.reduce((s,f)=>s+f.pro,0);
   const fat=foods.reduce((s,f)=>s+f.fat,0);const carb=foods.reduce((s,f)=>s+f.carb,0);
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('mealTracking')}</h2>
+  <h2 class="text-lg font-bold mb-3">🍽️ Öğün Takibi</h2>
   <div class="bento-card mb-4">
     <div class="grid grid-cols-4 gap-2 text-center text-xs mb-3">
       <div><div class="text-lg font-bold text-indigo-400">${cal}</div><div class="text-slate-400">${PROFILE.dailyCal} kcal</div></div>
-      <div><div class="text-lg font-bold text-red-400">${pro}g</div><div class="text-slate-400">${t('protein')}</div></div>
-      <div><div class="text-lg font-bold text-yellow-400">${fat}g</div><div class="text-slate-400">${t('fat')}</div></div>
-      <div><div class="text-lg font-bold text-blue-400">${carb}g</div><div class="text-slate-400">${t('carb')}</div></div>
+      <div><div class="text-lg font-bold text-red-400">${pro}g</div><div class="text-slate-400">Protein</div></div>
+      <div><div class="text-lg font-bold text-yellow-400">${fat}g</div><div class="text-slate-400">Yağ</div></div>
+      <div><div class="text-lg font-bold text-blue-400">${carb}g</div><div class="text-slate-400">Karb</div></div>
     </div>
     <div class="macro-bar"><div class="macro-fill bg-gradient-to-r from-indigo-500 to-purple-500" style="width:${Math.min(100,Math.round(cal/PROFILE.dailyCal*100))}%"></div></div>
-    <div class="text-xs text-slate-400 mt-1 text-right">${t('remaining')}: ${Math.max(0,PROFILE.dailyCal-cal)} kcal</div>
+    <div class="text-xs text-slate-400 mt-1 text-right">Kalan: ${Math.max(0,PROFILE.dailyCal-cal)} kcal</div>
   </div>
   <div class="bento-card mb-4">
-    <h3 class="text-sm font-semibold mb-3">${t('addMeal')}</h3>
-    <input id="foodName" placeholder="${t('foodName')}" class="mb-2 text-sm">
+    <h3 class="text-sm font-semibold mb-3">Yeni Öğün Ekle</h3>
+    <input id="foodName" placeholder="Yemek adı" class="mb-2 text-sm">
     <div class="grid grid-cols-2 gap-2 mb-2">
-      <input id="foodCal" type="number" placeholder="${t('caloriesPlaceholder')}" class="text-sm">
-      <input id="foodPro" type="number" placeholder="${t('proteinPlaceholder')}" class="text-sm">
+      <input id="foodCal" type="number" placeholder="Kalori (kcal)" class="text-sm">
+      <input id="foodPro" type="number" placeholder="Protein (g)" class="text-sm">
     </div>
     <div class="grid grid-cols-2 gap-2 mb-3">
-      <input id="foodFat" type="number" placeholder="${t('fatPlaceholder')}" class="text-sm">
-      <input id="foodCarb" type="number" placeholder="${t('carbPlaceholder')}" class="text-sm">
+      <input id="foodFat" type="number" placeholder="Yağ (g)" class="text-sm">
+      <input id="foodCarb" type="number" placeholder="Karb (g)" class="text-sm">
     </div>
     <select id="foodMeal" class="mb-3 text-sm">
       <option value="Kahvaltı">🌅 Kahvaltı</option><option value="Ara Öğün 1">🥤 Ara Öğün 1</option>
       <option value="Öğle">☀️ Öğle</option><option value="Ara Öğün 2">🍎 Ara Öğün 2</option>
       <option value="Akşam">🌙 Akşam</option><option value="Ara Öğün 3">🥛 Ara Öğün 3</option>
     </select>
-    <button onclick="addFood()" class="btn-primary w-full text-sm">${t('addMealBtn')}</button>
+    <button onclick="addFood()" class="btn-primary w-full text-sm">+ Öğün Ekle</button>
   </div>
   <div class="space-y-2">
     ${foods.length?foods.map((f,i)=>`
       <div class="bento-card flex items-center justify-between py-2 px-3">
         <div class="flex-1"><div class="text-sm font-medium">${f.name}</div><div class="text-xs text-slate-400">${f.meal} · ${f.cal}kcal · P:${f.pro}g Y:${f.fat}g K:${f.carb}g</div></div>
-        <button onclick="removeFood(${i})" class="text-red-400 text-xs min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="${t('deleteMeal')}">✕</button>
-      </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-4">${t('noMeals')}</p>'}
+        <button onclick="removeFood(${i})" class="text-red-400 text-xs min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Öğünü sil">✕</button>
+      </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-4">Bugün henüz öğün eklenmedi</p>'}
   </div>`;
 }
 
@@ -1183,18 +871,18 @@ function removeFood(i){if(!isToday())return;const f=todayFoods();f.splice(i,1);D
 function renderWater(el){
   const water=todayWater();const glasses=Math.round(water/0.25);const target=14;
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('readinessWater')} Takibi</h2>
+  <h2 class="text-lg font-bold mb-3">💧 Su Takibi</h2>
   <div class="bento-card text-center mb-4">
     <div class="text-5xl font-bold text-cyan-400 mb-1">${water.toFixed(2)}L</div>
-    <div class="text-sm text-slate-400 mb-4">${PROFILE.waterTarget}L ${t('waterTarget')} · ${glasses}/${target} ${t('glass')}</div>
+    <div class="text-sm text-slate-400 mb-4">${PROFILE.waterTarget}L hedef · ${glasses}/${target} bardak</div>
     <div class="macro-bar h-3 mb-4"><div class="macro-fill bg-gradient-to-r from-cyan-500 to-blue-500" style="width:${Math.min(100,Math.round(water/PROFILE.waterTarget*100))}%"></div></div>
     <div class="grid grid-cols-7 gap-2 mb-4">
       ${Array.from({length:target},(_,i)=>`<button onclick="setWater(${i+1})" class="water-drop text-2xl min-h-[44px]${i<glasses?' filled':''}" aria-label="${i+1}. bardak">💧</button>`).join('')}
     </div>
     <div class="flex gap-2 justify-center">
-      <button onclick="addWater(0.25)" class="btn-primary btn-sm">${t('add1Glass')}</button>
-      <button onclick="addWater(0.5)" class="btn-primary btn-sm">${t('add2Glass')}</button>
-      <button onclick="addWater(-0.25)" class="btn-sm border border-slate-600 text-slate-300 rounded-lg">${t('minus1Glass')}</button>
+      <button onclick="addWater(0.25)" class="btn-primary btn-sm">+1 Bardak</button>
+      <button onclick="addWater(0.5)" class="btn-primary btn-sm">+2 Bardak</button>
+      <button onclick="addWater(-0.25)" class="btn-sm border border-slate-600 text-slate-300 rounded-lg">-1 Bardak</button>
     </div>
   </div>`;
 }
@@ -1205,15 +893,15 @@ function setWater(glasses){if(!isToday())return;DB.set('water_'+DB.today(),glass
 function renderWeight(el){
   const log=weightLog();
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('readinessWeight')} Takibi</h2>
+  <h2 class="text-lg font-bold mb-3">⚖️ Kilo Takibi</h2>
   <div class="bento-card mb-4">
     <div class="flex items-center justify-between mb-3">
-      <div><div class="text-3xl font-bold text-emerald-400">${latestWeight()} kg</div><div class="text-xs text-slate-400">${t('start')}: ${PROFILE.startWeight}kg · ${t('target')}: ${PROFILE.targetWeight}kg</div></div>
-      <div class="text-right"><div class="text-lg font-bold ${PROFILE.startWeight-latestWeight()>0?'text-emerald-400':'text-red-400'}">${(PROFILE.startWeight-latestWeight())>0?'-':'+'}${Math.abs(PROFILE.startWeight-latestWeight()).toFixed(1)}kg</div><div class="text-xs text-slate-400">${t('totalChange')}</div></div>
+      <div><div class="text-3xl font-bold text-emerald-400">${latestWeight()} kg</div><div class="text-xs text-slate-400">Başlangıç: ${PROFILE.startWeight}kg · Hedef: ${PROFILE.targetWeight}kg</div></div>
+      <div class="text-right"><div class="text-lg font-bold ${PROFILE.startWeight-latestWeight()>0?'text-emerald-400':'text-red-400'}">${(PROFILE.startWeight-latestWeight())>0?'-':'+'}${Math.abs(PROFILE.startWeight-latestWeight()).toFixed(1)}kg</div><div class="text-xs text-slate-400">toplam değişim</div></div>
     </div>
     <div class="flex gap-2">
-      <input id="weightInput" type="number" step="0.1" placeholder="${t('enterWeight')}" class="flex-1 text-sm" aria-label="Kilo gir">
-      <button onclick="addWeight()" class="btn-primary btn-sm">${t('save')}</button>
+      <input id="weightInput" type="number" step="0.1" placeholder="Kilo gir (kg)" class="flex-1 text-sm" aria-label="Kilo gir">
+      <button onclick="addWeight()" class="btn-primary btn-sm">Kaydet</button>
     </div>
   </div>
   <div class="bento-card mb-4"><canvas id="weightChart" height="200"></canvas></div>
@@ -1228,7 +916,7 @@ function addWeight(){const v=parseFloat(document.getElementById('weightInput').v
 function drawWeightChart(log){
   const ctx=document.getElementById('weightChart');if(!ctx)return;
   new Chart(ctx,{type:'line',data:{labels:log.map(e=>e.date.slice(5)),datasets:[
-    {label:t('weightChart'),data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3,pointRadius:4},
+    {label:'Kilo (kg)',data:log.map(e=>e.kg),borderColor:'#34d399',backgroundColor:'rgba(52,211,153,.1)',fill:true,tension:.3,pointRadius:4},
     {label:'Hedef',data:log.map(()=>PROFILE.targetWeight),borderColor:'#6366f1',borderDash:[5,5],pointRadius:0}
   ]},options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'rgba(30,41,59,.5)'}},y:{ticks:{color:'#64748b'},grid:{color:'rgba(30,41,59,.5)'}}}}});
 }
@@ -1259,17 +947,17 @@ function renderSaglik(el){
   const sub=currentSubTab.saglik||'vitamins';
   el.innerHTML=`
   <div class="flex gap-2 mb-4">
-    <button onclick="setSubTab('saglik','vitamins')" class="sub-tab ${sub==='vitamins'?'active':''}">${t('healthVitamin')}</button>
-    <button onclick="setSubTab('saglik','bp')" class="sub-tab ${sub==='bp'?'active':''}">${t('healthBp')}</button>
+    <button onclick="setSubTab('saglik','vitamins')" class="sub-tab ${sub==='vitamins'?'active':''}">💊 Vitamin</button>
+    <button onclick="setSubTab('saglik','bp')" class="sub-tab ${sub==='bp'?'active':''}">❤️ Tansiyon</button>
   </div>
   <div id="saglikContent" class="slide-in"></div>
   <div class="bento-card mt-3 flex items-center justify-between">
     <div>
-      <div class="text-sm font-semibold text-slate-200">${t('mealReminders')}</div>
-      <div class="text-xs text-slate-400">${t('lunchEvening')}</div>
+      <div class="text-sm font-semibold text-slate-200">🔔 Yemek Hatırlatmaları</div>
+      <div class="text-xs text-slate-400">13:00 öğlen · 19:00 akşam</div>
     </div>
     <button onclick="enableNotifications()" id="notifBtn" class="btn-primary btn-sm text-xs px-3">
-      ${(typeof Notification!=='undefined'&&Notification.permission==='granted')?t('active'):t('allow')}
+      ${(typeof Notification!=='undefined'&&Notification.permission==='granted')?'✅ Aktif':'İzin Ver'}
     </button>
   </div>`;
   (sub==='bp'?renderBP:renderVitamins)(el.querySelector('#saglikContent'));
@@ -1292,25 +980,25 @@ const VITAMINS=[
 function renderVitamins(el){
   const log=vitaminLog();const taken=Object.values(log).filter(v=>v).length;const total=VITAMINS.length;const pct=Math.round(taken/total*100);
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('vitaminSupplement')}</h2>
+  <h2 class="text-lg font-bold mb-3">💊 Vitamin & Takviye</h2>
   <div class="bento-card mb-4 text-center">
     <div class="text-3xl font-bold text-purple-400">${taken}/${total}</div>
-    <div class="text-xs text-slate-400 mt-1">${t('takenToday')}</div>
+    <div class="text-xs text-slate-400 mt-1">Bugün alınan</div>
     <div class="macro-bar mt-2"><div class="macro-fill bg-purple-500" style="width:${pct}%"></div></div>
   </div>
   <div class="space-y-2">
     ${VITAMINS.map(v=>{const done=log[v.id]||false;return `
       <div class="bento-card flex items-center gap-3 py-2 px-3 ${done?'opacity-60':''}">
-        <button onclick="toggleVitamin('${v.id}')" class="text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="${done?t('taken'):t('notTaken')}: ${v.name}">${done?'✅':v.emoji}</button>
+        <button onclick="toggleVitamin('${v.id}')" class="text-2xl min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="${done?'Alındı':'Alınmadı'}: ${v.name}">${done?'✅':v.emoji}</button>
         <div class="flex-1">
-          <div class="text-sm font-medium ${done?'line-through text-slate-500':''}">${v.name} ${v.missing?'<span class="text-xs text-red-400 font-normal">${t('buy')}</span>':''}</div>
+          <div class="text-sm font-medium ${done?'line-through text-slate-500':''}">${v.name} ${v.missing?'<span class="text-xs text-red-400 font-normal">(SATIN AL)</span>':''}</div>
           <div class="text-xs text-slate-400">${v.desc}</div>
           <div class="text-xs text-indigo-400 mt-0.5">⏰ ${v.when}</div>
         </div>
       </div>`}).join('')}
   </div>
   <div class="bento-card mt-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">${t('reminderProgram')}</h3>
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">🔔 Hatırlatma Programı</h3>
     <div class="text-xs text-slate-400 space-y-1.5">
       <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 07:30</span><span>Sabah aç karnına: Folbiol, Tiopati-B, Ginseng, Probiyotik, L-Arginin</span></div>
       <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 08:00</span><span>Kahvaltıyla: Multivitamin</span></div>
@@ -1319,10 +1007,10 @@ function renderVitamins(el){
       <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 20:00</span><span>Akşam yemekten sonra: Lipanthyl</span></div>
       <div class="flex items-center gap-2"><span class="text-amber-400">⏰ 23:00</span><span>Yatmadan: Magnezyum</span></div>
     </div>
-    <p class="text-xs text-slate-500 mt-2 italic">${t('remindersViaBot')}</p>
+    <p class="text-xs text-slate-500 mt-2 italic">📱 Hatırlatmalar Telegram bot üzerinden gönderilir.</p>
   </div>
   <div class="bento-card mt-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">${t('suggestions')}</h3>
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Öneriler</h3>
     <div class="text-xs text-slate-400 space-y-1">
       <p>• <strong>Kilo verirken</strong> en önemli: Multivitamin, D Vitamini, Omega-3, Magnezyum</p>
       <p>• <strong>Gym yapanlar</strong> için: Kreatin (5g/gün), Çinko, Magnezyum</p>
@@ -1337,25 +1025,25 @@ function toggleVitamin(id){const log=vitaminLog();log[id]=!log[id];DB.set('vitam
 // ==================== BLOOD PRESSURE ====================
 function renderBP(el){
   const log=bpLog();const latest=log.length?log[log.length-1]:null;
-  function bpCat(sys,dia){if(sys<120&&dia<80)return{label:t('normal'),color:'text-emerald-400'};if(sys<130&&dia<80)return{label:t('elevated'),color:'text-yellow-400'};if(sys<140||dia<90)return{label:t('hypertension1'),color:'text-orange-400'};return{label:t('hypertension2'),color:'text-red-400'}}
+  function bpCat(sys,dia){if(sys<120&&dia<80)return{label:'Normal',color:'text-emerald-400'};if(sys<130&&dia<80)return{label:'Yükselmiş',color:'text-yellow-400'};if(sys<140||dia<90)return{label:'Hipertansiyon 1',color:'text-orange-400'};return{label:'Hipertansiyon 2',color:'text-red-400'}}
   const cat=latest?bpCat(latest.sys,latest.dia):null;
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('bloodPressure')}</h2>
+  <h2 class="text-lg font-bold mb-3">❤️ Tansiyon Takibi</h2>
   ${latest?`<div class="bento-card mb-4 text-center">
     <div class="text-4xl font-bold"><span class="text-red-400">${latest.sys}</span><span class="text-slate-500">/</span><span class="text-blue-400">${latest.dia}</span></div>
     <div class="text-sm text-slate-400 mt-1">mmHg</div>
     <div class="flex items-center justify-center gap-2 mt-2"><span class="text-lg">💓</span><span class="text-xl font-bold text-pink-400">${latest.pulse||'—'}</span><span class="text-sm text-slate-400">bpm</span></div>
     <div class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-semibold ${cat.color}" style="background:rgba(0,0,0,.3)">${cat.label}</div>
     <div class="text-xs text-slate-500 mt-1">${latest.date} ${latest.time||''}</div>
-  </div>`:`<div class="bento-card mb-4 text-center"><p class="text-sm text-slate-500 py-4">${t('noBp')}</p></div>`}
+  </div>`:`<div class="bento-card mb-4 text-center"><p class="text-sm text-slate-500 py-4">Henüz tansiyon kaydı yok</p></div>`}
   <div class="bento-card mb-4">
-    <h3 class="text-sm font-semibold mb-3">${t('addMeasurement')}</h3>
+    <h3 class="text-sm font-semibold mb-3">Yeni Ölçüm Ekle</h3>
     <div class="grid grid-cols-3 gap-2 mb-2">
-      <div><label class="text-xs text-slate-400">${t('systolic')}</label><input id="bpSys" type="number" placeholder="120" class="text-sm text-center"></div>
-      <div><label class="text-xs text-slate-400">${t('diastolic')}</label><input id="bpDia" type="number" placeholder="80" class="text-sm text-center"></div>
-      <div><label class="text-xs text-slate-400">${t('pulse')}</label><input id="bpPulse" type="number" placeholder="72" class="text-sm text-center"></div>
+      <div><label class="text-xs text-slate-400">Sistolik</label><input id="bpSys" type="number" placeholder="120" class="text-sm text-center"></div>
+      <div><label class="text-xs text-slate-400">Diastolik</label><input id="bpDia" type="number" placeholder="80" class="text-sm text-center"></div>
+      <div><label class="text-xs text-slate-400">Nabız</label><input id="bpPulse" type="number" placeholder="72" class="text-sm text-center"></div>
     </div>
-    <button onclick="addBP()" class="btn-primary w-full text-sm mt-2">${t('addRecord')}</button>
+    <button onclick="addBP()" class="btn-primary w-full text-sm mt-2">+ Kaydet</button>
   </div>
   <div class="bento-card mb-4"><canvas id="bpChart" height="200"></canvas></div>
   <div class="space-y-1">${log.slice().reverse().slice(0,15).map(e=>{const c=bpCat(e.sys,e.dia);return `
@@ -1365,7 +1053,7 @@ function renderBP(el){
     </div>`}).join('')}
   </div>
   <div class="bento-card mt-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">${t('refValues')}</h3>
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">📌 Referans Değerler</h3>
     <div class="space-y-1 text-xs">
       <div class="flex justify-between"><span class="text-emerald-400">Normal</span><span class="text-slate-400">&lt;120 / &lt;80</span></div>
       <div class="flex justify-between"><span class="text-yellow-400">Yükselmiş</span><span class="text-slate-400">120-129 / &lt;80</span></div>
@@ -1401,9 +1089,9 @@ function renderGym(el){
   const sub=currentSubTab.gym||'program';
   el.innerHTML=`
   <div class="flex gap-2 mb-4">
-    <button onclick="setSubTab('gym','program')" class="sub-tab ${sub==='program'?'active':''}">${t('gymProgramTab')}</button>
-    <button onclick="setSubTab('gym','log')" class="sub-tab ${sub==='log'?'active':''}">${t('gymLogTab')}</button>
-    <button onclick="setSubTab('gym','history')" class="sub-tab ${sub==='history'?'active':''}">${t('gymHistoryTab')}</button>
+    <button onclick="setSubTab('gym','program')" class="sub-tab ${sub==='program'?'active':''}">📋 Program</button>
+    <button onclick="setSubTab('gym','log')" class="sub-tab ${sub==='log'?'active':''}">📝 Kayıt</button>
+    <button onclick="setSubTab('gym','history')" class="sub-tab ${sub==='history'?'active':''}">📊 Geçmiş</button>
   </div>
   <div id="gymContent" class="slide-in"></div>`;
   ({program:renderGymProgram,log:renderGymLog,history:renderGymHistory}[sub]||renderGymProgram)(el.querySelector('#gymContent'));
@@ -1414,14 +1102,14 @@ function getGymChecks(){try{return JSON.parse(localStorage.getItem('moose_gym_ch
 function setGymCheck(name,val){const c=getGymChecks();if(val)c[name]=true;else delete c[name];localStorage.setItem('moose_gym_checks_'+DB.today(),JSON.stringify(c))}
 function toggleGymCheck(name,btn){const checks=getGymChecks();const newVal=!checks[name];setGymCheck(name,newVal);const row=btn.closest('.gym-ex-row');if(row){row.classList.toggle('gym-checked',newVal);btn.textContent=newVal?'✅':'⬜'}updateGymProgress()}
 function updateGymProgress(){const checks=getGymChecks();const total=document.querySelectorAll('.gym-ex-row').length;const done=Object.keys(checks).length;const el=document.getElementById('gymProgress');if(el){el.textContent=done>0?`${done}/${total} tamamlandı ✨`:''}}
-function gymExRow(emoji,name,sets,link,linkColor){const checks=getGymChecks();const checked=!!checks[name];return `<div class="gym-ex-row ${checked?'gym-checked':''}"><details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center gap-2"><span class="gym-check-btn text-lg flex-shrink-0 select-none" onclick="event.preventDefault();event.stopPropagation();toggleGymCheck('${name}',this)" style="cursor:pointer">${checked?'✅':'⬜'}</span><span class="flex-1 gym-ex-name">${emoji} ${name}</span><span class="text-slate-400">${sets}</span></summary><div class="mt-2 text-center"><a href="${link}" target="_blank" class="${linkColor} text-xs underline">${t('howTo')}</a></div></details></div>`}
+function gymExRow(emoji,name,sets,link,linkColor){const checks=getGymChecks();const checked=!!checks[name];return `<div class="gym-ex-row ${checked?'gym-checked':''}"><details><summary class="flex justify-between cursor-pointer min-h-[44px] items-center gap-2"><span class="gym-check-btn text-lg flex-shrink-0 select-none" onclick="event.preventDefault();event.stopPropagation();toggleGymCheck('${name}',this)" style="cursor:pointer">${checked?'✅':'⬜'}</span><span class="flex-1 gym-ex-name">${emoji} ${name}</span><span class="text-slate-400">${sets}</span></summary><div class="mt-2 text-center"><a href="${link}" target="_blank" class="${linkColor} text-xs underline">📹 Nasıl yapılır?</a></div></details></div>`}
 
 function renderGymProgram(el){
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('workoutProgram')} <span id="gymProgress" class="text-sm font-normal text-emerald-400 ml-2"></span></h2>
-  <p class="text-xs text-slate-400 mb-4">${t('weekly3days')}</p>
+  <h2 class="text-lg font-bold mb-3">🏋️ Antrenman Programı <span id="gymProgress" class="text-sm font-normal text-emerald-400 ml-2"></span></h2>
+  <p class="text-xs text-slate-400 mb-4">Haftada 3 gün + her seans sonrası bel rehabilitasyonu</p>
   <div class="bento-card workout-card mb-3">
-    <h3 class="font-semibold text-indigo-400 mb-2">${t('mondayUpper')}</h3>
+    <h3 class="font-semibold text-indigo-400 mb-2">📅 Pazartesi — Üst Vücut</h3>
     <div class="space-y-2 text-sm">
       ${gymExRow('💪','Bench Press','4×10','https://musclewiki.com/barbell/male/chest/barbell-bench-press','text-indigo-400')}
       ${gymExRow('💪','Barbell Row','4×10','https://musclewiki.com/barbell/male/middle-back/barbell-bent-over-row','text-indigo-400')}
@@ -1432,7 +1120,7 @@ function renderGymProgram(el){
     </div>
   </div>
   <div class="bento-card workout-card mb-3" style="border-left-color:#10b981">
-    <h3 class="font-semibold text-emerald-400 mb-2">${t('wednesdayLower')}</h3>
+    <h3 class="font-semibold text-emerald-400 mb-2">📅 Çarşamba — Alt Vücut</h3>
     <div class="space-y-2 text-sm">
       ${gymExRow('🦵','Squat','4×10','https://musclewiki.com/barbell/male/quads/barbell-squat','text-emerald-400')}
       ${gymExRow('🦵','Leg Press','4×10','https://musclewiki.com/machine/male/quads/leg-press','text-emerald-400')}
@@ -1443,7 +1131,7 @@ function renderGymProgram(el){
     </div>
   </div>
   <div class="bento-card workout-card mb-3" style="border-left-color:#f59e0b">
-    <h3 class="font-semibold text-amber-400 mb-2">${t('fridayFull')}</h3>
+    <h3 class="font-semibold text-amber-400 mb-2">📅 Cuma — Full Body + Kardiyo</h3>
     <div class="space-y-2 text-sm">
       ${gymExRow('🏋️','Deadlift','4×8','https://musclewiki.com/barbell/male/glutes/barbell-deadlift','text-amber-400')}
       ${gymExRow('🏋️','Pull-ups','3×max','https://musclewiki.com/bodyweight/male/lats/pull-up','text-amber-400')}
@@ -1452,7 +1140,7 @@ function renderGymProgram(el){
     </div>
   </div>
   <div class="bento-card rehab-card mb-3">
-    <h3 class="font-semibold text-amber-400 mb-2">${t('rehab')} <span class="text-xs font-normal text-slate-400">${t('afterEachSession')}</span></h3>
+    <h3 class="font-semibold text-amber-400 mb-2">🧘 Bel Rehabilitasyonu <span class="text-xs font-normal text-slate-400">(her seans sonrası)</span></h3>
     <div class="space-y-2 text-sm">
       ${gymExRow('🧘','Cat-Cow','2×15','https://musclewiki.com/bodyweight/male/abdominals/cat-cow','text-amber-400')}
       ${gymExRow('🧘','Bird-Dog','2×10','https://musclewiki.com/bodyweight/male/lower-back/bird-dog','text-amber-400')}
@@ -1461,8 +1149,8 @@ function renderGymProgram(el){
     </div>
   </div>
   <div class="bento-card">
-    <h3 class="font-semibold text-slate-300 mb-2">${t('dailyGoal')}</h3>
-    <div class="flex items-center gap-2 text-sm"><span class="text-2xl">🚶</span><span>${t('everyDay10k')}</span></div>
+    <h3 class="font-semibold text-slate-300 mb-2">📝 Günlük Hedef</h3>
+    <div class="flex items-center gap-2 text-sm"><span class="text-2xl">🚶</span><span>Her gün <strong class="text-amber-400">10.000 adım</strong></span></div>
   </div>`;
   updateGymProgress();
 }
@@ -1473,13 +1161,13 @@ function renderGymLog(el){
   if(existing&&existing.exercises){existing.exercises.forEach((ex,i)=>{exerciseRows+=gymExerciseRow(i,ex.name,ex.weight,ex.sets,ex.reps)})}
   else{exerciseRows=gymExerciseRow(0,'','','','')}
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('workoutLog')}</h2>
+  <h2 class="text-lg font-bold mb-3">📝 Antrenman Kaydı</h2>
   <div class="bento-card mb-4">
-    <div class="flex items-center gap-2 mb-3"><label class="text-sm text-slate-400">${t('date')}</label><input type="date" id="gymDate" value="${today}" class="text-sm flex-1"></div>
-    <div class="flex items-center gap-2 mb-3"><label class="text-sm text-slate-400">${t('notes')}</label><input type="text" id="gymNotes" placeholder="${t('optionalNotes')}" value="${existing?.notes||''}" class="text-sm flex-1"></div>
+    <div class="flex items-center gap-2 mb-3"><label class="text-sm text-slate-400">Tarih:</label><input type="date" id="gymDate" value="${today}" class="text-sm flex-1"></div>
+    <div class="flex items-center gap-2 mb-3"><label class="text-sm text-slate-400">Notlar:</label><input type="text" id="gymNotes" placeholder="Opsiyonel notlar..." value="${existing?.notes||''}" class="text-sm flex-1"></div>
     <div id="gymExercises" class="space-y-2 mb-3">${exerciseRows}</div>
     <div class="flex gap-2">
-      <button onclick="addGymExerciseRow()" class="btn-sm border border-slate-600 text-slate-300 rounded-lg flex-1">${t('addExercise')}</button>
+      <button onclick="addGymExerciseRow()" class="btn-sm border border-slate-600 text-slate-300 rounded-lg flex-1">+ Egzersiz Ekle</button>
       <button onclick="saveGymLog()" class="btn-primary btn-sm flex-1">💾 Kaydet</button>
     </div>
   </div>
@@ -1488,11 +1176,11 @@ function renderGymLog(el){
 
 function gymExerciseRow(i,name,weight,sets,reps){
   return `<div class="grid grid-cols-12 gap-1 items-center gym-row">
-    <input list="exerciseList" placeholder="${t('exercise')}" value="${name}" class="col-span-4 text-xs gym-name">
+    <input list="exerciseList" placeholder="Egzersiz" value="${name}" class="col-span-4 text-xs gym-name">
     <input type="number" placeholder="kg" value="${weight}" class="col-span-2 text-xs text-center gym-weight">
     <input type="number" placeholder="set" value="${sets}" class="col-span-2 text-xs text-center gym-sets">
     <input type="number" placeholder="rep" value="${reps}" class="col-span-2 text-xs text-center gym-reps">
-    <button onclick="this.closest('.gym-row').remove()" class="col-span-2 text-red-400 text-xs min-h-[44px]" aria-label="${t('deleteExercise')}">✕</button>
+    <button onclick="this.closest('.gym-row').remove()" class="col-span-2 text-red-400 text-xs min-h-[44px]" aria-label="Egzersizi sil">✕</button>
   </div>`;
 }
 
@@ -1503,8 +1191,8 @@ function saveGymLog(){
   const exercises=[];document.querySelectorAll('.gym-row').forEach(row=>{
     const name=row.querySelector('.gym-name').value.trim();if(!name)return;
     exercises.push({name,weight:parseFloat(row.querySelector('.gym-weight').value)||0,sets:parseInt(row.querySelector('.gym-sets').value)||0,reps:parseInt(row.querySelector('.gym-reps').value)||0})});
-  if(!exercises.length){alert(t('enterOneExercise'));return}
-  DB.set('gym_'+date,{date,notes,exercises,savedAt:new Date().toISOString()});alert(t('workoutSaved'));
+  if(!exercises.length){alert('En az bir egzersiz girin!');return}
+  DB.set('gym_'+date,{date,notes,exercises,savedAt:new Date().toISOString()});alert('✅ Antrenman kaydedildi!');
 }
 
 // ==================== GYM HISTORY ====================
@@ -1512,14 +1200,14 @@ function renderGymHistory(el){
   const logs=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('moose_gym_')&&k.length===21){const data=DB.get('gym_'+k.slice(10));if(data)logs.push(data)}}
   logs.sort((a,b)=>b.date.localeCompare(a.date));
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('workoutHistory')}</h2>
+  <h2 class="text-lg font-bold mb-3">📊 Antrenman Geçmişi</h2>
   ${logs.length?logs.map(log=>`
     <div class="bento-card mb-3 workout-card">
-      <div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-indigo-400 text-sm">${log.date}</h3><span class="text-xs text-slate-400">${log.exercises.length} ${t('exerciseCount')}</span></div>
+      <div class="flex justify-between items-center mb-2"><h3 class="font-semibold text-indigo-400 text-sm">${log.date}</h3><span class="text-xs text-slate-400">${log.exercises.length} egzersiz</span></div>
       ${log.notes?`<p class="text-xs text-slate-400 mb-2 italic">${log.notes}</p>`:''}
       <div class="space-y-1">${log.exercises.map(ex=>`<div class="flex justify-between text-xs py-1 border-b border-slate-700/50"><span>${ex.name}</span><span class="text-slate-400">${ex.weight}kg · ${ex.sets}×${ex.reps}</span></div>`).join('')}</div>
-      <button onclick="if(confirm('Sil?')){localStorage.removeItem('moose_gym_${log.date}');render()}" class="text-xs text-red-400 mt-2">${t('delete')}</button>
-    </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-8">${t('noWorkoutHistory')}</p>'}`;
+      <button onclick="if(confirm('Sil?')){localStorage.removeItem('moose_gym_${log.date}');render()}" class="text-xs text-red-400 mt-2">🗑️ Sil</button>
+    </div>`).join(''):'<p class="text-sm text-slate-500 text-center py-8">Henüz antrenman kaydı yok.</p>'}`;
 }
 
 // ==================== RAPOR ====================
@@ -1527,8 +1215,8 @@ function renderRapor(el){
   const sub=currentSubTab.rapor||'weekly';
   el.innerHTML=`
   <div class="flex gap-2 mb-4">
-    <button onclick="setSubTab('rapor','weekly')" class="sub-tab ${sub==='weekly'?'active':''}">${t('reportWeekly')}</button>
-    <button onclick="setSubTab('rapor','progress')" class="sub-tab ${sub==='progress'?'active':''}">${t('reportProgress')}</button>
+    <button onclick="setSubTab('rapor','weekly')" class="sub-tab ${sub==='weekly'?'active':''}">📅 Haftalık</button>
+    <button onclick="setSubTab('rapor','progress')" class="sub-tab ${sub==='progress'?'active':''}">📊 İlerleme</button>
   </div>
   <div id="raporContent" class="slide-in"></div>`;
   (sub==='progress'?renderProgress:renderWeeklyReport)(el.querySelector('#raporContent'));
@@ -1552,25 +1240,25 @@ function renderWeeklyReport(el){
   let grade='🟡',gradeText='Devam Et';if(score>=80){grade='🟢';gradeText='Harika Gidiyorsun!'}else if(score<50){grade='🔴';gradeText='Kendine Çeki Düzen Ver!'}else{gradeText='İyi Ama Daha İyisi Var'}
 
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('weeklyReport')}</h2>
+  <h2 class="text-lg font-bold mb-3">📅 Haftalık Rapor</h2>
   <p class="text-xs text-slate-400 mb-4">${weekDates[0]||'—'} → ${weekDates[weekDates.length-1]||'—'}</p>
   <div class="bento-card mb-4 text-center bg-gradient-to-br from-indigo-900/30 to-purple-900/30 border-indigo-500/15">
-    <div class="text-4xl mb-1">${grade}</div><div class="text-lg font-bold">${gradeText}</div><div class="text-xs text-slate-400 mt-1">${t('score')}: ${score}/100</div>
+    <div class="text-4xl mb-1">${grade}</div><div class="text-lg font-bold">${gradeText}</div><div class="text-xs text-slate-400 mt-1">Skor: ${score}/100</div>
   </div>
   <div class="bento-grid mb-4">
-    <div class="bento-card text-center"><div class="text-2xl font-bold text-indigo-400">${avgCal}</div><div class="text-xs text-slate-400">${t('avgCalories')}</div></div>
-    <div class="bento-card text-center"><div class="text-2xl font-bold text-red-400">${avgPro}g</div><div class="text-xs text-slate-400">${t('avgProtein')}</div></div>
-    <div class="bento-card text-center"><div class="text-2xl font-bold text-cyan-400">${avgWater}L</div><div class="text-xs text-slate-400">${t('avgWater')}</div></div>
-    <div class="bento-card text-center"><div class="text-2xl font-bold text-amber-400">${workoutCount}</div><div class="text-xs text-slate-400">${t('workouts')}</div></div>
-    <div class="bento-card text-center"><div class="text-2xl font-bold text-purple-400">${vitPct}%</div><div class="text-xs text-slate-400">${t('vitaminCompliance')}</div></div>
-    <div class="bento-card text-center"><div class="text-2xl font-bold ${weightChange.includes('-')?'text-emerald-400':'text-red-400'}">${weightChange}</div><div class="text-xs text-slate-400">${t('weightChange')}</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-indigo-400">${avgCal}</div><div class="text-xs text-slate-400">Ort. Kalori</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-red-400">${avgPro}g</div><div class="text-xs text-slate-400">Ort. Protein</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-cyan-400">${avgWater}L</div><div class="text-xs text-slate-400">Ort. Su</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-amber-400">${workoutCount}</div><div class="text-xs text-slate-400">Antrenman</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold text-purple-400">${vitPct}%</div><div class="text-xs text-slate-400">Vitamin Uyumu</div></div>
+    <div class="bento-card text-center"><div class="text-2xl font-bold ${weightChange.includes('-')?'text-emerald-400':'text-red-400'}">${weightChange}</div><div class="text-xs text-slate-400">Kilo Değişimi</div></div>
   </div>
   <div class="bento-card">
     <h3 class="text-sm font-semibold text-slate-300 mb-2">💡 Öneriler</h3>
     <div class="text-xs text-slate-400 space-y-1">
       ${avgCal===0?'<p>• 📝 Bu hafta öğün kaydı yok. Yediklerini kaydetmeye başla!</p>':''}
       ${avgPro<150?'<p>• 🥩 Protein alımını artır (hedef: 170-180g/gün)</p>':''}
-      ${parseFloat(avgWater)<3?'<p>• ${t('readinessWater')} içmeyi unutma! (hedef: 3.5L/gün)</p>':''}
+      ${parseFloat(avgWater)<3?'<p>• 💧 Su içmeyi unutma! (hedef: 3.5L/gün)</p>':''}
       ${workoutCount<3?'<p>• 🏋️ Bu hafta daha fazla antrenman yap (hedef: 3/hafta)</p>':''}
       ${vitPct<70?'<p>• 💊 Vitamin almayı ihmal etme!</p>':''}
       ${score>=80?'<p>• 🌟 Bu hafta harika gidiyorsun, aynı tempoyu koru!</p>':''}
@@ -1582,16 +1270,16 @@ function renderProgress(el){
   const log=weightLog();const last30=[];
   for(let i=29;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const ds=d.toISOString().slice(0,10);const foods=DB.get('foods_'+ds,[]);last30.push({date:ds,cal:foods.reduce((s,f)=>s+f.cal,0)})}
   el.innerHTML=`
-  <h2 class="text-lg font-bold mb-3">${t('progress')}</h2>
-  <div class="bento-card mb-4"><h3 class="text-sm font-semibold text-slate-300 mb-2">${t('weightTrend')}</h3><canvas id="progressWeightChart" height="200"></canvas>${log.length<2?'<p class="text-xs text-slate-500 text-center mt-2">${t('noWeight2')}</p>':''}</div>
-  <div class="bento-card mb-4"><h3 class="text-sm font-semibold text-slate-300 mb-2">${t('calCompliance')}</h3><canvas id="progressCalChart" height="200"></canvas></div>
+  <h2 class="text-lg font-bold mb-3">📊 İlerleme</h2>
+  <div class="bento-card mb-4"><h3 class="text-sm font-semibold text-slate-300 mb-2">Kilo Trendi</h3><canvas id="progressWeightChart" height="200"></canvas>${log.length<2?'<p class="text-xs text-slate-500 text-center mt-2">En az 2 kilo kaydı gerekli</p>':''}</div>
+  <div class="bento-card mb-4"><h3 class="text-sm font-semibold text-slate-300 mb-2">Kalori Uyumu (Son 30 Gün)</h3><canvas id="progressCalChart" height="200"></canvas></div>
   <div class="bento-card mb-4">
-    <h3 class="text-sm font-semibold text-slate-300 mb-2">${t('summaryStats')}</h3>
+    <h3 class="text-sm font-semibold text-slate-300 mb-2">Özet İstatistikler</h3>
     <div class="bento-grid text-center text-sm">
-      <div class="neu-inset p-3"><div class="text-xl font-bold text-emerald-400">${log.length}</div><div class="text-xs text-slate-400">${t('weightRecords')}</div></div>
-      <div class="neu-inset p-3"><div class="text-xl font-bold text-indigo-400">${last30.filter(d=>d.cal>0).length}</div><div class="text-xs text-slate-400">${t('mealRecords30')}</div></div>
-      <div class="neu-inset p-3"><div class="text-xl font-bold text-cyan-400">${log.length>=2?(log[0].kg-log[log.length-1].kg).toFixed(1):'—'}</div><div class="text-xs text-slate-400">${t('lostWeight')}</div></div>
-      <div class="neu-inset p-3"><div class="text-xl font-bold text-amber-400">${goals().filter(g=>g.done).length}/${goals().length}</div><div class="text-xs text-slate-400">${t('goalsShort')}</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-emerald-400">${log.length}</div><div class="text-xs text-slate-400">Kilo Kaydı</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-indigo-400">${last30.filter(d=>d.cal>0).length}</div><div class="text-xs text-slate-400">Öğün Kaydı (30g)</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-cyan-400">${log.length>=2?(log[0].kg-log[log.length-1].kg).toFixed(1):'—'}</div><div class="text-xs text-slate-400">Verilen Kilo</div></div>
+      <div class="neu-inset p-3"><div class="text-xl font-bold text-amber-400">${goals().filter(g=>g.done).length}/${goals().length}</div><div class="text-xs text-slate-400">Hedef</div></div>
     </div>
   </div>`;
   setTimeout(()=>{
@@ -1652,7 +1340,6 @@ async function enableNotifications(){
 
 // ==================== INIT ====================
 document.getElementById('headerDate').textContent=new Date().toLocaleDateString('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-renderStaticTexts();
 navigate('dashboard');
 </script>
 </body>
