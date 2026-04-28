@@ -40,5 +40,6 @@
   "moose_gym_2026-04-23": "{\"date\": \"2026-04-23\", \"notes\": \"Realistic demo day - upper body and light cardio\", \"exercises\": [{\"name\": \"Bench Press\", \"weight\": 60, \"sets\": 4, \"reps\": 10}, {\"name\": \"Barbell Row\", \"weight\": 50, \"sets\": 4, \"reps\": 10}, {\"name\": \"Shoulder Press\", \"weight\": 20, \"sets\": 3, \"reps\": 12}, {\"name\": \"Bicep Curl\", \"weight\": 12, \"sets\": 3, \"reps\": 12}, {\"name\": \"Treadmill Walk\", \"weight\": 0, \"sets\": 1, \"reps\": 20, \"note\": \"20 min moderate pace\"}], \"savedAt\": \"2026-04-23T11:30:00.000Z\"}",
   "moose_gym_checks_2026-04-23": "{\"Bench Press\": true, \"Barbell Row\": true, \"Shoulder Press\": true, \"Bicep Curl\": true}",
   "moose_bp_log": "[{\"date\": \"2026-04-23\", \"time\": \"08:15\", \"sys\": 124, \"dia\": 82, \"pulse\": 72}]",
-  "moose_lang": "\"en\""
+  "moose_lang": "\"en\"",
+  "moose_foods_2026-04-28": "[{\"name\": \"Grilled salmon with quinoa, avocado, tomato and red onion\", \"meal\": \"Lunch\", \"cal\": 720, \"pro\": 48, \"fat\": 36, \"carb\": 48}]"
 }
